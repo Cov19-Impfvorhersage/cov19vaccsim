@@ -1,7 +1,7 @@
 {
-	"description": "Impfbereitschaft aus den Daten des COVID-19 Snapshot Monitorings der Universität Erfurt",
+	"description": "Impfbereitschaft aus den Daten des COVID-19 Snapshot Monitorings der Universität Erfurt (ab Mai mit bereits geimpften als 7)",
 	"source": "https://projekte.uni-erfurt.de/cosmo2020/",
-	"detail": "7 = Auf jeden Fall; 1 = Auf keinen Fall",
+	"detail": "7 = Auf jeden Fall / bereits geimpft; 1 = Auf keinen Fall",
 	"data": {
 		"2021-02-09": {
 			"prozente": {
@@ -103,6 +103,74 @@
                 "30-49": 4.89,
                 "50-64": 5.17,
                 "65-74": 5.60
+            }
+        },
+        "2021-05-04": {
+            "prozente": {
+                "7": 0.652,
+                "6": 0.056,
+                "5": 0.054,
+                "4": 0.069,
+                "3": 0.027,
+                "2": 0.041,
+                "1": 0.101
+            },
+            "mittel_nach_alter": {
+                "18-29": 5.46,
+                "30-49": 5.53,
+                "50-64": 6.07,
+                "65-74": 6.25
+            }
+        },
+        "2021-05-18": {
+            "prozente": {
+                "7": 0.673,
+                "6": 0.055,
+                "5": 0.034,
+                "4": 0.058,
+                "3": 0.021,
+                "2": 0.035,
+                "1": 0.125
+            },
+            "mittel_nach_alter": {
+                "18-29": 5.52,
+                "30-49": 5.50,
+                "50-64": 5.76,
+                "65-74": 6.30
+            }
+        },
+        "2021-06-01": {
+            "prozente": {
+                "7": 0.684,
+                "6": 0.056,
+                "5": 0.039,
+                "4": 0.055,
+                "3": 0.035,
+                "2": 0.029,
+                "1": 0.103
+            },
+            "mittel_nach_alter": {
+                "18-29": 5.60,
+                "30-49": 5.61,
+                "50-64": 5.95,
+                "65-74": 6.23
+            }
+        },
+        "2021-06-15": {
+            "prozente": {
+                "7": 0.726,
+                "6": 0.032,
+                "5": 0.037,
+                "4": 0.045,
+                "3": 0.016,
+                "2": 0.026,
+                "1": 0.119
+            },
+            "mittel_nach_alter": {
+                "18-29": 5.82,
+                "30-49": 5.61,
+                "50-64": 6.08,
+                "65-74": 6.15
             }
         }
 	}
