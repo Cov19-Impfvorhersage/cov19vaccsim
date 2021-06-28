@@ -25,9 +25,9 @@
                                 <mat-form-field color="accent" appearance="outline" class="slim"
                                                 style="position: absolute; right: 0; width: 25em; max-width: 60%;"
                                                 matTooltip="Aufteilung der Bevölkerung im rechten Balken der Grafik.
-                                                Hat keinen Einfluss auf die Simulation die nur von der Impfbereitschaft abhängt,
+                                                Hat keinen Einfluss auf die Simulation, die nur von der Impfbereitschaft abhängt,
                                                 daher entspricht die Reihenfolge der Blöcke auch nicht automatisch der logischen Impfreihenfolge
-                                                (Insb. beim Alter da ja nicht strikt nach Alter geimpft wird)">
+                                                (Insb. beim Alter, da ja nicht strikt nach Alter geimpft wird).">
                                     <mat-icon class="tooltip-info">help</mat-icon>
                                     <mat-label>Aufteilung im rechten Balken</mat-label>
                                     <mat-select [(ngModel)]="displayPartitioning" (selectionChange)="buildChartPopulation()" >
@@ -115,8 +115,8 @@
                         </mat-tab>
                     </mat-tab-group>
                     <div matTooltip="Startwoche der Simulation.
-                                Nützlich um die Simulation mit echten Daten zu vergleichen;
-                                allerdings ist zu beachten dass stets die neuesten Lieferdaten & -Ankündigungen verwendet werden.">
+                                Nützlich, um die Simulation mit echten Daten zu vergleichen;
+                                allerdings ist zu beachten, dass stets die neuesten Lieferdaten & -Ankündigungen verwendet werden.">
                         <mat-icon class="tooltip-info" style="margin-left: 0.5em; margin-top: 0.1em;">help</mat-icon>
                         <mat-slider class="simulation-start"
                                     [(ngModel)]="simulationStartWeekNum"
@@ -143,7 +143,7 @@
             <mat-card-content class="settings_card">
                 <div>
                     <h2><strong>Zulassung</strong></h2>
-                    <div class="settings_row" matTooltip="Personen die keinen der aktuell verfügbaren Impfstoffe erhalten können z.B. weil sie zu jung sind">
+                    <div class="settings_row" matTooltip="Personen, die keinen der aktuell verfügbaren Impfstoffe erhalten können, z.B. weil sie zu jung sind.">
                         <mat-slide-toggle [(ngModel)]="simulation.params.considerContraindicated"
                                           (change)="runSimulation();" labelPosition="before">
                             Kontraindizierte beachten
@@ -159,7 +159,7 @@
                         </div>
                     </div>
                     <div class="settings_row">
-                        <p matTooltip="Welche Impfstoffe für die Simulation beachtet werden sollen" >Ausfall / Zulassung simulieren:</p>
+                        <p matTooltip="Welche Impfstoffe für die Simulation beachtet werden sollen." >Ausfall / Zulassung simulieren:</p>
                         <div style="margin-left: 1.5rem;">
                             <p
                                 *ngFor="let vacc of simulation.params.vaccinesUsed | keyvalue: originalOrder">
@@ -216,7 +216,7 @@
 
                     <div class="settings_row">
                         <mat-slide-toggle [(ngModel)]="simulation.params.considerStockPile"
-                                          matTooltip="Lagerbestand der zu Beginn der Simulation besteht in die Simulation mit einfließen lassen.
+                                          matTooltip="Lagerbestand, der zu Beginn der Simulation besteht, in die Simulation mit einfließen lassen.
                                           Überschätzt dadurch meist die Impfungen der nächsten Woche."
                                           (change)="runSimulation();" labelPosition="before">
                             Lagerbestand beachten
@@ -227,7 +227,7 @@
                 <div>
                     <h2><strong>Impforganisation</strong></h2>
 
-                    <div class="settings_row" matTooltip="Anteil Impfdosen die nicht verimpft, sondern zurückgehalten werden für Personen die noch eine Zweitimpfung benötigen">
+                    <div class="settings_row" matTooltip="Anteil Impfdosen, die nicht verimpft, sondern zurückgehalten werden für Personen, die noch eine Zweitimpfung benötigen.">
                         <div fxLayout="row" fxLayoutAlign="space-between center">
                             <div>Rückstellungen für Zweitimpfungen:</div>
                             <div fxFlex="0 0 auto" >
@@ -271,14 +271,14 @@
                         </mat-slide-toggle>
                     </div>
                     <div class="settings_row"
-                         matTooltip="Personen die sich nur zögerlich impfen lassen; Lässt vor allem den Graph schöner aussehen. Details siehe Einschränkungen">
+                         matTooltip="Personen, die sich nur zögerlich impfen lassen; Lässt vor allem den Graph schöner aussehen. Details siehe Einschränkungen.">
                         <mat-slide-toggle [(ngModel)]="simulation.params.considerHesitating"
                                           (change)="runSimulation();" labelPosition="before">
                             Impfzögerliche beachten
                         </mat-slide-toggle>
                     </div>
                     <div class="settings_row"
-                        matTooltip="Personen für die Impfungen zugelassen wären, die theoretisch bereit wären sich impfen zu lassen.
+                        matTooltip="Personen, für die Impfungen zugelassen wären, die theoretisch bereit wären, sich impfen zu lassen.
                         Standardwert ist der Anteil der Antworten [7-3] aus der Skala [7-1] der COSMO-Umfragen.">
                         <div fxLayout="row" fxLayoutAlign="space-between center">
                             <div>Impfbereitschaft:</div>
@@ -299,7 +299,7 @@
                         </div>
                     </div>
 
-                    <div class="settings_row" matTooltip="Anteil der erstgeimpften Personen die eine nötige zweite Impfdosis annehmen.">
+                    <div class="settings_row" matTooltip="Anteil der erstgeimpften Personen, die eine vorgesehene zweite Impfdosis annehmen.">
                         <div fxLayout="row" fxLayoutAlign="space-between center">
                             <div>Zweitimpfbereitschaft</div>
                             <div fxFlex="0 0 auto" >
@@ -329,7 +329,7 @@
             <mat-card-content class="mat-padding">
                 <h2>Was wie wo</h2>
                 <p>
-                    Ein kleines Amateur-Bastelprojekt um historische Daten, Simulationen für die Zukunft
+                    Ein kleines Amateur-Bastelprojekt, um historische Daten, Simulationen für die Zukunft
                     und weitere Infos zur Impfkampagne gegen Covid-19 in Deutschland in einem Dashboard zusammenzuführen.<br>
                     Alles ist mit einer gewissen Skepsis zu betrachten, das hier ist schließlich keine offizielle Vorhersage.<br>
                     Wenn ihr etwas beitragen oder selbst mit dem Code rumspielen wollt, findet ihr alles auf <a href="https://github.com/Cov19-Impfvorhersage/cov19vaccsim">GitHub</a>.
@@ -366,15 +366,15 @@
                 <ul>
                     <li>
                         <b>Keine Simulation der Kapazitäten:</b><br>
-                        Die Annahme ist dass für jede verfügbare Impfdosis für die sich eine impfwillige Person findet sich auch ein Weg in den Arm auftut.
-                        Hausärzte impfen bereits mit und wenn genug da ist tun das sicher gerne auch Betriebsärzte, Tierärzte, etc; zur Not auch in 24h-Schicht.<br>
+                        Die Annahme ist, dass für jede verfügbare Impfdosis, für die sich eine impfwillige Person findet, sich auch ein Weg in den Arm auftut.
+                        Hausärzt:innen impfen bereits mit und wenn genug da ist, tun das sicher gerne auch Betriebsärzt:innen, Tierärzt:innen, etc; zur Not auch in 24h-Schicht.<br>
                         Eine Kapazitätssimulation findet sich auf dem <a href="https://www.zidatasciencelab.de/cov19vaccsim">Impfdashboards des Zi Datascience Lab</a>
                     </li>
                     <li>
                         <b>Verzögertes Verfügbarwerden der Impfdosen:</b><br>
-                        Auch wenn Impfdosen offiziell geliefert wurden so müssen sie immer noch an die Einsatzorte verteilt werden.
+                        Auch wenn Impfdosen offiziell geliefert wurden, so müssen sie immer noch an die Einsatzorte verteilt werden.
                         Daraus ergibt sich seit Beginn der Kampagne eine 1 - 2-wöchige Verzögerung von Lieferung => Arm.
-                        Dies gilt für ziemlich alle Länder und Staaten und wird hier simuliert indem die gelieferten Dosen einfach erst in der darauffolgenden Woche verfügbar werden.
+                        Dies gilt für ziemlich alle Länder und Staaten und wird hier simuliert, indem die gelieferten Dosen einfach erst in der darauffolgenden Woche verfügbar werden.
                         Sollte diese Annahme nicht stimmen (z.B. teilweise aktuell für BioNtech),
                         wird das durch die Nichtbehandlung negativer Lagerbestände teilweise ausgeglichen (siehe nächster Punkt).
                     </li>
@@ -389,16 +389,16 @@
                         <b>Zweitimpfungen:</b><br>
                         Zweitimpfungen werden entsprechend der RKI-Empfehlung angesetzt, allerdings ist die Warteschlange aus den historischen Daten nicht ganz berechenbar:<br>
                         Es kann zwar abgeschätzt werden, wie viele Zweitimpfungen nötig sind, wenn das Intervall für jede Person exakt nach STIKO-Empfehlungen angewendet wird;
-                        aber teilweise werden kürzere Intervalle angewendet. Dies ist insbesondere der Fall wenn die Simulation zu früheren Zeitpunkten gestartet wird,
+                        aber teilweise werden kürzere Intervalle angewendet. Dies ist insbesondere der Fall, wenn die Simulation zu früheren Zeitpunkten gestartet wird,
                         da sie aktuell stets die letzten STIKO-Empfehlungen verwendet.
                     </li>
                     <li>
                         <b>Aufteilung der Bevölkerung:</b><br>
                         Um den Teil der Bevölkerung zu simulieren, der die Impfung erhalten wird, werden zunächst die Kontraindizierten abgezogen.
-                        Dies sind vor allem alle unter 16 jährigen da bisher keiner der Impfstoffe für diese Altersgruppe zugelassen wurde.
+                        Dies sind vor allem alle unter 16 jährigen, da bisher keiner der Impfstoffe für diese Altersgruppe zugelassen wurde.
                         Anschließend wird vom Rest der Bevölkerung der Anteil Impfunwilliger abgezogen.
                         Dies ist für die meisten Berechnungen sinnvoll, insbesondere da die Umfragen zur Impfwilligkeit sich meist
-                        auf die volljährige Bevölkerung beziehen und dies auch diejenigen sind für die die Impfstoffe aktuell zugelassen sind.
+                        auf die volljährige Bevölkerung beziehen und dies auch diejenigen sind, für die die Impfstoffe aktuell zugelassen sind.
                     </li>
                     <li>
                         <b>Impfbereitschaft:</b><br>
@@ -409,7 +409,7 @@
                         Der restliche Teil wird homogen als impfbereit betrachtet.
                         Darüber hinaus wird die Impfbereitschaft aktuell als homogen für alle Alters- und Prioritätsgruppen angenommen,
                         <a href="https://assets.rrz.uni-hamburg.de/instance_assets/fakws/16982038/impfbereitschaft-nach-alter-de-en-733x414-a12762b14c33380471c46edd52d2e81c4b598036.jpg">
-                            was definitiv nicht der Realität entspricht
+                            was definitiv nicht der Realität entspricht,
                         </a> aber für die Darstellungen hier ausreichen dürfte.
                     </li>
                     <li>
@@ -418,7 +418,7 @@
                         Dies wird hier wie folgt simuliert:<br>
                         Während von den Impfwilligen jede Woche 100% bereit wären und von den Impfunwilligen 0%,
                         ist dies bei den Impfzögerlichen ein fließender Übergang zwischen 50% und 10%.
-                        Die Zahlen sind komplett aus der Luft gegriffen weil der Plot dann schön aussieht.
+                        Die Zahlen sind komplett aus der Luft gegriffen, weil der Plot dann schön aussieht.
                     </li>
                 </ul>
 
@@ -447,7 +447,6 @@
                     D.h. der Browser fragt z.B. die Tabelle vom <a href="https://impfdashboard.de">impfdashboard.de</a> direkt an.
                 </p>
             </mat-card-content>
-
         </mat-card>
     </div>
 </div>
