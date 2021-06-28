@@ -27,14 +27,31 @@ export class CosmoVaccinationWillingnessPartitioner implements VaccinationWillin
     constructor(
         private dataloader: DataloaderService) {
     }
+    public cosmoDate: string = '2021-06-15';
+
+    getAvailableSurveys(): string[] {
+
+        // Sanity check
+        for (const [entry, data] of Object.entries(this.dataloader.vaccinationWillingness.data)){
+            let sum = 0;
+            for(const p of Object.values(data.prozente)){
+                sum += p;
+            }
+            if( sum !== 1) {
+                console.warn('COSMO Data for ', entry, ' does not sum up to 1! ', sum, data);
+            }
+        }
+
+        return Object.keys(this.dataloader.vaccinationWillingness.data);
+    }
 
     getUnwillingFraction(): number {
-        const cosmoData = this.dataloader.vaccinationWillingness.data['2021-04-06'].prozente;
+        const cosmoData = this.dataloader.vaccinationWillingness.data[this.cosmoDate].prozente;
         return cosmoData['2'] + cosmoData['1'];
     }
 
     getHesitatinglyWillingFraction(): number {
-        const cosmoData = this.dataloader.vaccinationWillingness.data['2021-04-06'].prozente;
+        const cosmoData = this.dataloader.vaccinationWillingness.data[this.cosmoDate].prozente;
         return cosmoData['4'] + cosmoData['3'];
     }
 
@@ -77,7 +94,7 @@ export class CosmoVaccinationWillingnessPartitioner implements VaccinationWillin
         const restPopulation = population - partitions.map(x => x.size).reduce(sum, 0);
 
         // partition based on the latest data of COSMO
-        const cosmoData = this.dataloader.vaccinationWillingness.data['2021-04-06'].prozente;
+        const cosmoData = this.dataloader.vaccinationWillingness.data[this.cosmoDate].prozente;
 
         const factor =  1 / (1 - this.getUnwillingFraction());
 
@@ -102,7 +119,7 @@ export class CosmoVaccinationWillingnessPartitioner implements VaccinationWillin
 
     /*partitionPopulation(){
         // partition based on the latest data of COSMO
-        const cosmoData = this.dataloader.vaccinationWillingness.data['2021-04-06'].prozente;
+        const cosmoData = this.dataloader.vaccinationWillingness.data[this.cosmoDate].prozente;
 
         const population = this.dataloader.population.data.total;
 

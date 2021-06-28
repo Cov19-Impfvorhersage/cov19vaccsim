@@ -82,6 +82,7 @@ export class BasicSimulation implements VaccinationSimulation {
     };
 
     willingness = new CosmoVaccinationWillingnessPartitioner(this.dataloader);
+    availableWillingnessOptions = {};
     vaccineUsage = new VaccineUsage(this.dataloader);
 
     partitionings = {
@@ -110,7 +111,7 @@ export class BasicSimulation implements VaccinationSimulation {
     simulationStartWeek: YearWeek = cw.yws([2021, 10]);
     simulationEndWeek: YearWeek = cw.yws([2021, 43]);
 
-    /** Prepare data: Call when Dataloade is ready */
+    /** Prepare data: Call when Dataloader is ready */
     prepareData(): boolean {
         if (!this.dataloader.allLoaded()){
             return false;
@@ -124,6 +125,14 @@ export class BasicSimulation implements VaccinationSimulation {
             });
         }
         this.params.vaccinesUsed = used;
+
+        this.availableWillingnessOptions = {};
+        for (const survey of this.willingness.getAvailableSurveys()){
+            this.availableWillingnessOptions[survey] = (new Date(survey)).toLocaleDateString('de-DE',
+                { year: '2-digit', month: 'long', day: '2-digit' }
+            );
+        }
+
         return true;
     }
 

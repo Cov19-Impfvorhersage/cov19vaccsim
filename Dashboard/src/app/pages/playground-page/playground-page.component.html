@@ -200,6 +200,26 @@
                             </div>
                         </div>
                     </div>
+
+
+                    <div class="settings_row" matTooltip="COSMO-Umfragewelle, auf Basis derer die Aufteilung nach Impfwilligkeit sowie der Anteil der Impfunwilligen & Impfzögerlichen in der Simulation berechnet werden.
+                        Ab 20. April sind bereits geimpfte unter 'Impfwillig' eingeordnet.">
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                            <div>COSMO-Umfragewelle:</div>
+                            <div fxFlex="0 0 auto" >
+
+                                <mat-form-field color="accent" appearance="outline" class="slim"
+                                                style="width: auto; min-width: 10em;"
+                                                matTooltip="">
+                                    <mat-select [(ngModel)]="simulation.willingness.cosmoDate" (selectionChange)="setWillingnessDate()" >
+                                        <ng-container *ngFor="let p of simulation.availableWillingnessOptions | keyvalue: originalOrder">
+                                            <mat-option [value]="p.key">{{p.value}}</mat-option>
+                                        </ng-container>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <mat-divider></mat-divider>
                 <div>

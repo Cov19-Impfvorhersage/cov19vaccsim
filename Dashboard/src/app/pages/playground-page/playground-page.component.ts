@@ -823,6 +823,9 @@ export class PlaygroundPageComponent implements OnInit {
         return 0;
     }
 
+    setWillingnessDate(): void {
+        this.resetWillingness();
+    }
     resetWillingness(): void {
         this.simulation.params.fractionWilling = 1 - this.simulation.willingness.getUnwillingFraction();
         this.runSimulation();
