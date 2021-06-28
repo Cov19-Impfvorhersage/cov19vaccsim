@@ -414,6 +414,13 @@ export class PlaygroundPageComponent implements OnInit {
                 });
             }
         }*/
+        // Add first datapoint so that the chart is always scaled the same
+        if(this.dataloader.vaccinations) {
+            vacDeliveries.data.push({
+                date: this.dataloader.vaccinations[0].date,
+                value: 0
+            });
+        }
         if (this.simulation.weeklyDeliveries) {
             for (const [week, del] of this.simulation.weeklyDeliveries.entries()) {
                 vacDeliveries.data.push({
@@ -600,6 +607,14 @@ export class PlaygroundPageComponent implements OnInit {
                     }))],
                 });
             }
+        }
+
+        // Add first datapoint so that the chart is always scaled the same
+        if(this.dataloader.vaccinations) {
+            vacDoses.data.push({
+                date: this.dataloader.vaccinations[0].date,
+                value: 0
+            });
         }
         if (this.simulation.weeklyVaccinations) {
             for (const [yWeek, data] of this.simulation.weeklyVaccinations.entries()) {
