@@ -142,6 +142,67 @@
             <mat-card-title>Simulationsparameter</mat-card-title>
             <mat-card-content class="settings_card">
                 <div>
+                    <h2><strong>Impfbereitschaft</strong></h2>
+
+                    <div class="settings_row"
+                         matTooltip="Personen, für die Impfungen zugelassen wären, die aber nicht bereit sind, sich impfen zu lassen.">
+                        <mat-slide-toggle [(ngModel)]="simulation.params.considerNotWilling"
+                                          (change)="runSimulation();" labelPosition="before">
+                            Impfunwillige beachten
+                        </mat-slide-toggle>
+                    </div>
+                    <div class="settings_row"
+                         matTooltip="Personen, die sich nur zögerlich impfen lassen; Lässt vor allem den Graph schöner aussehen. Details siehe Einschränkungen.">
+                        <mat-slide-toggle [(ngModel)]="simulation.params.considerHesitating"
+                                          (change)="runSimulation();" labelPosition="before">
+                            Impfzögerliche beachten
+                        </mat-slide-toggle>
+                    </div>
+                    <div class="settings_row"
+                         matTooltip="Personen, für die Impfungen zugelassen wären, die theoretisch bereit wären, sich impfen zu lassen.
+                        Standardwert ist der Anteil der Antworten [7-3] aus der Skala [7-1] der COSMO-Umfragen.">
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                            <div>Impfbereitschaft:</div>
+                            <div fxFlex="0 0 auto" >
+                                <strong>{{simulation.params.fractionWilling*100 | number:'1.0-0'}} % </strong>impfbereit
+                            </div>
+                        </div>
+                        <div class="slider-with-reset" fxLayout="row" fxLayoutAlign="space-between center">
+                            <div fxFlex="1 0 auto" >
+                                <mat-slider [(ngModel)]="simulation.params.fractionWilling" min=".5" max="1.0" step="0.01"
+                                            (change)="runSimulation();"></mat-slider>
+                            </div>
+                            <div fxFlex="0 0 auto" >
+                                <button mat-icon-button aria-label="Zurücksetzen" (click)="resetWillingness()">
+                                    <mat-icon>restore</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings_row" matTooltip="Anteil der erstgeimpften Personen, die eine vorgesehene zweite Impfdosis annehmen.
+                        Standardwert ist das Ergebnis der COSMO-Umfrage vom 18. Mai.">
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                            <div>Zweitimpfbereitschaft</div>
+                            <div fxFlex="0 0 auto" >
+                                <strong>{{simulation.params.fractionTakingSecondDose*100 | number:'1.0-0'}} % </strong>
+                            </div>
+                        </div>
+                        <div class="slider-with-reset" fxLayout="row" fxLayoutAlign="space-between center">
+                            <div fxFlex="1 0 auto" >
+                                <mat-slider [(ngModel)]="simulation.params.fractionTakingSecondDose" min=".5" max="1.0" step="0.01"
+                                            (change)="runSimulation();"></mat-slider>
+                            </div>
+                            <div fxFlex="0 0 auto" >
+                                <button mat-icon-button aria-label="Zurücksetzen" (click)="reset2ndWillingness()">
+                                    <mat-icon>restore</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <mat-divider></mat-divider>
+                <div>
                     <h2><strong>Zulassung</strong></h2>
                     <div class="settings_row" matTooltip="Personen, die keinen der aktuell verfügbaren Impfstoffe erhalten können, z.B. weil sie zu jung sind.">
                         <mat-slide-toggle [(ngModel)]="simulation.params.considerContraindicated"
@@ -257,57 +318,6 @@
                                           (change)="runSimulation();" labelPosition="before">
                             Extra Abstand nur Neuimpfungen
                         </mat-slide-toggle>
-                    </div>
-                </div>
-                <mat-divider></mat-divider>
-                <div>
-                    <h2><strong>Impfbereitschaft</strong></h2>
-
-                    <div class="settings_row"
-                         matTooltip="Personen, für die Impfungen zugelassen wären, die aber nicht bereit sind, sich impfen zu lassen.">
-                        <mat-slide-toggle [(ngModel)]="simulation.params.considerNotWilling"
-                                          (change)="runSimulation();" labelPosition="before">
-                            Impfunwillige beachten
-                        </mat-slide-toggle>
-                    </div>
-                    <div class="settings_row"
-                         matTooltip="Personen, die sich nur zögerlich impfen lassen; Lässt vor allem den Graph schöner aussehen. Details siehe Einschränkungen.">
-                        <mat-slide-toggle [(ngModel)]="simulation.params.considerHesitating"
-                                          (change)="runSimulation();" labelPosition="before">
-                            Impfzögerliche beachten
-                        </mat-slide-toggle>
-                    </div>
-                    <div class="settings_row"
-                        matTooltip="Personen, für die Impfungen zugelassen wären, die theoretisch bereit wären, sich impfen zu lassen.
-                        Standardwert ist der Anteil der Antworten [7-3] aus der Skala [7-1] der COSMO-Umfragen.">
-                        <div fxLayout="row" fxLayoutAlign="space-between center">
-                            <div>Impfbereitschaft:</div>
-                            <div fxFlex="0 0 auto" >
-                                <strong>{{simulation.params.fractionWilling*100 | number:'1.0-0'}} % </strong>impfbereit
-                            </div>
-                        </div>
-                        <div class="slider-with-reset" fxLayout="row" fxLayoutAlign="space-between center">
-                            <div fxFlex="1 0 auto" >
-                                <mat-slider [(ngModel)]="simulation.params.fractionWilling" min=".5" max="1.0" step="0.01"
-                                            (change)="runSimulation();"></mat-slider>
-                            </div>
-                            <div fxFlex="0 0 auto" >
-                                <button mat-icon-button aria-label="Zurücksetzen" (click)="resetWillingness()">
-                                    <mat-icon>restore</mat-icon>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="settings_row" matTooltip="Anteil der erstgeimpften Personen, die eine vorgesehene zweite Impfdosis annehmen.">
-                        <div fxLayout="row" fxLayoutAlign="space-between center">
-                            <div>Zweitimpfbereitschaft</div>
-                            <div fxFlex="0 0 auto" >
-                                <strong>{{simulation.params.fractionTakingSecondDose*100 | number:'1.0-0'}} % </strong>
-                            </div>
-                        </div>
-                        <mat-slider [(ngModel)]="simulation.params.fractionTakingSecondDose" min=".5" max="1.0" step="0.01"
-                                    (change)="runSimulation();"></mat-slider>
                     </div>
                 </div>
             </mat-card-content>

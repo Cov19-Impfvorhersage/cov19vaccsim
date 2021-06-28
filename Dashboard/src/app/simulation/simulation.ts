@@ -76,7 +76,7 @@ export class BasicSimulation implements VaccinationSimulation {
         keep2ndDosesBack: 0,
         extraIntervalWeeks: 0,
         extraIntervalWeeksOnlyFuture: false,
-        fractionTakingSecondDose: 1.0,
+        fractionTakingSecondDose: 0.96,
         fractionWilling: 0.80,
         vaccinesUsed: new Map(),
     };

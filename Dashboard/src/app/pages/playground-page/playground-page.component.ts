@@ -827,6 +827,10 @@ export class PlaygroundPageComponent implements OnInit {
         this.simulation.params.fractionWilling = 1 - this.simulation.willingness.getUnwillingFraction();
         this.runSimulation();
     }
+    reset2ndWillingness(): void {
+        this.simulation.params.fractionTakingSecondDose = 0.96;
+        this.runSimulation();
+    }
 
     // experimental tooltip things
     experimentalTooltipUpdate: TooltipUpdate;
