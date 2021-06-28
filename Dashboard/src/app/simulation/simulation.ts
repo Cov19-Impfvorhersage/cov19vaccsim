@@ -166,7 +166,7 @@ export class BasicSimulation implements VaccinationSimulation {
         // Running week data
         // (never go below actual data in first week if the first week is the current week)
         let runningWeekData =
-            (this.simulationStartWeek === cw.getYearWeekOfDate(this.dataloader.lastRefreshVaccinations)) ?
+            (this.simulationStartWeek === cw.getYearWeekOfDate(this.dataloader.lastRefreshVaccinations, 1)) ?
             this.weeklyVaccinations.get(this.simulationStartWeek) :
             null;
 

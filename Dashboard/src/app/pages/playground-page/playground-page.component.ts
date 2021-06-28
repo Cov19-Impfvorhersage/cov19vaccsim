@@ -165,7 +165,7 @@ export class PlaygroundPageComponent implements OnInit {
             this.loaded = true;
             this.simulation.prepareData();
             this.prepareSimulationStartSlider();
-            this.simulationStartWeek = getYearWeekOfDate(this.dataloader.lastRefreshVaccinations);
+            this.simulationStartWeek = getYearWeekOfDate(this.dataloader.lastRefreshVaccinations, 1);
             this.simulationStartWeekNum = cw.ywt(this.simulationStartWeek)[1];
             this.simulation.params.fractionWilling = 1 - this.simulation.willingness.getUnwillingFraction();
             this.runSimulation();
@@ -173,7 +173,7 @@ export class PlaygroundPageComponent implements OnInit {
     }
 
     prepareSimulationStartSlider(): void {
-        const realDataEndYW = getYearWeekOfDate(this.dataloader.lastRefreshVaccinations);
+        const realDataEndYW = getYearWeekOfDate(this.dataloader.lastRefreshVaccinations, 1);
         const realDataEndYWT = cw.ywt(realDataEndYW);
         const graphFirstDate = this.dataloader.vaccinations[0].date;
         const graphLastDate = cw.getWeekdayInYearWeek(this.simulation.simulationEndWeek, 8);
@@ -292,9 +292,9 @@ export class PlaygroundPageComponent implements OnInit {
             let date = cw.getWeekdayInYearWeek(this.simulationStartWeek, 1);
             let dataAttach = this.simulation.weeklyVaccinations.get(cw.weekBefore(this.simulationStartWeek));
             // If Sim start is the current week, attach line directly to week in progress
-            if (this.simulationStartWeek === cw.getYearWeekOfDate(this.dataloader.lastRefreshVaccinations)) {
+            if (this.simulationStartWeek === cw.getYearWeekOfDate(this.dataloader.lastRefreshVaccinations, 1)) {
                 date = this.dataloader.lastRefreshVaccinations;
-                dataAttach = this.simulation.weeklyVaccinations.get(this.simulationStartWeek);
+                dataAttach = this.simulation.weeklyVaccinations.get(cw.getYearWeekOfDate(this.dataloader.lastRefreshVaccinations));
             }
             vacAtLeastOnceSim.data.push({
                 date,
@@ -456,9 +456,11 @@ export class PlaygroundPageComponent implements OnInit {
                     }],
                 });
             }
-            // remove last week because it is not complete yet
-            vacFirstDoses.data.pop();
-            vacSecondDoses.data.pop();
+            // remove last week if it is not complete yet
+            if(this.dataloader.lastRefreshVaccinations.getUTCDay() !== 0) {
+                vacFirstDoses.data.pop();
+                vacSecondDoses.data.pop();
+            }
         }
 
         if (this.simulationResults) {
@@ -624,8 +626,10 @@ export class PlaygroundPageComponent implements OnInit {
                     value: data.vaccineDoses
                 });
             }
-            // remove last week because it is not complete yet
-            vacDoses.data.pop();
+            // remove last week if it is not complete yet
+            if(this.dataloader.lastRefreshVaccinations.getUTCDay() !== 0) {
+                vacDoses.data.pop();
+            }
         }
 
         if (this.simulationResults) {
@@ -778,9 +782,9 @@ export class PlaygroundPageComponent implements OnInit {
             const dateWeek = date;
             let dataAttach = this.simulation.weeklyVaccinations.get(cw.weekBefore(this.simulationStartWeek));
             // If Sim start is the current week, attach line directly to week in progress
-            if (this.simulationStartWeek === cw.getYearWeekOfDate(this.dataloader.lastRefreshVaccinations)) {
+            if (this.simulationStartWeek === cw.getYearWeekOfDate(this.dataloader.lastRefreshVaccinations, 1)) {
                 date = this.dataloader.lastRefreshVaccinations;
-                dataAttach = this.simulation.weeklyVaccinations.get(this.simulationStartWeek);
+                dataAttach = this.simulation.weeklyVaccinations.get(cw.getYearWeekOfDate(this.dataloader.lastRefreshVaccinations));
             }
             vacDosesSim.data.push({
                 date,
