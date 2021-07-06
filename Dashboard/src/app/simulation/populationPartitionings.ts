@@ -27,7 +27,7 @@ export class CosmoVaccinationWillingnessPartitioner implements VaccinationWillin
     constructor(
         private dataloader: DataloaderService) {
     }
-    public cosmoDate: string = '2021-06-15';
+    public cosmoDate: string = '2021-04-20';
 
     getAvailableSurveys(): string[] {
 
