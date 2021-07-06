@@ -378,7 +378,7 @@ export class PlaygroundPageComponent implements OnInit {
             data: [],
             fillColor: '#69b8b4',
             strokeColor: '#46827f',
-            label: 'Erste Impfungen',
+            label: 'Erste Impfungen (inkl. J&J)',
         };
         const vacSecondDoses: DataSeries = {
             data: [],
@@ -444,12 +444,12 @@ export class PlaygroundPageComponent implements OnInit {
                     dateStart: cw.getWeekdayInYearWeek(yWeek, 2),
                     dateEnd: cw.getWeekdayInYearWeek(yWeek, (yWeek < this.simulationStartWeek) ? 8 : 3),
                     values: [{
-                        value: data.vaccineDoses - data.fullyImmunized,
+                        value: data.partiallyImmunized,
                         fillColor: vacFirstDoses.fillColor,
                         fillStriped: false,
                         fillOpacity: (yWeek < this.simulationStartWeek) ? 0.9 : 0.9,
                     },{
-                        value: data.fullyImmunized,
+                        value: data.vaccineDoses - data.partiallyImmunized,
                         fillColor: vacSecondDoses.fillColor,
                         fillStriped: false,
                         fillOpacity: (yWeek < this.simulationStartWeek) ? 0.9 : 0.9,
@@ -499,12 +499,12 @@ export class PlaygroundPageComponent implements OnInit {
                     dateStart: cw.getWeekdayInYearWeek(yWeek, 3),
                     dateEnd: cw.getWeekdayInYearWeek(yWeek, 8),
                     values: [{
-                        value: data.vaccineDoses - data.fullyImmunized,
+                        value: data.partiallyImmunized,
                         fillColor: vacFirstDosesSim.fillColor,
                         fillStriped: true,
                         fillOpacity: 0.8,
                     },{
-                        value: data.fullyImmunized,
+                        value: data.vaccineDoses - data.partiallyImmunized,
                         fillColor: vacSecondDosesSim.fillColor,
                         fillStriped: true,
                         fillOpacity: 0.8,
