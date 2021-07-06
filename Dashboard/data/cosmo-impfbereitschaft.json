@@ -1,7 +1,7 @@
 {
 	"description": "Impfbereitschaft aus den Daten des COVID-19 Snapshot Monitorings der Universität Erfurt (ab 20. April mit bereits geimpften als 7)",
 	"source": "https://projekte.uni-erfurt.de/cosmo2020/",
-	"detail": "7 = Auf jeden Fall / bereits geimpft; 1 = Auf keinen Fall",
+	"detail": "7 = Auf jeden Fall / bereits geimpft; 1 = Auf keinen Fall; Werte der Gruppe 7 gerundet sodass die Summe stets 1 ergiebt",
 	"data": {
 		"2021-02-09": {
 			"prozente": {
@@ -171,6 +171,23 @@
                 "30-49": 5.61,
                 "50-64": 6.08,
                 "65-74": 6.15
+            }
+        },
+        "2021-06-29": {
+            "prozente": {
+                "7": 0.758,
+                "6": 0.026,
+                "5": 0.022,
+                "4": 0.045,
+                "3": 0.021,
+                "2": 0.022,
+                "1": 0.106
+            },
+            "mittel_nach_alter": {
+                "18-29": 5.95,
+                "30-49": 5.85,
+                "50-64": 6.15,
+                "65-74": 6.41
             }
         }
 	}

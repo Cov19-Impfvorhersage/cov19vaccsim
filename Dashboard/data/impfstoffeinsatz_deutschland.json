@@ -31,6 +31,21 @@
                     "2nd_dose_weeks": "6",
                     "description": "Anpassung der STIKO-Empfehlung für die zweite Impfdosis die maximale Verzögerung auszunutzen",
                     "source": "https://www.rki.de/DE/Content/Kommissionen/STIKO/Empfehlungen/Vierte_Empfehlung_01042021_Download.pdf"
+                },
+                "2021-05-28": {
+                    "ages": ">=12",
+                    "description": "Am  28.05. empfohlen durch die EMA für Personen ab 12 Jahren",
+                    "source": [
+                        "https://www.ema.europa.eu/en/news/first-covid-19-vaccine-approved-children-aged-12-15-eu",
+                        ""
+                    ]
+                },
+                "2021-07-01": {
+                    "2nd_dose_weeks": "3-6",
+                    "description": "Anpassung der STIKO-Empfehlung, die zweiten Impfungen wieder schneller durchzuführen",
+                    "source": [
+                        "https://www.rki.de/DE/Content/Kommissionen/STIKO/Empfehlungen/PM_2021-07-01.html"
+                    ]
                 }
             }
         },
@@ -63,6 +78,13 @@
                     "2nd_dose_weeks": "6",
                     "description": "Anpassung der STIKO-Empfehlung für die zweite Impfdosis die maximale Verzögerung auszunutzen",
                     "source": "https://www.rki.de/DE/Content/Kommissionen/STIKO/Empfehlungen/Vierte_Empfehlung_01042021_Download.pdf"
+                },
+                "2021-07-01": {
+                    "2nd_dose_weeks": "4-6",
+                    "description": "Anpassung der STIKO-Empfehlung, die zweiten Impfungen wieder schneller durchzuführen",
+                    "source": [
+                        "https://www.rki.de/DE/Content/Kommissionen/STIKO/Empfehlungen/PM_2021-07-01.html"
+                    ]
                 }
             }
         },
@@ -110,6 +132,13 @@
                     "2nd_dose_weeks": "12",
                     "description": "Anpassung der STIKO-Empfehlung für die zweite Impfdosis die maximale Verzögerung auszunutzen",
                     "source": "https://www.rki.de/DE/Content/Kommissionen/STIKO/Empfehlungen/Vierte_Empfehlung_01042021_Download.pdf"
+                },
+                "2021-07-01": {
+                    "2nd_dose_weeks": "4+",
+                    "description": "Empfehlung eines heterologen Impfschemas durch Zweitimpfung mit einem mRNA-Impfstoff",
+                    "source": [
+                        "https://www.rki.de/DE/Content/Kommissionen/STIKO/Empfehlungen/PM_2021-07-01.html"
+                    ]
                 }
             }
         },
