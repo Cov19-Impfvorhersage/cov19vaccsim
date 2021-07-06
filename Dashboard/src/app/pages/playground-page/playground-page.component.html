@@ -259,6 +259,13 @@
                             </mat-checkbox>
                         </p>-->
                     </div>
+                    <div class="settings_row"
+                         matTooltip="Zweitimpfungen für mit Astra-Zeneca Erstgeimpfte nach der aktuellen STIKO-Empfehlung mit BioNtech-Impfstoff und 4-wöchigem Abstand durchführen">
+                        <mat-slide-toggle [(ngModel)]="simulation.params.astra2ndToBiontech"
+                                          (change)="runSimulation();" labelPosition="before">
+                            Astra 2. Impfungen mit BioNtech
+                        </mat-slide-toggle>
+                    </div>
                 </div>
                 <mat-divider></mat-divider>
                 <div>

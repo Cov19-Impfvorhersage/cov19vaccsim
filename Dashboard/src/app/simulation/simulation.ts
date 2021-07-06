@@ -22,6 +22,7 @@ import {
 } from './populationPartitionings';
 import {sum, sub, vNM, v, mul} from './vaccine-map-helper';
 import {VaccineUsage} from './vaccine-usage';
+import {normalizeVaccineName} from "./data-interfaces/vaccine-names";
 
 
 export interface ISimulationParameters {
@@ -29,6 +30,7 @@ export interface ISimulationParameters {
     considerNotWilling: boolean;
     considerHesitating: boolean;
     considerStockPile: boolean;
+    astra2ndToBiontech: boolean;
     contraindicationAge: number;
     deliveryAmountFactor: number;
     deliveryScenario: string;
@@ -70,6 +72,7 @@ export class BasicSimulation implements VaccinationSimulation {
         considerNotWilling: true,
         considerHesitating: true,
         considerStockPile: false,
+        astra2ndToBiontech: true,
         contraindicationAge: 12,
         deliveryAmountFactor: 1,
         deliveryScenario: zilabImpfsimVerteilungszenarien[1],
@@ -223,6 +226,14 @@ export class BasicSimulation implements VaccinationSimulation {
                 // For every vaccine type given so far
                 for (const vName of cumDosesByVaccine.keys()) {
                     let intervalWeeks = this.vaccineUsage.getVaccineIntervalWeeks(curWeek, vName);
+                    let vName2nd = vName;
+
+                    // Hardcoded for now
+                    if(this.params.astra2ndToBiontech && vName === normalizeVaccineName('astra')){
+                        vName2nd = normalizeVaccineName('biontech');
+                        intervalWeeks = 4;
+                    }
+
 
                     // Handle negative extra interval weeks here
                     if(intervalWeeks > 0 && !this.params.extraIntervalWeeksOnlyFuture && this.params.extraIntervalWeeks < 0){
@@ -240,7 +251,7 @@ export class BasicSimulation implements VaccinationSimulation {
                         if (thatWeek) {
                             const shots1 = thatWeek.firstDosesByVaccine.get(vName) || 0;
                             const ppl = Math.min(pplNeeding2ndShot, shots1);
-                            waitingFor2ndDose[i].set(vName, (waitingFor2ndDose[i].get(vName) || 0) + ppl * this.params.fractionTakingSecondDose);
+                            waitingFor2ndDose[i].set(vName2nd, (waitingFor2ndDose[i].get(vName2nd) || 0) + ppl * this.params.fractionTakingSecondDose);
                             pplNeeding2ndShot -= ppl;
                         }
                     }
@@ -398,12 +409,20 @@ export class BasicSimulation implements VaccinationSimulation {
             // 1st shots go on waiting list to get their 2nd in a few weeks
             for (const [vName, num] of given1stShots.entries()) {
                 let intervalWeeks = this.vaccineUsage.getVaccineIntervalWeeks(curWeek, vName);
+                let vName2nd = vName;
+
+                // Hardcoded for now
+                if(this.params.astra2ndToBiontech && vName === normalizeVaccineName('astra')){
+                    vName2nd = normalizeVaccineName('biontech');
+                    intervalWeeks = 4;
+                }
+
                 partiallyImmunized += num;
                 if (intervalWeeks > 0) {
                     // -1 as [0] is the next week; so [5] = in 6 weeks
                     intervalWeeks += this.params.extraIntervalWeeks - 1;
-                    waitingFor2ndDose[intervalWeeks].set(vName,
-                        (waitingFor2ndDose[intervalWeeks].get(vName) || 0) + num * this.params.fractionTakingSecondDose);
+                    waitingFor2ndDose[intervalWeeks].set(vName2nd,
+                        (waitingFor2ndDose[intervalWeeks].get(vName2nd) || 0) + num * this.params.fractionTakingSecondDose);
                 }else{
                     // This vaccine doesn't need a 2nd shot so these people are already fully immunized
                     fullyImmunized += num;
