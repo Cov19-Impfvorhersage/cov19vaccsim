@@ -103,10 +103,7 @@ export function calculateWeeklyVaccinations(vaccinations: d3.DSVParsedArray<Vacc
             };
 
             if(week1stDoses + week2ndDoses !== currWeek.vaccineDoses){
-                console.warn('Something wrong in weekly vaccination data', currWeek);
-            }
-            if(week2ndDoses !== currWeek.vaccineDoses - currWeek.partiallyImmunized){
-                console.warn('Something wrong in weekly vaccination data', currWeek);
+                console.warn('Something wrong in weekly vaccination data (2st and 2nd doses dont sum up to vaccineDoses)', currWeek);
             }
             week1stDoses = 0;
             week2ndDoses = 0;
@@ -135,7 +132,7 @@ export function calculateWeeklyVaccinations(vaccinations: d3.DSVParsedArray<Vacc
         week1stDoses += vaccDay.dosen_erst_differenz_zum_vortag;
         week2ndDoses += vaccDay.dosen_zweit_differenz_zum_vortag;
         if(vaccDay.dosen_erst_differenz_zum_vortag + vaccDay.dosen_zweit_differenz_zum_vortag !== vaccDay.dosen_differenz_zum_vortag){
-            console.warn('Something wrong in vaccination data', vaccDay);
+            console.warn('Something wrong in vaccination data (1st and 2nd doses dont sum up to total doses)', vaccDay);
         }
     }
     closeCurrWeek();
