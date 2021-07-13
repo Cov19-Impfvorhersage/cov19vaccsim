@@ -215,7 +215,7 @@ export class BasicSimulation implements VaccinationSimulation {
 
         // Distribute people that didn't get their 2nd shot yet onto the waiting list
         {
-            let pplNeeding2ndShot = dataBeforeSim.cumPartiallyImmunized - dataBeforeSim.cumFullyImmunized;
+            let pplNeeding2ndShot = Math.max(0, dataBeforeSim.cumPartiallyImmunized - dataBeforeSim.cumFullyImmunized) * this.params.fractionTakingSecondDose;
             console.log('People still needing 2nd shots', pplNeeding2ndShot);
 
 
@@ -250,8 +250,8 @@ export class BasicSimulation implements VaccinationSimulation {
 
                         if (thatWeek) {
                             const shots1 = thatWeek.firstDosesByVaccine.get(vName) || 0;
-                            const ppl = Math.min(pplNeeding2ndShot, shots1);
-                            waitingFor2ndDose[i].set(vName2nd, (waitingFor2ndDose[i].get(vName2nd) || 0) + ppl * this.params.fractionTakingSecondDose);
+                            const ppl = Math.min(pplNeeding2ndShot, shots1 * this.params.fractionTakingSecondDose);
+                            waitingFor2ndDose[i].set(vName2nd, (waitingFor2ndDose[i].get(vName2nd) || 0) + ppl);
                             pplNeeding2ndShot -= ppl;
                         }
                     }
@@ -283,6 +283,23 @@ export class BasicSimulation implements VaccinationSimulation {
             }
             /* */
 
+            // Hardcoded for now:
+            // Handle Astra-People wanting their 2nd shot of BioNtech NOW while originally having to wait for a lot of weeks
+            // Spread them on to the next three weeks
+            if(this.params.astra2ndToBiontech){
+                const vName = normalizeVaccineName('astra');
+                const vName2nd = normalizeVaccineName('biontech');
+                const fiveWeeksAgo = this.weeklyVaccinations.get(
+                    cw.weekBefore(this.simulationStartWeek, 5)
+                );
+                const astraPplWaiting = Math.max(0, fiveWeeksAgo.cumFirstDosesByVaccine.get(vName) * 2 - dataBeforeSim.cumDosesByVaccine.get(vName));
+                const ppl = Math.min(pplNeeding2ndShot, astraPplWaiting * this.params.fractionTakingSecondDose);
+                waitingFor2ndDose[0].set(vName2nd, (waitingFor2ndDose[0].get(vName2nd) || 0) + ppl * 0.5);
+                waitingFor2ndDose[1].set(vName2nd, (waitingFor2ndDose[1].get(vName2nd) || 0) + ppl * 0.3);
+                waitingFor2ndDose[2].set(vName2nd, (waitingFor2ndDose[2].get(vName2nd) || 0) + ppl * 0.2);
+                pplNeeding2ndShot -= ppl;
+            }
+
             // If anything is left over, distribute it somewhat equally on all vaccines in the first week
             if (pplNeeding2ndShot > 0) {
                 console.warn('12 weeks not enough...', pplNeeding2ndShot);
@@ -292,6 +309,9 @@ export class BasicSimulation implements VaccinationSimulation {
                     waitingFor2ndDose[0].set(vName, num + ppl);
                     pplNeeding2ndShot -= ppl;
                 }
+            }
+            if (pplNeeding2ndShot < 0) {
+                console.warn('More second shots planned than necessary!!', pplNeeding2ndShot);
             }
 
             // Push second vaccinations some weeks into the future
