@@ -177,7 +177,7 @@ export class BasicSimulation implements VaccinationSimulation {
         };
 
 
-        // # Hesitating population estimations
+        // # Willingness estimations per vaccine
         let perVacWillingnessData = new Map();
         if(this.params.estimateWillingPerVaccine){
             // For every vaccine available
@@ -196,6 +196,7 @@ export class BasicSimulation implements VaccinationSimulation {
                     const deliveries = Math.max(0, deliveriesBeforeSim.cumDosesByVaccine.get(vName) - deliveriesNWeeksAgo.cumDosesByVaccine.get(vName)) * (estimateWeeks / deliveryEstimateWeeks);
                     const shots = Math.max(0, dataBeforeSim.cumDosesByVaccine.get(vName) - dataNWeeksAgo.cumDosesByVaccine.get(vName));
                     const shots1 = Math.max(0, dataBeforeSim.cumFirstDosesByVaccine.get(vName) - dataNWeeksAgo.cumFirstDosesByVaccine.get(vName)) || shots;
+                    // Fraction of first shots given of possible first shots (deliveries minus second shots)
                     const fraction = shots1 / (deliveries - (shots - shots1));
                     console.log('Data for last ' + estimateWeeks + ' weeks:', vName,
                         ' delivered ', deliveries,
@@ -453,7 +454,7 @@ export class BasicSimulation implements VaccinationSimulation {
 
                     if(this.params.estimateWillingPerVaccine) {
                         const willData = perVacWillingnessData.get(vName);
-                        const interpolate = Math.max(0, Math.min(1, willData.fraction))
+                        const interpolate = Math.max(0, Math.min(1, Math.pow(willData.fraction*1.5, 2)/1.5)) * 0.8
                         availablePplForThisVac = Math.min(availablePeople,
                             interpolate * willData.fraction * availableVaccineStockPile.get(vName) +
                             (1-interpolate) * willData.averageNumbers

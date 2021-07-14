@@ -441,7 +441,7 @@
                     <li>
                         <b>Aufteilung der Bevölkerung:</b><br>
                         Um den Teil der Bevölkerung zu simulieren, der die Impfung erhalten wird, werden zunächst die Kontraindizierten abgezogen.
-                        Dies sind vor allem alle unter 16 jährigen, da bisher keiner der Impfstoffe für diese Altersgruppe zugelassen wurde.
+                        Dies sind vor allem alle unter 12 jährigen, da bisher keiner der Impfstoffe für diese Altersgruppe zugelassen wurde.
                         Anschließend wird vom Rest der Bevölkerung der Anteil Impfunwilliger abgezogen.
                         Dies ist für die meisten Berechnungen sinnvoll, insbesondere da die Umfragen zur Impfwilligkeit sich meist
                         auf die volljährige Bevölkerung beziehen und dies auch diejenigen sind, für die die Impfstoffe aktuell zugelassen sind.
@@ -465,6 +465,16 @@
                         Während von den Impfwilligen jede Woche 100% bereit wären und von den Impfunwilligen 0%,
                         ist dies bei den Impfzögerlichen ein fließender Übergang zwischen 50% und 10%.
                         Die Zahlen sind komplett aus der Luft gegriffen, weil der Plot dann schön aussieht.
+                    </li>
+                    <li>
+                        <b>Automatische Abschätzung der Impfwilligen pro Impfstoff:</b><br>
+                        Inzwischen ist die Kampagne an einer Stelle an der die Impfungen mehr von der Impfbereitschaft abhängen als von den Impflieferungen.
+                        Da dies jedoch pro Impfstoff sehr unterschiedlich ist (z.B. wird Astra-Zeneca kaum noch verimpft, während von BioNtech noch die meisten gelieferten Dosen weggehen),
+                        wird hierfür folgende automatische Abschätzung verwendet:<br>
+                        1) Über die letzten paar Wochen wird die durchschnittliche Anzahl an Erstimpfungen pro Impfstoff berechnet.<br>
+                        2) Ebenso wird der Anteil dieser Erstimpfungen an den theoretisch möglichen Erstimpfungen (Lieferungen minus Zweitimpfungen) berechnet.<br>
+                        Für die zukünftige Woche wird anschließend eine Linearkombination aus 1) und 2) (auf die Lieferungen der neuen Woche bezogen) verwendet,
+                        je nach Wert von 2).
                     </li>
                 </ul>
 
