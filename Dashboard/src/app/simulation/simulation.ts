@@ -29,6 +29,7 @@ export interface ISimulationParameters {
     considerContraindicated: boolean;
     considerNotWilling: boolean;
     considerHesitating: boolean;
+    estimateWillingPerVaccine: boolean;
     considerStockPile: boolean;
     astra2ndToBiontech: boolean;
     contraindicationAge: number;
@@ -71,6 +72,7 @@ export class BasicSimulation implements VaccinationSimulation {
         considerContraindicated: true,
         considerNotWilling: true,
         considerHesitating: true,
+        estimateWillingPerVaccine: true,
         considerStockPile: false,
         astra2ndToBiontech: true,
         contraindicationAge: 12,
@@ -173,6 +175,41 @@ export class BasicSimulation implements VaccinationSimulation {
         const results: ISimulationResults = {
             weeklyData: new Map()
         };
+
+
+        // # Hesitating population estimations
+        let perVacWillingnessData = new Map();
+        if(this.params.estimateWillingPerVaccine){
+            // For every vaccine available
+            // Check the fraction of delivered vaccine given out to people over the last weeks
+
+            const estimateWeeks = 3;
+            const deliveryEstimateWeeks = 8; // estimate deliveries over a longer period because they tend to be sporadic
+
+            const dataBeforeSim = this.weeklyVaccinations.get(cw.weekBefore(this.simulationStartWeek));
+            const deliveriesBeforeSim = this.weeklyDeliveriesScenario.get(cw.weekBefore(this.simulationStartWeek));
+            const dataNWeeksAgo = this.weeklyVaccinations.get(cw.weekBefore(this.simulationStartWeek, estimateWeeks + 1));
+            const deliveriesNWeeksAgo = this.weeklyDeliveriesScenario.get(cw.weekBefore(this.simulationStartWeek, deliveryEstimateWeeks + 1));
+
+            for (const vName of this.vaccineUsage.getVaccinesPriorityList()){
+                if (this.params.vaccinesUsed.get(vName).used){
+                    const deliveries = Math.max(0, deliveriesBeforeSim.cumDosesByVaccine.get(vName) - deliveriesNWeeksAgo.cumDosesByVaccine.get(vName)) * (estimateWeeks / deliveryEstimateWeeks);
+                    const shots = Math.max(0, dataBeforeSim.cumDosesByVaccine.get(vName) - dataNWeeksAgo.cumDosesByVaccine.get(vName));
+                    const shots1 = Math.max(0, dataBeforeSim.cumFirstDosesByVaccine.get(vName) - dataNWeeksAgo.cumFirstDosesByVaccine.get(vName)) || shots;
+                    const fraction = shots1 / (deliveries - (shots - shots1));
+                    console.log('Data for last ' + estimateWeeks + ' weeks:', vName,
+                        ' delivered ', deliveries,
+                        'given total', shots,
+                        'given 1st', shots1,
+                        'fraction of available 1st actually given', fraction);
+                    perVacWillingnessData.set(vName, {
+                        fraction: fraction,
+                        averageNumbers: shots1 / estimateWeeks,
+                    });
+                }
+            }
+        }
+
 
 
         // Running week data
@@ -412,7 +449,18 @@ export class BasicSimulation implements VaccinationSimulation {
             let given1stShots = new Map();
             for (const vName of this.vaccineUsage.getVaccinesPriorityList()){
                 if (availableVaccineStockPile.has(vName) && this.params.vaccinesUsed.get(vName).used){
-                    const shots = Math.max(0, Math.min(availableVaccineStockPile.get(vName), availablePeople));
+                    let availablePplForThisVac = availablePeople;
+
+                    if(this.params.estimateWillingPerVaccine) {
+                        const willData = perVacWillingnessData.get(vName);
+                        const interpolate = Math.max(0, Math.min(1, willData.fraction))
+                        availablePplForThisVac = Math.min(availablePeople,
+                            interpolate * willData.fraction * availableVaccineStockPile.get(vName) +
+                            (1-interpolate) * willData.averageNumbers
+                        );
+                    }
+
+                    const shots = Math.max(0, Math.min(availableVaccineStockPile.get(vName), availablePplForThisVac));
                     given1stShots.set(vName, shots);
                     availablePeople -= shots;
                 }

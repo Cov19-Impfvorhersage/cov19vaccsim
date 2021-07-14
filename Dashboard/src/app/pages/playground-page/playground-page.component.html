@@ -159,6 +159,15 @@
                         </mat-slide-toggle>
                     </div>
                     <div class="settings_row"
+                         style="height: 3em;"
+                         matTooltip="Personen, die sich impfen lassen, für jeden Impfstoff aus den vergangenen Wochen abschätzen. Details siehe Einschränkungen">
+                        <mat-slide-toggle [(ngModel)]="simulation.params.estimateWillingPerVaccine"
+                                          (change)="runSimulation();" labelPosition="before">
+                            Impfwilligkeit pro Impfstoff <br>
+                            automatisch abschätzen
+                        </mat-slide-toggle>
+                    </div>
+                    <div class="settings_row"
                          matTooltip="Personen, für die Impfungen zugelassen wären, die theoretisch bereit wären, sich impfen zu lassen.
                         Standardwert ist der Anteil der Antworten [7-3] aus der Skala [7-1] der COSMO-Umfragen.">
                         <div fxLayout="row" fxLayoutAlign="space-between center">
