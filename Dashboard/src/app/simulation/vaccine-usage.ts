@@ -33,7 +33,7 @@ export class VaccineUsage {
             az: 12,
             'j&j': 0
         };
-        return (vName in vacSpecialIntervals) ? vacSpecialIntervals[vName] : 6;
+        return (vName in vacSpecialIntervals) ? vacSpecialIntervals[vName] : 5;
     }
 
     isVaccineUsed(week: YearWeek, vName: string): boolean {
