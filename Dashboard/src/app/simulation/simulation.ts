@@ -253,7 +253,7 @@ export class BasicSimulation implements VaccinationSimulation {
 
         // Distribute people that didn't get their 2nd shot yet onto the waiting list
         {
-            let pplNeeding2ndShot = Math.max(0, dataBeforeSim.cumPartiallyImmunized - dataBeforeSim.cumFullyImmunized) * this.params.fractionTakingSecondDose;
+            let pplNeeding2ndShot =  Math.floor(Math.max(0, dataBeforeSim.cumPartiallyImmunized - dataBeforeSim.cumFullyImmunized) * this.params.fractionTakingSecondDose);
             console.log('People still needing 2nd shots', pplNeeding2ndShot);
 
 
@@ -288,7 +288,7 @@ export class BasicSimulation implements VaccinationSimulation {
 
                         if (thatWeek) {
                             const shots1 = thatWeek.firstDosesByVaccine.get(vName) || 0;
-                            const ppl = Math.min(pplNeeding2ndShot, shots1 * this.params.fractionTakingSecondDose);
+                            const ppl = Math.min(pplNeeding2ndShot,  Math.floor(shots1 * this.params.fractionTakingSecondDose));
                             waitingFor2ndDose[i].set(vName2nd, (waitingFor2ndDose[i].get(vName2nd) || 0) + ppl);
                             pplNeeding2ndShot -= ppl;
                         }
@@ -331,7 +331,8 @@ export class BasicSimulation implements VaccinationSimulation {
                     cw.weekBefore(this.simulationStartWeek, 5)
                 );
                 const astraPplWaiting = Math.max(0, fiveWeeksAgo.cumFirstDosesByVaccine.get(vName) * 2 - dataBeforeSim.cumDosesByVaccine.get(vName));
-                const ppl = Math.min(pplNeeding2ndShot, astraPplWaiting * this.params.fractionTakingSecondDose);
+                console.log('Astra ppl put into next weeks', astraPplWaiting);
+                const ppl = Math.min(pplNeeding2ndShot,  Math.floor(astraPplWaiting * this.params.fractionTakingSecondDose));
                 waitingFor2ndDose[0].set(vName2nd, (waitingFor2ndDose[0].get(vName2nd) || 0) + ppl * 0.5);
                 waitingFor2ndDose[1].set(vName2nd, (waitingFor2ndDose[1].get(vName2nd) || 0) + ppl * 0.3);
                 waitingFor2ndDose[2].set(vName2nd, (waitingFor2ndDose[2].get(vName2nd) || 0) + ppl * 0.2);
