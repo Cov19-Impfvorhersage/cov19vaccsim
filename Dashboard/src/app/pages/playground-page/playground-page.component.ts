@@ -113,7 +113,8 @@ export class PlaygroundPageComponent implements OnInit {
                 ],
                 fillColor: '#46bf3d',
                 strokeColor: '#39a401',
-                strokeDasharray: '5, 5'
+                strokeDasharray: '5, 5',
+                strokeDashoffset: '5'
             },
         ],
         partitions: [],
@@ -264,6 +265,7 @@ export class PlaygroundPageComponent implements OnInit {
             fillColor: '#69b8b4',
             strokeColor: '#46827f',
             strokeDasharray: '5, 5',
+            strokeDashoffset: '5',
             fillStriped: true,
         };
         const vacFullySim: DataSeries = {
@@ -271,6 +273,7 @@ export class PlaygroundPageComponent implements OnInit {
             fillColor: '#2d876a',
             strokeColor: '#265538',
             strokeDasharray: '5, 5',
+            strokeDashoffset: '5',
             fillStriped: true,
         };
 
@@ -371,6 +374,7 @@ export class PlaygroundPageComponent implements OnInit {
             fillColor: '#b8ad69',
             strokeColor: '#827a46',
             strokeDasharray: '5, 5',
+            strokeDashoffset: '5',
             fillOpacity: 0,
             fillStriped: true,
         };
@@ -391,6 +395,7 @@ export class PlaygroundPageComponent implements OnInit {
             fillColor: '#69b8b4',
             strokeColor: '#46827f',
             strokeDasharray: '5, 5',
+            strokeDashoffset: '5',
             fillStriped: true,
         };
         const vacSecondDosesSim: DataSeries = {
@@ -398,6 +403,7 @@ export class PlaygroundPageComponent implements OnInit {
             fillColor: '#2d876a',
             strokeColor: '#265538',
             strokeDasharray: '5, 5',
+            strokeDashoffset: '5',
             fillStriped: true,
         };
         const stackedBars: Array<StackedBar> = [];
@@ -556,6 +562,7 @@ export class PlaygroundPageComponent implements OnInit {
             fillColor: '#b8ad69',
             strokeColor: '#827a46',
             strokeDasharray: '5, 5'
+            strokeDashoffset: '5',
         };*/
         const vacDoses: DataSeries = {
             data: [],
@@ -570,6 +577,7 @@ export class PlaygroundPageComponent implements OnInit {
             strokeColor: '#265538',
             fillOpacity: 0,
             strokeDasharray: '5, 5',
+            strokeDashoffset: '5',
             fillStriped: true,
         };
         const stackedBars: Array<StackedBar> = [];
@@ -707,6 +715,7 @@ export class PlaygroundPageComponent implements OnInit {
                     fillColor: color,
                     strokeColor: color,
                     strokeDasharray: '5, 5',
+                    strokeDashoffset: '5',
                     fillStriped: true,
                 });
             }
@@ -749,6 +758,7 @@ export class PlaygroundPageComponent implements OnInit {
             fillColor: '#b8ad69',
             strokeColor: '#827a46',
             strokeDasharray: '5, 5',
+            strokeDashoffset: '5',
             fillStriped: true,
         };
         const vacDosesSim: DataSeries = {
@@ -756,6 +766,7 @@ export class PlaygroundPageComponent implements OnInit {
             fillColor: '#2d876a',
             strokeColor: '#265538',
             strokeDasharray: '5, 5',
+            strokeDashoffset: '5',
             fillStriped: true,
         };
 

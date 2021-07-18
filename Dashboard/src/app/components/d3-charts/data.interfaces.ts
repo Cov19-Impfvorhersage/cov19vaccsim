@@ -5,6 +5,7 @@ export interface DataSeries {
     data: DataPoint[];
     strokeColor: string;
     strokeDasharray?: string;
+    strokeDashoffset?: string;
     fillColor: string;
     fillOpacity?: number;
     fillStriped?: boolean;

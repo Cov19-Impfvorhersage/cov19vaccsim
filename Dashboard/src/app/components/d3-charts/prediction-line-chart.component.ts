@@ -216,6 +216,7 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
             .attr('stroke', s => s.strokeColor)
             .attr('stroke-width', '2')
             .attr('stroke-dasharray', s => s.strokeDasharray || null)
+            .attr('stroke-dashoffset', s => s.strokeDashoffset || null)
             .attr('d', (d) => lineGenerator(d.data));
 
         this.fills
