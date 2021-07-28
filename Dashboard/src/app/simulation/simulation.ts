@@ -352,9 +352,9 @@ export class BasicSimulation implements VaccinationSimulation {
                 const astraPplWaiting = Math.max(0, weekBeforeChange.cumFirstDosesByVaccine.get(vName) * 2 - dataBeforeSim.cumDosesByVaccine.get(vName));
                 console.log('Astra ppl put into next weeks', astraPplWaiting);
                 const ppl = Math.min(pplNeeding2ndShot,  Math.floor(astraPplWaiting * this.params.fractionTakingSecondDose));
-                waitingFor2ndDose[weekDiff].set(vName2nd, (waitingFor2ndDose[0].get(vName2nd) || 0) + ppl * 0.5);
-                waitingFor2ndDose[weekDiff+1].set(vName2nd, (waitingFor2ndDose[1].get(vName2nd) || 0) + ppl * 0.3);
-                waitingFor2ndDose[weekDiff+2].set(vName2nd, (waitingFor2ndDose[2].get(vName2nd) || 0) + ppl * 0.2);
+                waitingFor2ndDose[weekDiff].set(vName2nd, (waitingFor2ndDose[weekDiff].get(vName2nd) || 0) + ppl * 0.5);
+                waitingFor2ndDose[weekDiff+1].set(vName2nd, (waitingFor2ndDose[weekDiff+1].get(vName2nd) || 0) + ppl * 0.3);
+                waitingFor2ndDose[weekDiff+2].set(vName2nd, (waitingFor2ndDose[weekDiff+2].get(vName2nd) || 0) + ppl * 0.2);
                 pplNeeding2ndShot -= ppl;
             }
 
