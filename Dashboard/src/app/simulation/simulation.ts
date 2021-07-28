@@ -73,7 +73,7 @@ export class BasicSimulation implements VaccinationSimulation {
         considerNotWilling: true,
         considerHesitating: true,
         estimateWillingPerVaccine: 'exponential',
-        considerStockPile: false,
+        considerStockPile: true,
         astra2ndToBiontech: true,
         contraindicationAge: 12,
         deliveryAmountFactor: 1,
