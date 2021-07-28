@@ -89,3 +89,11 @@ export function weekAfter(yw: YearWeek, weeks: number = 1): YearWeek {
 export function weekBefore(yw: YearWeek, weeks: number = 1): YearWeek {
     return getYearWeekOfDate(getWeekdayInYearWeek(yw, 1 - 7 * weeks));
 }
+
+/**
+ * Returns the number of weeks difference of yw1 and yw2 (yw2 - yw1)
+ */
+export function weekDiff(yw1: YearWeek, yw2: YearWeek): number {
+    return Math.floor((getWeekdayInYearWeek(yw2, 2).getTime() - getWeekdayInYearWeek(yw1, 1).getTime())
+        / (1000 * 60 * 60 * 24 * 7)); // Rounding errors
+}

@@ -58,8 +58,12 @@ export class BasicSimulation implements VaccinationSimulation {
         private dataloader: DataloaderService) {
     }
 
+    simulationStartWeek: YearWeek = cw.yws([2021, 10]);
+    simulationEndWeek: YearWeek = cw.yws([2021, 43]);
+
     /** Delay between vaccines being delivered and them being available for usage */
     vaccineDeliveryDelayWeeks = 1;
+    astra2ndToBiontechStartWeek: YearWeek = cw.yws([2021, 27]);
 
     weeklyVaccinations: WeeklyVaccinationData;
     weeklyDeliveries: WeeklyDeliveryData;
@@ -117,9 +121,6 @@ export class BasicSimulation implements VaccinationSimulation {
             partitions: []
         },
     };
-
-    simulationStartWeek: YearWeek = cw.yws([2021, 10]);
-    simulationEndWeek: YearWeek = cw.yws([2021, 43]);
 
     /** Prepare data: Call when Dataloader is ready */
     prepareData(): boolean {
@@ -282,7 +283,8 @@ export class BasicSimulation implements VaccinationSimulation {
                     let vName2nd = vName;
 
                     // Hardcoded for now
-                    if(this.params.astra2ndToBiontech && vName === normalizeVaccineName('astra')){
+                    if(this.params.astra2ndToBiontech && vName === normalizeVaccineName('astra') &&
+                        cw.weekAfter(curWeek, i) >= this.astra2ndToBiontechStartWeek){
                         vName2nd = normalizeVaccineName('biontech');
                         intervalWeeks = 4;
                     }
@@ -339,18 +341,20 @@ export class BasicSimulation implements VaccinationSimulation {
             // Hardcoded for now:
             // Handle Astra-People wanting their 2nd shot of BioNtech NOW while originally having to wait for a lot of weeks
             // Spread them on to the next three weeks
-            if(this.params.astra2ndToBiontech){
+            if(this.params.astra2ndToBiontech && cw.weekAfter(curWeek, 10) >= this.astra2ndToBiontechStartWeek){
+                const weekDiff = Math.max(0, cw.weekDiff(curWeek, this.astra2ndToBiontechStartWeek));
                 const vName = normalizeVaccineName('astra');
                 const vName2nd = normalizeVaccineName('biontech');
-                const fiveWeeksAgo = this.weeklyVaccinations.get(
-                    cw.weekBefore(this.simulationStartWeek, 5)
+                const weekBeforeChange = this.weeklyVaccinations.get(
+                    cw.weekBefore(this.simulationStartWeek, Math.max(0, 5 - weekDiff))
                 );
-                const astraPplWaiting = Math.max(0, fiveWeeksAgo.cumFirstDosesByVaccine.get(vName) * 2 - dataBeforeSim.cumDosesByVaccine.get(vName));
+                console.log('distance for astra', Math.max(0, 5 - weekDiff));
+                const astraPplWaiting = Math.max(0, weekBeforeChange.cumFirstDosesByVaccine.get(vName) * 2 - dataBeforeSim.cumDosesByVaccine.get(vName));
                 console.log('Astra ppl put into next weeks', astraPplWaiting);
                 const ppl = Math.min(pplNeeding2ndShot,  Math.floor(astraPplWaiting * this.params.fractionTakingSecondDose));
-                waitingFor2ndDose[0].set(vName2nd, (waitingFor2ndDose[0].get(vName2nd) || 0) + ppl * 0.5);
-                waitingFor2ndDose[1].set(vName2nd, (waitingFor2ndDose[1].get(vName2nd) || 0) + ppl * 0.3);
-                waitingFor2ndDose[2].set(vName2nd, (waitingFor2ndDose[2].get(vName2nd) || 0) + ppl * 0.2);
+                waitingFor2ndDose[weekDiff].set(vName2nd, (waitingFor2ndDose[0].get(vName2nd) || 0) + ppl * 0.5);
+                waitingFor2ndDose[weekDiff+1].set(vName2nd, (waitingFor2ndDose[1].get(vName2nd) || 0) + ppl * 0.3);
+                waitingFor2ndDose[weekDiff+2].set(vName2nd, (waitingFor2ndDose[2].get(vName2nd) || 0) + ppl * 0.2);
                 pplNeeding2ndShot -= ppl;
             }
 
@@ -502,9 +506,10 @@ export class BasicSimulation implements VaccinationSimulation {
                 let vName2nd = vName;
 
                 // Hardcoded for now
-                if(this.params.astra2ndToBiontech && vName === normalizeVaccineName('astra')){
+                if(this.params.astra2ndToBiontech && vName === normalizeVaccineName('astra')
+                    && cw.weekAfter(curWeek, intervalWeeks) >= this.astra2ndToBiontechStartWeek){
                     vName2nd = normalizeVaccineName('biontech');
-                    intervalWeeks = 4;
+                    intervalWeeks = Math.max(4, cw.weekDiff(curWeek, this.astra2ndToBiontechStartWeek));
                 }
 
                 partiallyImmunized += num;

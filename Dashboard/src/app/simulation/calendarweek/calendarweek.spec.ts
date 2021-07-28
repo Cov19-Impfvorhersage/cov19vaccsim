@@ -77,4 +77,20 @@ describe('Calendarweek', () => {
         expect(yWeekT[0]).toEqual(2021);
         expect(yWeekT[1]).toEqual(1);
     });
+
+    it('should calculate differences correctly', () => {
+        const yWeekAfter = cw.weekAfter(tenthWeek2021);
+        const y5WeekAfter = cw.weekAfter(tenthWeek2021, 5);
+        expect(cw.weekDiff(tenthWeek2021, tenthWeek2021)).toEqual(0);
+        expect(cw.weekDiff(tenthWeek2021, yWeekAfter)).toEqual(1);
+        expect(cw.weekDiff(tenthWeek2021, y5WeekAfter)).toEqual(5);
+        expect(cw.weekDiff(yWeekAfter, tenthWeek2021)).toEqual(-1);
+
+        expect(cw.weekDiff(firstWeek2021, tenthWeek2021)).toEqual(9);
+    });
+
+    it('should calculate differences over year boundaries correctly', () => {
+        expect(cw.weekDiff(lastWeek2020, firstWeek2021)).toEqual(1);
+        expect(cw.weekDiff(lastWeek2020, tenthWeek2021)).toEqual(10);
+    });
 });
