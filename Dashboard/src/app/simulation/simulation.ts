@@ -482,8 +482,11 @@ export class BasicSimulation implements VaccinationSimulation {
                     }
                     else if(this.params.estimateWillingPerVaccine === 'exponential') {
                         const willData = perVacWillingnessData.get(vName);
-                        availablePplForThisVac = willData.exponentialNumbers * willData.exponentialFactor;
-                        willData.exponentialNumbers = availablePplForThisVac; // propagate for next week
+                        const expNum = willData.exponentialNumbers * willData.exponentialFactor;
+                        willData.exponentialNumbers = expNum; // propagate for next week
+                        availablePplForThisVac = Math.min(availablePeople,
+                            expNum
+                        );
                     }
 
                     const shots = Math.max(0, Math.min(availableVaccineStockPile.get(vName), availablePplForThisVac));
