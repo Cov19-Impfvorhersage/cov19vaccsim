@@ -481,12 +481,18 @@
                         <b>Automatische Abschätzung der Impfwilligen pro Impfstoff:</b><br>
                         Inzwischen ist die Kampagne an einer Stelle an der die Impfungen mehr von der Impfbereitschaft abhängen als von den Impflieferungen.
                         Da dies jedoch pro Impfstoff sehr unterschiedlich ist (z.B. wird Astra-Zeneca kaum noch verimpft, während von BioNtech noch die meisten gelieferten Dosen weggehen),
-                        wird hierfür folgende automatische Abschätzung verwendet:<br>
+                        wird hierfür eine der folgenden automatische Abschätzung verwendet:<br>
+                        <u>Konstant:</u><br>
                         1) Über die letzten paar Wochen wird die durchschnittliche Anzahl an Erstimpfungen pro Impfstoff berechnet.<br>
                         2) Ebenso wird der Anteil dieser Erstimpfungen an den theoretisch möglichen Erstimpfungen (Lieferungen minus Zweitimpfungen) berechnet.<br>
                         Für die zukünftige Woche wird anschließend eine Linearkombination aus 1) und 2) (auf die Lieferungen der neuen Woche bezogen) verwendet,
                         je nach Wert von 2).<br>
-                        Für die Zukunft sind hier noch ausgeklügeltere Ansätze geplant (z.B. exponentielle Verläufe pro Impfstoff).
+                        <u>Exponentiell abfallend:</u><br>
+                        Über die letzten paar Wochen wird für jeden Impfstoff ein exponentiell abfallendes (exp. <= 1) Modell berechnet.<br>
+                        Dieses wird dann für die folgenden Wochen fortgeführt.<br>
+                        Dieses Modell ergibt im Gegensatz zur konstanten Fortführung ein oberes Limit dafür, wie viele Leute sich insgesamt impfen lassen,
+                        das unabhängig von der eingestellten Impfbereitschaft ist.<br>
+                        Beide Abschätzungen machen allerdings nur ab Mitte Juli Sinn, daher sollte man diese deaktivieren, wenn man die Simulation zu einem früheren Zeitpunkt starten möchte.
                     </li>
                 </ul>
 
