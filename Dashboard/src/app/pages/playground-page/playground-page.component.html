@@ -161,11 +161,22 @@
                     <div class="settings_row"
                          style="height: 3em;"
                          matTooltip="Personen, die sich impfen lassen, für jeden Impfstoff aus den vergangenen Wochen abschätzen. Details siehe Einschränkungen">
-                        <mat-slide-toggle [(ngModel)]="simulation.params.estimateWillingPerVaccine"
-                                          (change)="runSimulation();" labelPosition="before">
-                            Impfwilligkeit pro Impfstoff <br>
-                            automatisch abschätzen
-                        </mat-slide-toggle>
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                            <div>Impfwilligkeit pro Impfstoff <br>
+                                automatisch abschätzen</div>
+                            <div fxFlex="0 0 auto" >
+
+                                <mat-form-field color="accent" appearance="outline" class="slim"
+                                                style="width: auto; min-width: 10em;"
+                                                matTooltip="">
+                                    <mat-select [(ngModel)]="simulation.params.estimateWillingPerVaccine" (selectionChange)="setWillingnessDate()" >
+                                        <ng-container *ngFor="let p of simulation.availableWillingnessEstimationOptions | keyvalue: originalOrder">
+                                            <mat-option [value]="p.key">{{p.value}}</mat-option>
+                                        </ng-container>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
                     </div>
                     <div class="settings_row"
                          matTooltip="Personen, für die Impfungen zugelassen wären, die theoretisch bereit wären, sich impfen zu lassen.

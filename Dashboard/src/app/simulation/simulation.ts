@@ -29,7 +29,7 @@ export interface ISimulationParameters {
     considerContraindicated: boolean;
     considerNotWilling: boolean;
     considerHesitating: boolean;
-    estimateWillingPerVaccine: boolean;
+    estimateWillingPerVaccine: string;
     considerStockPile: boolean;
     astra2ndToBiontech: boolean;
     contraindicationAge: number;
@@ -72,7 +72,7 @@ export class BasicSimulation implements VaccinationSimulation {
         considerContraindicated: true,
         considerNotWilling: true,
         considerHesitating: true,
-        estimateWillingPerVaccine: true,
+        estimateWillingPerVaccine: 'exponential',
         considerStockPile: false,
         astra2ndToBiontech: true,
         contraindicationAge: 12,
@@ -88,6 +88,11 @@ export class BasicSimulation implements VaccinationSimulation {
 
     willingness = new CosmoVaccinationWillingnessPartitioner(this.dataloader);
     availableWillingnessOptions = {};
+    availableWillingnessEstimationOptions = {
+        off: "Keine",
+        constant: "Konstant",
+        exponential: "Exponentiell abfallend"
+    };
     vaccineUsage = new VaccineUsage(this.dataloader);
 
     partitionings = {
@@ -179,7 +184,7 @@ export class BasicSimulation implements VaccinationSimulation {
 
         // # Willingness estimations per vaccine
         let perVacWillingnessData = new Map();
-        if(this.params.estimateWillingPerVaccine){
+        if(this.params.estimateWillingPerVaccine !== 'off'){
             // For every vaccine available
             // Check the fraction of delivered vaccine given out to people over the last weeks
 
@@ -453,7 +458,7 @@ export class BasicSimulation implements VaccinationSimulation {
                 if (availableVaccineStockPile.has(vName) && this.params.vaccinesUsed.get(vName).used){
                     let availablePplForThisVac = availablePeople;
 
-                    if(this.params.estimateWillingPerVaccine) {
+                    if(this.params.estimateWillingPerVaccine === 'constant') {
                         const willData = perVacWillingnessData.get(vName);
                         const interpolate = Math.max(0, Math.min(1, Math.pow(willData.fraction*1.5, 2)/1.5)) * 0.8
                         availablePplForThisVac = Math.min(availablePeople,
