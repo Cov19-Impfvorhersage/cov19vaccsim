@@ -200,10 +200,10 @@ export class BasicSimulation implements VaccinationSimulation {
             for (const vName of this.vaccineUsage.getVaccinesPriorityList()){
                 if (this.params.vaccinesUsed.get(vName).used){
                     const deliveries = Math.max(0, deliveriesBeforeSim.cumDosesByVaccine.get(vName) || 0 - deliveriesNWeeksAgo.cumDosesByVaccine.get(vName) || 0) * (estimateWeeks / deliveryEstimateWeeks);
-                    const shots = Math.max(0, dataBeforeSim.cumDosesByVaccine.get(vName) - dataNWeeksAgo.cumDosesByVaccine.get(vName));
+                    const shots = Math.max(0, dataBeforeSim.cumDosesByVaccine.get(vName) - dataNWeeksAgo.cumDosesByVaccine.get(vName)) || 0;
                     const shots1 = Math.max(0, dataBeforeSim.cumFirstDosesByVaccine.get(vName) - dataNWeeksAgo.cumFirstDosesByVaccine.get(vName)) || shots;
                     // Fraction of first shots given of possible first shots (deliveries minus second shots)
-                    const fraction = Math.min(1, Math.max(0, shots1 / (deliveries - (shots - shots1))));
+                    const fraction = Math.min(1, Math.max(0, shots1 / (deliveries - (shots - shots1)))) || 1;
                     const averageShots1 = shots1 / estimateWeeks;
                     const expFact = Math.min(1, Math.max(0,
                         Math.pow(
