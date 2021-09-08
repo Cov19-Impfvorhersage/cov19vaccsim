@@ -5,6 +5,9 @@ export const sum = (x: number, y: number): number => x + y;
 export const sub = (x: number, y: number): number => x - y;
 export const mul = (x: number, y: number): number => x * y;
 
+export const geq0 = (x: number): boolean => x >= 0;
+export const relu = (x: number): number => Math.max(x, 0);
+
 
 /**
  * Vaccine Number Math
