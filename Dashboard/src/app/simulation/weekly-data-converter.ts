@@ -121,11 +121,11 @@ export function calculateWeeklyVaccinations(vaccinations: d3.DSVParsedArray<Vacc
         weekData.cumVaccineDoses = Math.max(weekData.cumVaccineDoses, vaccDay.dosen_kumulativ);
 
         weekData.cumDosesByVaccine.set(normalizeVaccineName('biontech'), vaccDay.dosen_biontech_kumulativ);
-        weekData.cumDosesByVaccine.set(normalizeVaccineName('astrazeneca'), vaccDay.dosen_astrazeneca_kumulativ);
+        weekData.cumDosesByVaccine.set(normalizeVaccineName('astrazeneca'), vaccDay.dosen_astra_kumulativ);
         weekData.cumDosesByVaccine.set(normalizeVaccineName('moderna'), vaccDay.dosen_moderna_kumulativ);
         weekData.cumDosesByVaccine.set(normalizeVaccineName('johnson'), vaccDay.dosen_johnson_kumulativ);
         weekData.cumFirstDosesByVaccine.set(normalizeVaccineName('biontech'), vaccDay.dosen_biontech_erst_kumulativ);
-        weekData.cumFirstDosesByVaccine.set(normalizeVaccineName('astrazeneca'), vaccDay.dosen_astrazeneca_erst_kumulativ);
+        weekData.cumFirstDosesByVaccine.set(normalizeVaccineName('astrazeneca'), vaccDay.dosen_astra_erst_kumulativ);
         weekData.cumFirstDosesByVaccine.set(normalizeVaccineName('moderna'), vaccDay.dosen_moderna_erst_kumulativ);
         //weekData.cumFirstDosesByVaccine.set(normalizeVaccineName('johnson'), vaccDay.dosen_johnson_erst_kumulativ);
 
