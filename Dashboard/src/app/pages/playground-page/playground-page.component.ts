@@ -51,12 +51,12 @@ export class PlaygroundPageComponent implements OnInit {
 
     vaccinationsPalette = {
         once: {
-            fillColor: '#69b8b4',
-            strokeColor: '#46827f',
+            fillColor: '#8cd0cd',
+            strokeColor: '#6fb6b3',
         },
         fully: {
-            fillColor: '#2d876a',
-            strokeColor: '#265538',
+            fillColor: '#54a98f',
+            strokeColor: '#4a8a60',
         },
         booster: {
             fillColor: '#2c725c',
