@@ -6,7 +6,7 @@ import {
     WeeklyDeliveryData,
     WeeklyVaccinationData
 } from './data-interfaces/simulation-data.interfaces';
-import {getYearWeekOfDate, YearWeek, yws} from './calendarweek/calendarweek';
+import {getYearWeekOfDate, weekAfter, YearWeek, yws} from './calendarweek/calendarweek';
 import {normalizeVaccineName} from './data-interfaces/vaccine-names';
 
 
@@ -146,19 +146,31 @@ export function calculateWeeklyVaccinations(vaccinations: d3.DSVParsedArray<Vacc
 
 export function extractDeliveriesInfo(
         zilabImpfsimLieferungenData: ZilabImpfsimlieferungenDataRow[],
-        verteilungszenario: string): WeeklyDeliveryData {
+        verteilungszenario: string,
+        extendUntil: YearWeek): WeeklyDeliveryData {
 
     const transformedData: WeeklyDeliveryData = new Map();
+    let lastyWeek: YearWeek = yws([2021, 1]);
     for (const row of zilabImpfsimLieferungenData) {
         if (row.Verteilungsszenario === verteilungszenario && row.Bundesland === 'Gesamt') {
             const vName = normalizeVaccineName(row.hersteller);
             const yWeek: YearWeek = yws([2021, row.kw]);
+            lastyWeek = yWeek;
 
             // tslint:disable-next-line:no-unused-expression
             transformedData.has(yWeek) || transformedData.set(yWeek, emptyDeliveryWeek());
             const r = transformedData.get(yWeek);
             r.dosesByVaccine.set(vName, (r.dosesByVaccine.get(vName) || 0) + row.dosen_kw);
         }
+    }
+    // Extend future deliveries until the current end of the simulation
+    let yWeek = lastyWeek;
+    while(yWeek < extendUntil){
+        yWeek = weekAfter(yWeek);
+        transformedData.set(yWeek, {
+            dosesByVaccine: new Map(transformedData.get(lastyWeek).dosesByVaccine),
+            cumDosesByVaccine: new Map(),
+        });
     }
 
     recalculateCumulativeWeeklyDeliveries(transformedData);
