@@ -49,6 +49,20 @@ export class PlaygroundPageComponent implements OnInit {
     simulation = new BasicSimulation(this.dataloader);
     loaded = false;
 
+    vaccinationsPalette = {
+        once: {
+            fillColor: '#69b8b4',
+            strokeColor: '#46827f',
+        },
+        fully: {
+            fillColor: '#2d876a',
+            strokeColor: '#265538',
+        },
+        booster: {
+            fillColor: '#2c725c',
+            strokeColor: '#20412f',
+        }
+    }
     populationPartitionPalette = [
         '#a2d9ac',
         '#69b164',
@@ -250,20 +264,20 @@ export class PlaygroundPageComponent implements OnInit {
 
         const vacAtLeastOnce: DataSeries = {
             data: [],
-            fillColor: '#69b8b4',
-            strokeColor: '#46827f',
+            fillColor: this.vaccinationsPalette.once.fillColor,
+            strokeColor: this.vaccinationsPalette.once.strokeColor,
             label: 'Mindestens Erstgeimpft'
         };
         const vacFully: DataSeries = {
             data: [],
-            fillColor: '#2d876a',
-            strokeColor: '#265538',
+            fillColor: this.vaccinationsPalette.fully.fillColor,
+            strokeColor: this.vaccinationsPalette.fully.strokeColor,
             label: 'Vollständig Immunisiert'
         };
         const vacBooster: DataSeries = {
             data: [],
-            fillColor: '#2c725c',
-            strokeColor: '#20412f',
+            fillColor: this.vaccinationsPalette.booster.fillColor,
+            strokeColor: this.vaccinationsPalette.booster.strokeColor,
             label: 'Booster-Immunisiert'
         };
         const vacAtLeastOnceSim: DataSeries = {
@@ -408,20 +422,20 @@ export class PlaygroundPageComponent implements OnInit {
         };
         const vacFirstDoses: DataSeries = {
             data: [],
-            fillColor: '#69b8b4',
-            strokeColor: '#46827f',
+            fillColor: this.vaccinationsPalette.once.fillColor,
+            strokeColor: this.vaccinationsPalette.once.strokeColor,
             label: 'Erste Impfungen (inkl. J&J)',
         };
         const vacSecondDoses: DataSeries = {
             data: [],
-            fillColor: '#2d876a',
-            strokeColor: '#265538',
+            fillColor: this.vaccinationsPalette.fully.fillColor,
+            strokeColor: this.vaccinationsPalette.fully.strokeColor,
             label: 'Zweite Impfungen',
         };
         const vacBoosterDoses: DataSeries = {
             data: [],
-            fillColor: '#2c725c',
-            strokeColor: '#20412f',
+            fillColor: this.vaccinationsPalette.booster.fillColor,
+            strokeColor: this.vaccinationsPalette.booster.strokeColor,
             label: 'Booster-Impfungen',
         };
         const vacFirstDosesSim: DataSeries = {
