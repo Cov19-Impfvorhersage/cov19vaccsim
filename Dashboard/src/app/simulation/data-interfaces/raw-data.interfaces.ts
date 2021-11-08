@@ -43,6 +43,9 @@ export interface VaccinationsData {
     dosen_astra_zweit_kumulativ: number;
     dosen_astra_dritt_kumulativ: number;
     dosen_johnson_kumulativ: number;
+    dosen_johnson_erst_kumulativ: number;
+    dosen_johnson_zweit_kumulativ: number;
+    dosen_johnson_dritt_kumulativ: number;
     dosen_erst_kumulativ: number;
     dosen_zweit_kumulativ: number;
     dosen_dritt_kumulativ: number;
@@ -50,8 +53,10 @@ export interface VaccinationsData {
     dosen_erst_differenz_zum_vortag: number;
     dosen_zweit_differenz_zum_vortag: number;
     dosen_dritt_differenz_zum_vortag: number;
+    dosen_vollstaendig_differenz_zum_vortag: number;
     personen_erst_kumulativ: number;
     personen_voll_kumulativ: number;
+    personen_auffrisch_kumulativ: number;
     impf_quote_erst: number;
     impf_quote_voll: number;
     dosen_dim_kumulativ: number;

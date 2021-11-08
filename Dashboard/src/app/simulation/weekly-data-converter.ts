@@ -56,13 +56,17 @@ export function calculateWeeklyVaccinations(vaccinations: d3.DSVParsedArray<Vacc
         vaccineDoses: 0,
         partiallyImmunized: 0,
         fullyImmunized: 0,
+        boosterImmunized: 0,
         cumVaccineDoses: 0,
         cumPartiallyImmunized: 0,
         cumFullyImmunized: 0,
+        cumBoosterImmunized: 0,
         dosesByVaccine: new Map(),
         cumDosesByVaccine: new Map(),
         firstDosesByVaccine: new Map(),
         cumFirstDosesByVaccine: new Map(),
+        boosterDosesByVaccine: new Map(),
+        cumBoosterDosesByVaccine: new Map(),
     };
 
     let week1stDoses = 0;
@@ -73,11 +77,15 @@ export function calculateWeeklyVaccinations(vaccinations: d3.DSVParsedArray<Vacc
             currWeek.vaccineDoses = currWeek.cumVaccineDoses - lastWeek.cumVaccineDoses;
             currWeek.partiallyImmunized = currWeek.cumPartiallyImmunized - lastWeek.cumPartiallyImmunized;
             currWeek.fullyImmunized = currWeek.cumFullyImmunized - lastWeek.cumFullyImmunized;
+            currWeek.boosterImmunized = currWeek.cumBoosterImmunized - lastWeek.cumBoosterImmunized;
             for (const [vacc, doses] of currWeek.cumDosesByVaccine.entries()) {
                 currWeek.dosesByVaccine.set(vacc, doses - (lastWeek.cumDosesByVaccine.get(vacc) || 0));
             }
             for (const [vacc, doses] of currWeek.cumFirstDosesByVaccine.entries()) {
                 currWeek.firstDosesByVaccine.set(vacc, doses - (lastWeek.cumFirstDosesByVaccine.get(vacc) || 0));
+            }
+            for (const [vacc, doses] of currWeek.cumBoosterDosesByVaccine.entries()) {
+                currWeek.boosterDosesByVaccine.set(vacc, doses - (lastWeek.cumBoosterDosesByVaccine.get(vacc) || 0));
             }
         }
     }
@@ -93,13 +101,17 @@ export function calculateWeeklyVaccinations(vaccinations: d3.DSVParsedArray<Vacc
                 vaccineDoses: 0,
                 partiallyImmunized: 0,
                 fullyImmunized: 0,
+                boosterImmunized: 0,
                 cumVaccineDoses: currWeek.cumVaccineDoses,
                 cumPartiallyImmunized: currWeek.cumPartiallyImmunized,
                 cumFullyImmunized: currWeek.cumFullyImmunized,
+                cumBoosterImmunized: currWeek.cumBoosterImmunized,
                 dosesByVaccine: new Map(),
                 cumDosesByVaccine: new Map(currWeek.cumDosesByVaccine),
                 firstDosesByVaccine: new Map(),
                 cumFirstDosesByVaccine: new Map(currWeek.cumFirstDosesByVaccine),
+                boosterDosesByVaccine: new Map(),
+                cumBoosterDosesByVaccine: new Map(currWeek.cumBoosterDosesByVaccine),
             };
 
             if(week1stDoses + week2ndDoses !== currWeek.vaccineDoses){
@@ -116,6 +128,7 @@ export function calculateWeeklyVaccinations(vaccinations: d3.DSVParsedArray<Vacc
         // Set values in current week from array
         const weekData = weeklyVacc.get(yWeek);
 
+        weekData.cumBoosterImmunized = Math.max(weekData.cumBoosterImmunized, vaccDay.personen_auffrisch_kumulativ);
         weekData.cumFullyImmunized = Math.max(weekData.cumFullyImmunized, vaccDay.personen_voll_kumulativ);
         weekData.cumPartiallyImmunized = Math.max(weekData.cumPartiallyImmunized, vaccDay.personen_erst_kumulativ);
         weekData.cumVaccineDoses = Math.max(weekData.cumVaccineDoses, vaccDay.dosen_kumulativ);
@@ -128,6 +141,10 @@ export function calculateWeeklyVaccinations(vaccinations: d3.DSVParsedArray<Vacc
         weekData.cumFirstDosesByVaccine.set(normalizeVaccineName('astrazeneca'), vaccDay.dosen_astra_erst_kumulativ);
         weekData.cumFirstDosesByVaccine.set(normalizeVaccineName('moderna'), vaccDay.dosen_moderna_erst_kumulativ);
         //weekData.cumFirstDosesByVaccine.set(normalizeVaccineName('johnson'), vaccDay.dosen_johnson_erst_kumulativ);
+        weekData.cumBoosterDosesByVaccine.set(normalizeVaccineName('biontech'), vaccDay.dosen_biontech_dritt_kumulativ);
+        weekData.cumBoosterDosesByVaccine.set(normalizeVaccineName('astrazeneca'), vaccDay.dosen_astra_dritt_kumulativ);
+        weekData.cumBoosterDosesByVaccine.set(normalizeVaccineName('moderna'), vaccDay.dosen_moderna_dritt_kumulativ);
+        weekData.cumBoosterDosesByVaccine.set(normalizeVaccineName('johnson'), vaccDay.dosen_johnson_dritt_kumulativ);
 
         week1stDoses += vaccDay.dosen_erst_differenz_zum_vortag;
         week2ndDoses += vaccDay.dosen_zweit_differenz_zum_vortag;

@@ -260,6 +260,12 @@ export class PlaygroundPageComponent implements OnInit {
             strokeColor: '#265538',
             label: 'Vollständig Immunisiert'
         };
+        const vacBooster: DataSeries = {
+            data: [],
+            fillColor: '#2c725c',
+            strokeColor: '#20412f',
+            label: 'Booster-Immunisiert'
+        };
         const vacAtLeastOnceSim: DataSeries = {
             data: [],
             fillColor: '#69b8b4',
@@ -276,6 +282,14 @@ export class PlaygroundPageComponent implements OnInit {
             strokeDashoffset: '5',
             fillStriped: true,
         };
+        const vacBoosterSim: DataSeries = {
+            data: [],
+            fillColor: '#2c725c',
+            strokeColor: '#20412f',
+            strokeDasharray: '5, 5',
+            strokeDashoffset: '5',
+            fillStriped: true,
+        };
 
         if (this.dataloader.vaccinations) {
             for (const vacDay of this.dataloader.vaccinations) {
@@ -286,6 +300,10 @@ export class PlaygroundPageComponent implements OnInit {
                 vacFully.data.push({
                     date: vacDay.date,
                     value: vacDay.personen_voll_kumulativ
+                });
+                vacBooster.data.push({
+                    date: vacDay.date,
+                    value: vacDay.personen_auffrisch_kumulativ
                 });
             }
         }
@@ -307,6 +325,10 @@ export class PlaygroundPageComponent implements OnInit {
                 date,
                 value: dataAttach.cumFullyImmunized
             });
+            vacBoosterSim.data.push({
+                date,
+                value: dataAttach.cumBoosterImmunized
+            });
             for (const [yWeek, data] of this.simulationResults.weeklyData.entries()) {
                 // Plotpunkt immer am Montag nach der Woche, also wenn Woche vorbei
                 date = cw.getWeekdayInYearWeek(yWeek, 8);
@@ -317,6 +339,10 @@ export class PlaygroundPageComponent implements OnInit {
                 vacFullySim.data.push({
                     date,
                     value: data.cumFullyImmunized
+                });
+                vacBoosterSim.data.push({
+                    date,
+                    value: data.cumBoosterImmunized
                 });
             }
 
@@ -345,8 +371,10 @@ export class PlaygroundPageComponent implements OnInit {
         newData.series = [
             vacAtLeastOnce,
             vacFully,
+            vacBooster,
             vacAtLeastOnceSim,
-            vacFullySim
+            vacFullySim,
+            vacBoosterSim,
         ];
 
         this.chartPopulation = newData;
@@ -390,6 +418,12 @@ export class PlaygroundPageComponent implements OnInit {
             strokeColor: '#265538',
             label: 'Zweite Impfungen',
         };
+        const vacBoosterDoses: DataSeries = {
+            data: [],
+            fillColor: '#2c725c',
+            strokeColor: '#20412f',
+            label: 'Booster-Impfungen',
+        };
         const vacFirstDosesSim: DataSeries = {
             data: [],
             fillColor: '#69b8b4',
@@ -402,6 +436,14 @@ export class PlaygroundPageComponent implements OnInit {
             data: [],
             fillColor: '#2d876a',
             strokeColor: '#265538',
+            strokeDasharray: '5, 5',
+            strokeDashoffset: '5',
+            fillStriped: true,
+        };
+        const vacBoosterDosesSim: DataSeries = {
+            data: [],
+            fillColor: '#2c725c',
+            strokeColor: '#20412f',
             strokeDasharray: '5, 5',
             strokeDashoffset: '5',
             fillStriped: true,
@@ -455,8 +497,13 @@ export class PlaygroundPageComponent implements OnInit {
                         fillStriped: false,
                         fillOpacity: (yWeek < this.simulationStartWeek) ? 0.9 : 0.9,
                     },{
-                        value: data.vaccineDoses - data.partiallyImmunized,
+                        value: data.vaccineDoses - data.partiallyImmunized - data.boosterImmunized,
                         fillColor: vacSecondDoses.fillColor,
+                        fillStriped: false,
+                        fillOpacity: (yWeek < this.simulationStartWeek) ? 0.9 : 0.9,
+                    },{
+                        value: data.boosterImmunized,
+                        fillColor: vacBoosterDoses.fillColor,
                         fillStriped: false,
                         fillOpacity: (yWeek < this.simulationStartWeek) ? 0.9 : 0.9,
                     }],
@@ -466,6 +513,7 @@ export class PlaygroundPageComponent implements OnInit {
             if(this.dataloader.lastRefreshVaccinations.getUTCDay() !== 0) {
                 vacFirstDoses.data.pop();
                 vacSecondDoses.data.pop();
+                vacBoosterDoses.data.pop();
             }
         }
 
@@ -510,8 +558,13 @@ export class PlaygroundPageComponent implements OnInit {
                         fillStriped: true,
                         fillOpacity: 0.8,
                     },{
-                        value: data.vaccineDoses - data.partiallyImmunized,
+                        value: data.vaccineDoses - data.partiallyImmunized - data.boosterImmunized,
                         fillColor: vacSecondDosesSim.fillColor,
+                        fillStriped: true,
+                        fillOpacity: 0.8,
+                    },{
+                        value: data.boosterImmunized,
+                        fillColor: vacBoosterDosesSim.fillColor,
                         fillStriped: true,
                         fillOpacity: 0.8,
                     }],
@@ -524,8 +577,10 @@ export class PlaygroundPageComponent implements OnInit {
         newData.series = [
             vacDeliveries,
             vacDeliveriesSim,
+            vacBoosterDoses,
             vacSecondDoses,
             vacFirstDoses,
+            vacBoosterDosesSim,
             vacSecondDosesSim,
             vacFirstDosesSim,
         ];

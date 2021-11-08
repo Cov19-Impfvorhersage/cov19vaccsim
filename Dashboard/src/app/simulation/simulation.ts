@@ -39,6 +39,7 @@ export interface ISimulationParameters {
     extraIntervalWeeks: number;
     extraIntervalWeeksOnlyFuture: boolean;
     fractionTakingSecondDose: number;
+    fractionTakingThirdDose: number;
     fractionWilling: number;
     vaccinesUsed: Map<string, {
         used: boolean
@@ -86,6 +87,7 @@ export class BasicSimulation implements VaccinationSimulation {
         extraIntervalWeeks: 0,
         extraIntervalWeeksOnlyFuture: false,
         fractionTakingSecondDose: 0.96,
+        fractionTakingThirdDose: 0.96,
         fractionWilling: 0.80,
         vaccinesUsed: new Map(),
     };
@@ -239,9 +241,11 @@ export class BasicSimulation implements VaccinationSimulation {
         const dataBeforeSim = this.weeklyVaccinations.get(cw.weekBefore(this.simulationStartWeek));
         let cumPartiallyImmunized = dataBeforeSim.cumPartiallyImmunized;
         let cumFullyImmunized = dataBeforeSim.cumFullyImmunized;
+        let cumBoosterImmunized = dataBeforeSim.cumBoosterImmunized;
         let cumVaccineDoses = dataBeforeSim.cumVaccineDoses;
         let cumDosesByVaccine = dataBeforeSim.cumDosesByVaccine;
         let cumFirstDosesByVaccine = dataBeforeSim.cumFirstDosesByVaccine;
+        let cumBoosterDosesByVaccine = dataBeforeSim.cumBoosterDosesByVaccine;
 
         const cumulativeDeliveredVaccines = this.weeklyDeliveriesScenario.get(
             cw.weekBefore(this.simulationStartWeek, 1 + this.vaccineDeliveryDelayWeeks)
@@ -527,25 +531,32 @@ export class BasicSimulation implements VaccinationSimulation {
                 }
             }
 
+            // TODO: implement booster immunization simulation
+            const boosterImmunized = 0;
+
             const dosesByVaccine = v(given1stShots, sum, given2ndShots);
             const vaccineDoses = wu(dosesByVaccine.values()).reduce(sum);
             cumDosesByVaccine = v(cumDosesByVaccine, sum, dosesByVaccine);
             cumFirstDosesByVaccine = v(cumFirstDosesByVaccine, sum, given1stShots);
             cumPartiallyImmunized += partiallyImmunized;
             cumFullyImmunized += fullyImmunized;
+            cumBoosterImmunized += boosterImmunized;
             cumVaccineDoses += vaccineDoses;
 
             const weekData: IVaccinationWeek = {
                 vaccineDoses,
                 partiallyImmunized,
                 fullyImmunized,
+                boosterImmunized,
                 cumVaccineDoses,
                 cumPartiallyImmunized,
                 cumFullyImmunized,
+                cumBoosterImmunized,
                 dosesByVaccine,
                 cumDosesByVaccine,
                 firstDosesByVaccine: given1stShots,
                 cumFirstDosesByVaccine,
+                cumBoosterDosesByVaccine,
                 vaccineStockPile
             };
             results.weeklyData.set(curWeek, weekData);
