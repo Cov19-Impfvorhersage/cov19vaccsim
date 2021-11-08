@@ -268,24 +268,24 @@ export class PlaygroundPageComponent implements OnInit {
         };
         const vacAtLeastOnceSim: DataSeries = {
             data: [],
-            fillColor: '#69b8b4',
-            strokeColor: '#46827f',
+            fillColor: vacAtLeastOnce.fillColor,
+            strokeColor: vacAtLeastOnce.strokeColor,
             strokeDasharray: '5, 5',
             strokeDashoffset: '5',
             fillStriped: true,
         };
         const vacFullySim: DataSeries = {
             data: [],
-            fillColor: '#2d876a',
-            strokeColor: '#265538',
+            fillColor: vacFully.fillColor,
+            strokeColor: vacFully.strokeColor,
             strokeDasharray: '5, 5',
             strokeDashoffset: '5',
             fillStriped: true,
         };
         const vacBoosterSim: DataSeries = {
             data: [],
-            fillColor: '#2c725c',
-            strokeColor: '#20412f',
+            fillColor: vacBooster.fillColor,
+            strokeColor: vacBooster.strokeColor,
             strokeDasharray: '5, 5',
             strokeDashoffset: '5',
             fillStriped: true,
@@ -399,8 +399,8 @@ export class PlaygroundPageComponent implements OnInit {
         };
         const vacDeliveriesSim: DataSeries = {
             data: [],
-            fillColor: '#b8ad69',
-            strokeColor: '#827a46',
+            fillColor: vacDeliveries.fillColor,
+            strokeColor: vacDeliveries.strokeColor,
             strokeDasharray: '5, 5',
             strokeDashoffset: '5',
             fillOpacity: 0,
@@ -426,24 +426,24 @@ export class PlaygroundPageComponent implements OnInit {
         };
         const vacFirstDosesSim: DataSeries = {
             data: [],
-            fillColor: '#69b8b4',
-            strokeColor: '#46827f',
+            fillColor: vacFirstDoses.fillColor,
+            strokeColor: vacFirstDoses.strokeColor,
             strokeDasharray: '5, 5',
             strokeDashoffset: '5',
             fillStriped: true,
         };
         const vacSecondDosesSim: DataSeries = {
             data: [],
-            fillColor: '#2d876a',
-            strokeColor: '#265538',
+            fillColor: vacSecondDoses.fillColor,
+            strokeColor: vacSecondDoses.strokeColor,
             strokeDasharray: '5, 5',
             strokeDashoffset: '5',
             fillStriped: true,
         };
         const vacBoosterDosesSim: DataSeries = {
             data: [],
-            fillColor: '#2c725c',
-            strokeColor: '#20412f',
+            fillColor: vacBoosterDoses.fillColor,
+            strokeColor: vacBoosterDoses.strokeColor,
             strokeDasharray: '5, 5',
             strokeDashoffset: '5',
             fillStriped: true,
@@ -628,8 +628,8 @@ export class PlaygroundPageComponent implements OnInit {
         };
         const vacDosesSim: DataSeries = {
             data: [],
-            fillColor: '#2d876a',
-            strokeColor: '#265538',
+            fillColor: vacDoses.fillColor,
+            strokeColor: vacDoses.strokeColor,
             fillOpacity: 0,
             strokeDasharray: '5, 5',
             strokeDashoffset: '5',
@@ -810,16 +810,16 @@ export class PlaygroundPageComponent implements OnInit {
         };
         const vacDeliveriesSim: DataSeries = {
             data: [],
-            fillColor: '#b8ad69',
-            strokeColor: '#827a46',
+            fillColor: vacDeliveries.fillColor,
+            strokeColor: vacDeliveries.strokeColor,
             strokeDasharray: '5, 5',
             strokeDashoffset: '5',
             fillStriped: true,
         };
         const vacDosesSim: DataSeries = {
             data: [],
-            fillColor: '#2d876a',
-            strokeColor: '#265538',
+            fillColor: vacDoses.fillColor,
+            strokeColor: vacDoses.strokeColor,
             strokeDasharray: '5, 5',
             strokeDashoffset: '5',
             fillStriped: true,
