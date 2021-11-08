@@ -12,7 +12,7 @@
     height: 100%;
 
     ::ng-deep {
-        .grid line, .grid-minor line {
+        .grid line, .grid-minor line, , .grid-major line {
             shape-rendering: crispEdges;
         }
 
@@ -21,6 +21,10 @@
         }
         .grid-minor line {
             color: rgba(0, 0, 0, 0.1);
+        }
+        .grid-major line {
+            color: rgba(0, 0, 0, 0.25);
+            stroke-width: 2;
         }
     }
 }

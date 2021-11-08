@@ -74,6 +74,7 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
     private lines: SvgGroup;
     private fills: SvgGroup;
     private xGrid: SvgGroup;
+    private xGridMajor: SvgGroup;
     private yGrid: SvgGroup;
     private yGridMinor: SvgGroup;
     private rightBar: SvgGroup;
@@ -94,10 +95,11 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
 
         this.fills = this.svg.append('g').classed('fills', true);
         this.xGrid = this.svg.append('g').classed('grid', true);
+        this.xGridMajor = this.svg.append('g').classed('grid-major', true);
         this.yGrid = this.svg.append('g').classed('grid', true);
+        this.yGridMinor = this.svg.append('g').classed('grid-minor', true);
         this.stackedBars = this.svg.append('g').classed('stacked-bars', true);
         this.lines = this.svg.append('g').classed('lines', true);
-        this.yGridMinor = this.svg.append('g').classed('grid-minor', true);
         this.rightBar = this.svg.append('g').classed('right-bar', true);
         this.rightBarBoxes = this.rightBar.append('g').classed('boxes', true);
         this.rightBarLabels = this.rightBar.append('g').classed('labels', true);
@@ -327,10 +329,31 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
                 }))
             );
 
+        this.xGridMajor
+            .attr('transform', `translate(0, ${this.chartSize.height - coords.margin.bottom})`)
+            .call(d3
+                .axisBottom<Date>(coords.xScale)
+                .ticks(d3.timeYear)
+                .tickSize(-(this.chartSize.height - coords.margin.top - coords.margin.bottom))
+                .tickSizeOuter(0)
+                .tickPadding(smallXAxis ? 5 : 15)
+                .tickFormat(_ => '')
+                //.tickFormat(date => date.toLocaleString('default', {
+                //    year: 'numeric',
+                //}))
+            );
+
         this.xGrid.selectAll('.domain').remove();
+        this.xGridMajor.selectAll('.domain').remove();
 
         // Month labels alignment
         this.xGrid
+            .selectAll('text')
+            .attr('dx', 5)
+            .attr('text-anchor', 'start');
+
+        // Year labels alignment
+        this.xGridMajor
             .selectAll('text')
             .attr('dx', 5)
             .attr('text-anchor', 'start');
