@@ -346,7 +346,8 @@ export class BasicSimulation implements VaccinationSimulation {
             // Handle Astra-People wanting their 2nd shot of BioNtech NOW while originally having to wait for a lot of weeks
             // Spread them on to the next three weeks
             if(this.params.astra2ndToBiontech && cw.weekAfter(curWeek, 10) >= this.astra2ndToBiontechStartWeek){
-                const weekDiff = Math.max(0, cw.weekDiff(curWeek, this.astra2ndToBiontechStartWeek));
+                const rawWeekDiff = cw.weekDiff(curWeek, this.astra2ndToBiontechStartWeek);
+                const weekDiff = Math.max(0, rawWeekDiff);
                 const vName = normalizeVaccineName('astra');
                 const vName2nd = normalizeVaccineName('biontech');
                 const weekBeforeChange = this.weeklyVaccinations.get(
@@ -355,7 +356,10 @@ export class BasicSimulation implements VaccinationSimulation {
                 console.log('distance for astra', Math.max(0, 5 - weekDiff));
                 const astraPplWaiting = Math.max(0, weekBeforeChange.cumFirstDosesByVaccine.get(vName) * 2 - dataBeforeSim.cumDosesByVaccine.get(vName));
                 console.log('Astra ppl put into next weeks', astraPplWaiting);
-                const ppl = Math.min(pplNeeding2ndShot,  Math.floor(astraPplWaiting * this.params.fractionTakingSecondDose));
+                const ppl = Math.floor(
+                    Math.min(pplNeeding2ndShot, astraPplWaiting * this.params.fractionTakingSecondDose)
+                    * Math.max(0, Math.min(1, (rawWeekDiff+10) * 0.1)) // slowly fade out the effect over time
+                );
                 waitingFor2ndDose[weekDiff].set(vName2nd, (waitingFor2ndDose[weekDiff].get(vName2nd) || 0) + ppl * 0.5);
                 waitingFor2ndDose[weekDiff+1].set(vName2nd, (waitingFor2ndDose[weekDiff+1].get(vName2nd) || 0) + ppl * 0.3);
                 waitingFor2ndDose[weekDiff+2].set(vName2nd, (waitingFor2ndDose[weekDiff+2].get(vName2nd) || 0) + ppl * 0.2);
@@ -363,7 +367,8 @@ export class BasicSimulation implements VaccinationSimulation {
             }
 
             // If anything is left over, distribute it somewhat equally on all vaccines in the first week
-            if (pplNeeding2ndShot > 0) {
+            // IGNORE LEFT OVER SINCE THEY ARE PROBABLY NOT WILLING
+            /*if (pplNeeding2ndShot > 0) {
                 console.warn('12 weeks not enough...', pplNeeding2ndShot);
                 const doses = Math.ceil(pplNeeding2ndShot / waitingFor2ndDose[0].size);
                 for (const [vName, num] of waitingFor2ndDose[0]){
@@ -371,7 +376,7 @@ export class BasicSimulation implements VaccinationSimulation {
                     waitingFor2ndDose[0].set(vName, num + ppl);
                     pplNeeding2ndShot -= ppl;
                 }
-            }
+            }*/
             if (pplNeeding2ndShot < 0) {
                 console.warn('More second shots planned than necessary!!', pplNeeding2ndShot);
             }
@@ -411,7 +416,7 @@ export class BasicSimulation implements VaccinationSimulation {
             let given2ndShots = v(v(vaccineStockPile, Math.min, required2ndShots), Math.max, 0);
             if(runningWeekData){ // Never give less than the actual data shows if the first week is the running week
                 given2ndShots = v(given2ndShots, Math.max,
-                    v(runningWeekData.dosesByVaccine, sub, runningWeekData.firstDosesByVaccine))
+                    v(v(runningWeekData.dosesByVaccine, sub, runningWeekData.firstDosesByVaccine), sub, runningWeekData.boosterDosesByVaccine))
             }
             // push to next week if not enough vaccine available
             waitingFor2ndDose[0] = v(
