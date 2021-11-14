@@ -221,6 +221,27 @@
                         </div>
                     </div>
 
+                    <div class="settings_row" matTooltip="Anteil der vollständig geimpften Personen, die eine vorgesehene booster Impfdosis annehmen.
+                        Standardwert ist das Ergebnis der COSMO-Umfrage von Ende Oktober / Anfang November">
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                            <div>Boosterbereitschaft</div>
+                            <div fxFlex="0 0 auto" >
+                                <strong>{{simulation.params.fractionTakingThirdDose*100 | number:'1.0-0'}} % </strong>
+                            </div>
+                        </div>
+                        <div class="slider-with-reset" fxLayout="row" fxLayoutAlign="space-between center">
+                            <div fxFlex="1 0 auto" >
+                                <mat-slider [(ngModel)]="simulation.params.fractionTakingThirdDose" min=".5" max="1.0" step="0.01"
+                                            (change)="runSimulation();"></mat-slider>
+                            </div>
+                            <div fxFlex="0 0 auto" >
+                                <button mat-icon-button aria-label="Zurücksetzen" (click)="reset3rdWillingness()">
+                                    <mat-icon>restore</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <div class="settings_row" matTooltip="COSMO-Umfragewelle, auf Basis derer die Aufteilung nach Impfwilligkeit sowie der Anteil der Impfunwilligen & Impfzögerlichen in der Simulation berechnet werden.
                         Ab 20. April sind bereits geimpfte unter 'Impfwillig' eingeordnet.">
@@ -366,6 +387,25 @@
                             Extra Abstand nur Neuimpfungen
                         </mat-slide-toggle>
                     </div>
+                    <div class="settings_row" matTooltip="Abstand zwischen vollständiger Immunisierung und Boosterimpfung">
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                            <div>Abstand zur Boosterimpfung:</div>
+                            <div fxFlex="0 0 auto" >
+                                {{simulation.params.boosterIntervalWeeks}} Wochen
+                            </div>
+                        </div>
+                        <div class="slider-with-reset" fxLayout="row" fxLayoutAlign="space-between center">
+                            <div fxFlex="1 0 auto" >
+                                <mat-slider [(ngModel)]="simulation.params.boosterIntervalWeeks" min="20" max="32" step="1"
+                                            (change)="runSimulation();"></mat-slider>
+                            </div>
+                            <div fxFlex="0 0 auto" >
+                                <button mat-icon-button aria-label="Zurücksetzen" (click)="simulation.params.boosterIntervalWeeks = 26; runSimulation();">
+                                    <mat-icon>restore</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </mat-card-content>
         </mat-card>
@@ -493,6 +533,13 @@
                         Dieses Modell ergibt im Gegensatz zur konstanten Fortführung ein oberes Limit dafür, wie viele Leute sich insgesamt impfen lassen,
                         das unabhängig von der eingestellten Impfbereitschaft ist.<br>
                         Beide Abschätzungen machen allerdings nur ab Mitte Juli Sinn, daher sollte man diese deaktivieren, wenn man die Simulation zu einem früheren Zeitpunkt starten möchte.
+                    </li>
+                    <li>
+                        <b>Simulation der Boosterimpfungen:</b><br>
+                        Die Boosterimpfungen pro Woche werden aktuell ganz banal angesetzt als die Anzahl der Personen, die ein halbes Jahr vorher ihre vollständige Immunisierung erhalten haben.
+                        Dabei werden aktuell Impflieferungsdaten ignoriert, da die Datenquelle nicht mehr ganz korrekt ist.
+                        Außerdem wird ignoriert, dass J&J-Geimpfte die Boosterimpfung bereits nach ein paar Wochen erhalten können.
+                        Sämtliche Boosterimpfungen werden mit BioNTech-Impfstoff angesetzt.
                     </li>
                 </ul>
 

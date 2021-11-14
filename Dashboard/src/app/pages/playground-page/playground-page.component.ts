@@ -914,6 +914,10 @@ export class PlaygroundPageComponent implements OnInit {
         this.simulation.params.fractionTakingSecondDose = 0.96;
         this.runSimulation();
     }
+    reset3rdWillingness(): void {
+        this.simulation.params.fractionTakingThirdDose = 0.76;
+        this.runSimulation();
+    }
 
     // experimental tooltip things
     experimentalTooltipUpdate: TooltipUpdate;

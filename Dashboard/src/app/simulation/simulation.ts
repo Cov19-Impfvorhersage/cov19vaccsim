@@ -38,6 +38,7 @@ export interface ISimulationParameters {
     keep2ndDosesBack: number;
     extraIntervalWeeks: number;
     extraIntervalWeeksOnlyFuture: boolean;
+    boosterIntervalWeeks: number;
     fractionTakingSecondDose: number;
     fractionTakingThirdDose: number;
     fractionWilling: number;
@@ -86,8 +87,9 @@ export class BasicSimulation implements VaccinationSimulation {
         keep2ndDosesBack: 0,
         extraIntervalWeeks: 0,
         extraIntervalWeeksOnlyFuture: false,
+        boosterIntervalWeeks: 26,
         fractionTakingSecondDose: 0.96,
-        fractionTakingThirdDose: 0.96,
+        fractionTakingThirdDose: 0.76,
         fractionWilling: 0.80,
         vaccinesUsed: new Map(),
     };
@@ -536,10 +538,36 @@ export class BasicSimulation implements VaccinationSimulation {
                 }
             }
 
-            // TODO: implement booster immunization simulation
-            const boosterImmunized = 0;
 
-            const dosesByVaccine = v(given1stShots, sum, given2ndShots);
+            // Give as many booster shots as people or doses available
+            let maxPeopleAvailableForBooster = this.weeklyVaccinations.get(
+                cw.weekBefore(curWeek, this.params.boosterIntervalWeeks)
+            )?.cumFullyImmunized * this.params.fractionTakingThirdDose;
+            const vNameBnt = normalizeVaccineName('biontech'); // only give biontech as boosters
+            let givenBoosterShots = new Map();
+            givenBoosterShots.set(vNameBnt, 0);
+            if(maxPeopleAvailableForBooster){
+                if (availableVaccineStockPile.has(vNameBnt) && this.params.vaccinesUsed.get(vNameBnt).used){
+                    const availablePeople = this.weeklyVaccinations.get(
+                        cw.weekBefore(curWeek, this.params.boosterIntervalWeeks)
+                    )?.fullyImmunized * this.params.fractionTakingThirdDose;
+
+                    //const shots = Math.max(0, Math.min(availableVaccineStockPile.get(vNameBnt), availablePeople));
+                    givenBoosterShots.set(vNameBnt, availablePeople);
+                }
+            }
+            if(runningWeekData){ // Never give less than the actual data shows if the first week is the running week
+                givenBoosterShots = v(givenBoosterShots, Math.max, runningWeekData.boosterDosesByVaccine)
+            }
+            // Ignore vaccine deliveries for boosters for now
+            //vaccineStockPile = v(vaccineStockPile, sub, givenBoosterShots);
+            const boosterImmunized = wu(givenBoosterShots.values()).reduce(sum);
+
+
+
+
+
+            const dosesByVaccine = v(v(given1stShots, sum, given2ndShots), sum, givenBoosterShots);
             const vaccineDoses = wu(dosesByVaccine.values()).reduce(sum);
             cumDosesByVaccine = v(cumDosesByVaccine, sum, dosesByVaccine);
             cumFirstDosesByVaccine = v(cumFirstDosesByVaccine, sum, given1stShots);
