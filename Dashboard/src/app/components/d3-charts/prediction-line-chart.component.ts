@@ -577,6 +577,8 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
             value: string;
         }> = [];
 
+        const formatDate = (d: Date) => d.toISOString().split('T')[0];
+
         for (const s of this.data.series) {
             if (!s.data || !s.data.length) {
                 continue;
@@ -591,8 +593,29 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
                     const dataPoint = s.data[i - 1];
                     tooltipData.push({
                         label: s.label,
-                        value: `${dataPoint.value} ${dataPoint.date.toISOString().split('T')[0]}`
+                        value: `${dataPoint.value} ${formatDate(dataPoint.date)}`
                     });
+                    break;
+                }
+            }
+        }
+
+        const bars = this.data.stackedBars;
+        if (bars && bars.length > 0 && bars[0].dateStart <= hoveredDate && bars[bars.length - 1].dateEnd >= hoveredDate) {
+            // find last point that is smaller than hovered date
+            for (let i = 0; i < bars.length; i++) {
+                if (bars[i].dateStart > hoveredDate) {
+                    const b = bars[i - 1];
+                    tooltipData.push({
+                        label: 'stacked bar date range',
+                        value: `${formatDate(b.dateStart)} - ${formatDate(b.dateEnd)}`,
+                    });
+                    for (const v of b.values) {
+                        tooltipData.push({
+                            label: v.fillColor,
+                            value: `${v.value}`
+                        });
+                    }
                     break;
                 }
             }
