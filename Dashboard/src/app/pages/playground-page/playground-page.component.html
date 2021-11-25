@@ -43,22 +43,6 @@
                                 [data]="chartPopulation"
                                 [config]="chartPopulationConfig"
                             ></app-prediction-line-chart>
-                            <!--
-                                (tooltipUpdate)="updateTooltip($event)"
-
-                                experimental tooltip
-                                - any html content + css styles, animations and transitions possible
-                                - you have to take care of positioning yourself
-                            -->
-                            <div
-                                *ngIf="experimentalTooltipUpdate"
-                                class="custom-test-tooltip"
-                                [style.opacity]="experimentalTooltipUpdate.showTooltip ? 1 : 0"
-                                [style.left]="experimentalTooltipUpdate.mouseEvent.clientX + 15 + 'px'"
-                                [style.top]="experimentalTooltipUpdate.mouseEvent.clientY + 15 + 'px'"
-                            >
-                                {{experimentalTooltipText}}
-                            </div>
                         </mat-tab>
                         <mat-tab label="Wöchentliche Impfungen">
                             <div class="top-bar">

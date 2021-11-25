@@ -253,13 +253,3 @@ span.line {
         }
     }
 }
-
-.custom-test-tooltip {
-    position: fixed;
-    width: 300px;
-    background: rgba(white, 0.3);
-    border-radius: 5px;
-    padding: 5px;
-    pointer-events: none;
-    transition: opacity 200ms ease;
-}

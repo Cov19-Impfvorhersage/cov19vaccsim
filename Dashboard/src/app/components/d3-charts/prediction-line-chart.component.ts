@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import * as d3 from 'd3';
 
 import { ChartBase } from './chart-base/chart-base.directive';
@@ -65,8 +65,6 @@ type SvgGroup = d3.Selection<SVGGElement, unknown, null, undefined>;
 })
 export class PredictionLineChartComponent extends ChartBase<PredictionLineChartConfig, PredictionLineChartData> {
 
-    @Output() tooltipUpdate: EventEmitter<TooltipUpdate> = new EventEmitter();
-
     private defs: d3.Selection<SVGDefsElement, unknown, null, undefined>;
     private xAxis: SvgGroup;
     private yAxis: SvgGroup;
@@ -81,6 +79,7 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
     private rightBarBoxes: SvgGroup;
     private rightBarLabels: SvgGroup;
     private legend: SvgGroup;
+    private tooltipDiv: d3.Selection<HTMLDivElement, unknown, null, undefined>;
 
     initialChartConfig(): PredictionLineChartConfig {
         return {
@@ -106,6 +105,15 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
         this.xAxis = this.svg.append('g').classed('x-axis', true);
         this.yAxis = this.svg.append('g').classed('y-axis', true);
         this.legend = this.svg.append('g').classed('legend', true);
+        this.tooltipDiv = d3.select(this.chartContainerRef.nativeElement).append('div');
+        this.tooltipDiv
+            .style('position', 'fixed')
+            .style('width', '300px')
+            .style('background', 'rgba(255,255,255,0.3)')
+            .style('border-radius', '5px')
+            .style('padding', '5px')
+            .style('pointer-events', 'none')
+            .style('transition', 'opacity 200ms ease');
     }
 
     updateChart(): void {
@@ -338,9 +346,9 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
                 .tickSizeOuter(0)
                 .tickPadding(smallXAxis ? 5 : 15)
                 .tickFormat(_ => '')
-                //.tickFormat(date => date.toLocaleString('default', {
-                //    year: 'numeric',
-                //}))
+                // .tickFormat(date => date.toLocaleString('default', {
+                //     year: 'numeric',
+                // }))
             );
 
         this.xGrid.selectAll('.domain').remove();
@@ -551,13 +559,12 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
         hoveredDate.setSeconds(0);
         hoveredDate.setMilliseconds(0);
         */
-        this.tooltipUpdate.next({
-            showTooltip,
-            mouseEvent,
-            hoveredDate,
-            coords,
-            svgClientRect,
-        });
+
+        this.tooltipDiv
+            .style('opacity', showTooltip ? 1 : 0)
+            .style('left', mouseEvent.clientX + 15 + 'px')
+            .style('top', mouseEvent.clientY + 15 + 'px');
+        this.tooltipDiv.text('test tooltip text');
     }
 
     /**
