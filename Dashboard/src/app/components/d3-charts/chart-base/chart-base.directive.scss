@@ -26,6 +26,33 @@
             color: rgba(0, 0, 0, 0.25);
             stroke-width: 2;
         }
+
+        .tooltip {
+            background: rgba(255, 255, 255, 1);
+            border: 1px solid #777;
+            border-radius: 5px;
+            padding: 5px;
+            transition: opacity 200ms ease;
+            font-size: 14px;
+
+            .header {
+                text-align: center;
+                //font-weight: bold;
+            }
+
+            td {
+                vertical-align: top;
+                line-height: 1.1em;
+
+                &.value {
+                    text-align: right;
+                    font-weight: bold;
+                }
+                &.label {
+                    text-align: left;
+                }
+            }
+        }
     }
 }
 

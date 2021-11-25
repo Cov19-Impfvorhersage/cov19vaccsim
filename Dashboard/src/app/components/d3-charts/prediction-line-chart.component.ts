@@ -107,15 +107,13 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
         this.xAxis = this.svg.append('g').classed('x-axis', true);
         this.yAxis = this.svg.append('g').classed('y-axis', true);
         this.legend = this.svg.append('g').classed('legend', true);
-        this.tooltip = d3.select(this.chartContainerRef.nativeElement).append('div');
+        this.tooltip = d3.select(this.chartContainerRef.nativeElement).append('div').classed('tooltip', true);
         this.tooltip
             .style('position', 'fixed')
-            .style('width', '300px')
-            .style('background', 'rgba(255,255,255,0.3)')
-            .style('border-radius', '5px')
-            .style('padding', '5px')
-            .style('pointer-events', 'none')
-            .style('transition', 'opacity 200ms ease');
+            //.style('width', '300px')
+            .style('pointer-events', 'none');
+        this.tooltip.append('div').classed('header', true);
+        this.tooltip.append('table').classed('values', true);
     }
 
     updateChart(): void {
@@ -564,10 +562,14 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
         hoveredDate.setMilliseconds(0);
         */
 
+        const tooltipPosX = (mouseEvent.clientX >123) ? mouseEvent.clientX + 15 : mouseEvent.clientX + 15;
+        const tooltipPosY = mouseEvent.clientY + 15;
+
         this.tooltip
             .style('opacity', showTooltip ? 1 : 0)
-            .style('left', mouseEvent.clientX + 15 + 'px')
-            .style('top', mouseEvent.clientY + 15 + 'px');
+            .style('left',  tooltipPosX+ 'px')
+            .style('top', tooltipPosY + 'px');
+
         if (!showTooltip) {
             this.tooltip.style('opacity', 0);
             this.tooltipDots.selectAll('circle').data([]).join('circle');
@@ -589,8 +591,11 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
             filled: boolean;
         }> = [];
 
-        const formatDate = (d: Date) => d.toISOString().split('T')[0];
+        const formatDate = (d: Date) => d.toLocaleDateString('default', {day: '2-digit', month: '2-digit', year: 'numeric'});
         const yFormatter = (v: number) => d3.format(this.config.yAxisPercent ? '.1~%' : '.3~s')(v * this.config.yAxisScaleFactor);
+
+        let headerText = '';
+        let headerDate = null;
 
         for (const s of this.data.series) {
             if (!s.data || !s.data.length) {
@@ -604,12 +609,13 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
             for (let i = 0; i < s.data.length; i++) {
                 if (s.data[i].date > hoveredDate) {
                     const dataPoint = s.data[i - 1];
-                    if(!s.label){
-                        continue;
+                    if(s.data[i].date > headerDate || headerDate == null){
+                        headerDate = s.data[i].date;
+                        headerText = formatDate(headerDate);
                     }
                     tooltipData.push({
                         label: s.label,
-                        value: `${yFormatter(dataPoint.value)} ${formatDate(dataPoint.date)}`
+                        value: yFormatter(dataPoint.value)
                     });
                     tooltipDots.push({
                         x: coords.xScale(dataPoint.date),
@@ -628,10 +634,11 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
             for (let i = 0; i < bars.length; i++) {
                 if (bars[i].dateStart > hoveredDate) {
                     const b = bars[i - 1];
-                    tooltipData.push({
+                    /*tooltipData.push({
                         label: 'stacked bar date range',
                         value: `${formatDate(b.dateStart)} - ${formatDate(b.dateEnd)}`,
-                    });
+                    });*/
+                    headerText = `${formatDate(b.dateStart)} - ${formatDate(b.dateEnd)}`
                     let yVal = 0;
                     for (const v of b.values) {
                         if(v.value <= 0 || !v.label){
@@ -639,7 +646,7 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
                         }
                         tooltipData.push({
                             label: v.label,
-                            value: `${yFormatter(v.value)}`
+                            value: yFormatter(v.value)
                         });
                         yVal += v.value;
                         tooltipDots.push({
@@ -659,11 +666,26 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
         }
 
         // update tooltip content
-        this.tooltip
-            .selectAll('div')
+        this.tooltip.select('.header').text(headerText);
+        this.tooltip.select('table')
+            .selectAll('tr')
             .data(tooltipData)
-            .join('div')
-            .text(d => d.label + ' ' + d.value);
+            .join(
+                enter => {
+                    // group with rect behind a text
+                    const tr = enter.append('tr');
+                    tr.append('td').classed('value', true);
+                    tr.append('td').classed('label', true);
+                    return tr;
+                },
+                update => update,
+                exit => exit.remove(),
+            ).each((p, index, groups) => {
+                // in each group, update the text label
+                const g = d3.select(groups[index]);
+                g.select('.value').text(p.value);
+                g.select('.label').text(p.label);
+            });
 
         // update tooltip dots
         this.tooltipDots
