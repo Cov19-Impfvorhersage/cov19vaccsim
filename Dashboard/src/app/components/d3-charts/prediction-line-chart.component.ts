@@ -80,6 +80,7 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
     private rightBarLabels: SvgGroup;
     private legend: SvgGroup;
     private tooltip: d3.Selection<HTMLDivElement, unknown, null, undefined>;
+    private tooltipDots: SvgGroup;
 
     initialChartConfig(): PredictionLineChartConfig {
         return {
@@ -114,6 +115,7 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
             .style('padding', '5px')
             .style('pointer-events', 'none')
             .style('transition', 'opacity 200ms ease');
+        this.tooltipDots = this.svg.append('g').classed('tooltip-dots', true);
     }
 
     updateChart(): void {
@@ -567,6 +569,8 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
             .style('left', mouseEvent.clientX + 15 + 'px')
             .style('top', mouseEvent.clientY + 15 + 'px');
         if (!showTooltip) {
+            this.tooltip.style('opacity', 0);
+            this.tooltipDots.selectAll('circle').data([]).join('circle');
             return;
         }
 
@@ -575,6 +579,13 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
             // adapt if necessary
             label: string;
             value: string;
+        }> = [];
+
+        // dots to indicate where the data in the tooltip comes from
+        const tooltipDots: Array<{
+            x: number;
+            y: number;
+            color: string;
         }> = [];
 
         const formatDate = (d: Date) => d.toISOString().split('T')[0];
@@ -594,6 +605,11 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
                     tooltipData.push({
                         label: s.label,
                         value: `${dataPoint.value} ${formatDate(dataPoint.date)}`
+                    });
+                    tooltipDots.push({
+                        x: coords.xScale(dataPoint.date),
+                        y: coords.yScale(dataPoint.value),
+                        color: s.strokeColor
                     });
                     break;
                 }
@@ -615,6 +631,7 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
                             label: v.fillColor,
                             value: `${v.value}`
                         });
+                        // todo compute x & y for the tooltip dot and push into tooltipDots
                     }
                     break;
                 }
@@ -631,6 +648,16 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
             .data(tooltipData)
             .join('div')
             .text(d => d.label + ' ' + d.value);
+
+        // update tooltip dots
+        this.tooltipDots
+            .selectAll('circle')
+            .data(tooltipDots)
+            .join('circle')
+            .attr('cx', d => d.x)
+            .attr('cy', d => d.y)
+            .attr('r', 10)
+            .attr('fill', d => d.color);
     }
 
     /**
