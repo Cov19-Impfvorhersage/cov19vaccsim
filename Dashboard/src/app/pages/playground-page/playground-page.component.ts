@@ -144,6 +144,12 @@ export class PlaygroundPageComponent implements OnInit {
         yAxisScaleFactor: 1,
         yAxisPercent: false,
     };
+    chart7DayVaccinations: PredictionLineChartData = this.chartPopulation;
+    chart7DayVaccinationsConfig: PredictionLineChartConfig = {
+        yAxisLabel: '', // 'Impfdosen',
+        yAxisScaleFactor: 1,
+        yAxisPercent: false,
+    };
     chartWeeklyDeliveries: PredictionLineChartData = this.chartPopulation;
     chartWeeklyDeliveriesConfig: PredictionLineChartConfig = {
         yAxisLabel: '', // 'Impfdosen',
@@ -217,6 +223,7 @@ export class PlaygroundPageComponent implements OnInit {
         this.simulationResults = this.simulation.runSimulation();
         this.buildChartPopulation();
         this.buildChartWeeklyVaccinations();
+        this.buildChart7DayVaccinations();
         this.buildChartWeeklyDeliveries();
         this.buildChartCumulativeDeliveries();
         this.buildYScaleConfigurations();
@@ -244,6 +251,10 @@ export class PlaygroundPageComponent implements OnInit {
             yAxisPercent: percent,
         };
         this.chartWeeklyDeliveriesConfig = {... this.chartWeeklyDeliveriesConfig,
+            yAxisScaleFactor: weeklyScale,
+            yAxisPercent: percent,
+        };
+        this.chart7DayVaccinationsConfig = {... this.chart7DayVaccinationsConfig,
             yAxisScaleFactor: weeklyScale,
             yAxisPercent: percent,
         };
@@ -620,6 +631,94 @@ export class PlaygroundPageComponent implements OnInit {
         ];
 
         this.chartWeeklyVaccinations = newData;
+    }
+
+    buildChart7DayVaccinations(): void {
+        const newData: PredictionLineChartData = {
+            yMin: 0,
+            yMax: 5_000_000,
+            series: [],
+            partitions: [],
+        };
+        const vacFirstDoses: DataSeries = {
+            data: [],
+            fillColor: this.vaccinationsPalette.once.fillColor,
+            strokeColor: this.vaccinationsPalette.once.strokeColor,
+            fillOpacity: 0,
+            label: 'Erste Impfungen (inkl. J&J)',
+        };
+        const vacSecondDoses: DataSeries = {
+            data: [],
+            fillColor: this.vaccinationsPalette.fully.fillColor,
+            strokeColor: this.vaccinationsPalette.fully.strokeColor,
+            fillOpacity: 0,
+            label: 'Zweite Impfungen',
+        };
+        const vacBoosterDoses: DataSeries = {
+            data: [],
+            fillColor: this.vaccinationsPalette.booster.fillColor,
+            strokeColor: this.vaccinationsPalette.booster.strokeColor,
+            fillOpacity: 0,
+            label: 'Booster-Impfungen',
+        };
+        const vacFullyImmunizedShifted: DataSeries = {
+            data: [],
+            fillColor: 'white',
+            strokeColor: 'rgb(162,162,162)',
+            fillOpacity: 0,
+            strokeDasharray: '5, 5',
+            strokeDashoffset: '5',
+            label: 'Boosterbedarf (verschobene Zweitimpfungen)',
+        };
+
+        const vacFirstDoses7Days = [];
+        const vacSecondDoses7Days = [];
+        const vacBoosterDoses7Days = [];
+
+        if (this.dataloader.vaccinations) {
+            for (const vacDay of this.dataloader.vaccinations) {
+                vacFirstDoses7Days.unshift(vacDay.dosen_erst_differenz_zum_vortag);
+                vacSecondDoses7Days.unshift(vacDay.dosen_zweit_differenz_zum_vortag);
+                vacBoosterDoses7Days.unshift(vacDay.dosen_dritt_differenz_zum_vortag);
+                if(vacFirstDoses7Days.length > 7)
+                    vacFirstDoses7Days.pop();
+                if(vacSecondDoses7Days.length > 7)
+                    vacSecondDoses7Days.pop();
+                if(vacBoosterDoses7Days.length > 7)
+                    vacBoosterDoses7Days.pop();
+
+                vacFirstDoses.data.push({
+                    date: vacDay.date,
+                    value: vacFirstDoses7Days.reduce(sum)
+                });
+                vacSecondDoses.data.push({
+                    date: vacDay.date,
+                    value: vacSecondDoses7Days.reduce(sum)
+                });
+                vacBoosterDoses.data.push({
+                    date: vacDay.date,
+                    value: vacBoosterDoses7Days.reduce(sum)
+                });
+
+                let shiftedDate = new Date(vacDay.date);
+                shiftedDate.setUTCDate(shiftedDate.getUTCDate() + this.simulation.params.boosterIntervalWeeks * 7);
+                if(getYearWeekOfDate(shiftedDate) < this.simulation.simulationEndWeek) {
+                    vacFullyImmunizedShifted.data.push({
+                        date: shiftedDate,
+                        value: vacSecondDoses7Days.reduce(sum)
+                    });
+                }
+            }
+        }
+
+        newData.series = [
+            vacBoosterDoses,
+            vacSecondDoses,
+            vacFirstDoses,
+            vacFullyImmunizedShifted,
+        ];
+
+        this.chart7DayVaccinations = newData;
     }
 
     buildChartWeeklyDeliveries(): void {
