@@ -46,6 +46,13 @@
                     "source": [
                         "https://www.rki.de/DE/Content/Kommissionen/STIKO/Empfehlungen/PM_2021-07-01.html"
                     ]
+                },
+                "2021-11-25": {
+                    "ages": ">=5",
+                    "description": "Am  25.1. empfohlen durch die EMA für Personen ab 5 Jahren",
+                    "source": [
+                        "https://www.ema.europa.eu/en/news/comirnaty-covid-19-vaccine-ema-recommends-approval-children-aged-5-11"
+                    ]
                 }
             }
         },
