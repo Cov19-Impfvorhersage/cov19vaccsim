@@ -590,6 +590,7 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
         }> = [];
 
         const formatDate = (d: Date) => d.toISOString().split('T')[0];
+        const yFormatter = (v: number) => d3.format(this.config.yAxisPercent ? '.1~%' : '.3~s')(v * this.config.yAxisScaleFactor);
 
         for (const s of this.data.series) {
             if (!s.data || !s.data.length) {
@@ -608,7 +609,7 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
                     }
                     tooltipData.push({
                         label: s.label,
-                        value: `${dataPoint.value} ${formatDate(dataPoint.date)}`
+                        value: `${yFormatter(dataPoint.value)} ${formatDate(dataPoint.date)}`
                     });
                     tooltipDots.push({
                         x: coords.xScale(dataPoint.date),
@@ -638,7 +639,7 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
                         }
                         tooltipData.push({
                             label: v.label,
-                            value: `${v.value}`
+                            value: `${yFormatter(v.value)}`
                         });
                         yVal += v.value;
                         tooltipDots.push({

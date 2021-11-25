@@ -831,7 +831,7 @@ export class PlaygroundPageComponent implements OnInit {
     buildChartCumulativeDeliveries(): void {
         const newData: PredictionLineChartData = {
             yMin: 0,
-            yMax: this.dataloader.population ? this.dataloader.population.data.total * 2 : 10000000,
+            yMax: this.dataloader.population ? this.dataloader.population.data.total * 2.5 : 10000000,
             series: [],
             partitions: [],
         };
