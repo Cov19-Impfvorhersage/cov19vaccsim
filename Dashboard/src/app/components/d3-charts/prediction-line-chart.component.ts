@@ -100,6 +100,7 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
         this.yGridMinor = this.svg.append('g').classed('grid-minor', true);
         this.stackedBars = this.svg.append('g').classed('stacked-bars', true);
         this.lines = this.svg.append('g').classed('lines', true);
+        this.tooltipDots = this.svg.append('g').classed('tooltip-dots', true);
         this.rightBar = this.svg.append('g').classed('right-bar', true);
         this.rightBarBoxes = this.rightBar.append('g').classed('boxes', true);
         this.rightBarLabels = this.rightBar.append('g').classed('labels', true);
@@ -115,7 +116,6 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
             .style('padding', '5px')
             .style('pointer-events', 'none')
             .style('transition', 'opacity 200ms ease');
-        this.tooltipDots = this.svg.append('g').classed('tooltip-dots', true);
     }
 
     updateChart(): void {
@@ -586,6 +586,7 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
             x: number;
             y: number;
             color: string;
+            filled: boolean;
         }> = [];
 
         const formatDate = (d: Date) => d.toISOString().split('T')[0];
@@ -609,7 +610,8 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
                     tooltipDots.push({
                         x: coords.xScale(dataPoint.date),
                         y: coords.yScale(dataPoint.value),
-                        color: s.strokeColor
+                        color: s.strokeColor,
+                        filled: !s.fillStriped,
                     });
                     break;
                 }
@@ -626,12 +628,22 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
                         label: 'stacked bar date range',
                         value: `${formatDate(b.dateStart)} - ${formatDate(b.dateEnd)}`,
                     });
+                    let yVal = 0;
                     for (const v of b.values) {
+                        if(v.value <= 0){
+                            continue;
+                        }
                         tooltipData.push({
                             label: v.fillColor,
                             value: `${v.value}`
                         });
-                        // todo compute x & y for the tooltip dot and push into tooltipDots
+                        yVal += v.value;
+                        tooltipDots.push({
+                            x: (coords.xScale(b.dateStart) + coords.xScale(b.dateEnd)) / 2,
+                            y: coords.yScale(yVal),
+                            color: v.fillColor,
+                            filled: !v.fillStriped,
+                        });
                     }
                     break;
                 }
@@ -656,8 +668,12 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
             .join('circle')
             .attr('cx', d => d.x)
             .attr('cy', d => d.y)
-            .attr('r', 10)
-            .attr('fill', d => d.color);
+            .attr('fill', d => d.color)
+            //.attr('fill', d => d.filled ? d.color : 'transparent')
+            //.attr('stroke', d => d.color)
+            .attr('stroke', 'white')
+            .attr('r', 6)
+            .attr('stroke-width', 2);
     }
 
     /**
