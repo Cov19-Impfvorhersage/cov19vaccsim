@@ -39,6 +39,7 @@ export interface ISimulationParameters {
     extraIntervalWeeks: number;
     extraIntervalWeeksOnlyFuture: boolean;
     boosterIntervalWeeks: number;
+    boosterCatchUp: boolean;
     fractionTakingSecondDose: number;
     fractionTakingThirdDose: number;
     fractionWilling: number;
@@ -88,6 +89,7 @@ export class BasicSimulation implements VaccinationSimulation {
         extraIntervalWeeks: 0,
         extraIntervalWeeksOnlyFuture: false,
         boosterIntervalWeeks: 26,
+        boosterCatchUp: true,
         fractionTakingSecondDose: 0.96,
         fractionTakingThirdDose: 0.76,
         fractionWilling: 0.80,
@@ -554,8 +556,13 @@ export class BasicSimulation implements VaccinationSimulation {
                         cw.weekBefore(curWeek, this.params.boosterIntervalWeeks)
                     )?.fullyImmunized * this.params.fractionTakingThirdDose;
 
+                    let shots = availablePeople;
                     //const shots = Math.max(0, Math.min(availableVaccineStockPile.get(vNameBnt), availablePeople));
-                    givenBoosterShots.set(vNameBnt, availablePeople);
+                    if(this.params.boosterCatchUp){
+                        shots = Math.max(shots, shots + (maxPeopleAvailableForBooster - cumBoosterImmunized - shots) * 0.25);
+                    }
+
+                    givenBoosterShots.set(vNameBnt, shots);
                 }
             }
             if(runningWeekData){ // Never give less than the actual data shows if the first week is the running week

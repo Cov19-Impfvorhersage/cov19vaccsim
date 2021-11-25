@@ -270,6 +270,13 @@
                             </div>
                         </div>
                     </div>
+                    <div class="settings_row"
+                         matTooltip="Boosterimpfungen, die bereits möglich sind, aber noch nicht gegeben wurden, innerhalb der nächsten paar Wochen der Simulation aufholen">
+                        <mat-slide-toggle [(ngModel)]="simulation.params.boosterCatchUp"
+                                          (change)="runSimulation();" labelPosition="before">
+                            Boosterimpfungen aufholen
+                        </mat-slide-toggle>
+                    </div>
                     <div class="settings_row" matTooltip="Extra Abstand zwischen Erst- und Zweitimpfung über die Empfehlung der STIKO hinaus.">
                         <div fxLayout="row" fxLayoutAlign="space-between center">
                             <div>Abstand Erst- zu Zweitimpfung:</div>
@@ -525,6 +532,11 @@
                         Dabei werden aktuell Impflieferungsdaten ignoriert, da die Datenquelle nicht mehr ganz korrekt ist.
                         Außerdem wird ignoriert, dass J&J-Geimpfte die Boosterimpfung bereits nach ein paar Wochen erhalten können.
                         Sämtliche Boosterimpfungen werden mit BioNTech-Impfstoff angesetzt.
+                    </li>
+                    <li>
+                        <b>Boosterimpfungen aufholen:</b><br>
+                        Hier werden für jede Simulationswoche zusätzlich zu den neu hinzukommenden boosterwilligen Personen auch noch 25%
+                        der noch nicht geboosterten boosterwilligen der vergangenen Wochen hinzugefügt.
                     </li>
                 </ul>
 
