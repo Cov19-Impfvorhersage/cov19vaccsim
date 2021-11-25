@@ -81,7 +81,7 @@ export class BasicSimulation implements VaccinationSimulation {
         estimateWillingPerVaccine: 'exponential',
         considerStockPile: true,
         astra2ndToBiontech: true,
-        contraindicationAge: 12,
+        contraindicationAge: 5,
         deliveryAmountFactor: 1,
         deliveryScenario: zilabImpfsimVerteilungszenarien[1],
         keep2ndDosesBack: 0,

@@ -159,7 +159,7 @@ export class PlaygroundPageComponent implements OnInit {
     simulationStartWeekNum = 5;
     simulationStartWeek: YearWeek = cw.yws([2021, this.simulationStartWeekNum]);
     availableDeliveryScenarios = zilabImpfsimVerteilungszenarien;
-    availableAgeLimits = [12, 16];
+    availableAgeLimits = [5, 12, 16];
     simulationStartSlider = {
         min: 1,
         max: 15,
@@ -287,6 +287,8 @@ export class PlaygroundPageComponent implements OnInit {
             strokeDasharray: '5, 5',
             strokeDashoffset: '5',
             fillStriped: true,
+            label: vacAtLeastOnce.label + ' (Modell)',
+            hideInLegend: true,
         };
         const vacFullySim: DataSeries = {
             data: [],
@@ -295,6 +297,8 @@ export class PlaygroundPageComponent implements OnInit {
             strokeDasharray: '5, 5',
             strokeDashoffset: '5',
             fillStriped: true,
+            label: vacFully.label + ' (Modell)',
+            hideInLegend: true,
         };
         const vacBoosterSim: DataSeries = {
             data: [],
@@ -303,6 +307,8 @@ export class PlaygroundPageComponent implements OnInit {
             strokeDasharray: '5, 5',
             strokeDashoffset: '5',
             fillStriped: true,
+            label: vacBooster.label + ' (Modell)',
+            hideInLegend: true,
         };
 
         if (this.dataloader.vaccinations) {
@@ -419,6 +425,8 @@ export class PlaygroundPageComponent implements OnInit {
             strokeDashoffset: '5',
             fillOpacity: 0,
             fillStriped: true,
+            label: vacDeliveries.label + ' (Modell)',
+            hideInLegend: true,
         };
         const vacFirstDoses: DataSeries = {
             data: [],
@@ -445,6 +453,8 @@ export class PlaygroundPageComponent implements OnInit {
             strokeDasharray: '5, 5',
             strokeDashoffset: '5',
             fillStriped: true,
+            label: vacFirstDoses.label + ' (Modell)',
+            hideInLegend: true,
         };
         const vacSecondDosesSim: DataSeries = {
             data: [],
@@ -453,6 +463,8 @@ export class PlaygroundPageComponent implements OnInit {
             strokeDasharray: '5, 5',
             strokeDashoffset: '5',
             fillStriped: true,
+            label: vacSecondDoses.label + ' (Modell)',
+            hideInLegend: true,
         };
         const vacBoosterDosesSim: DataSeries = {
             data: [],
@@ -461,6 +473,8 @@ export class PlaygroundPageComponent implements OnInit {
             strokeDasharray: '5, 5',
             strokeDashoffset: '5',
             fillStriped: true,
+            label: vacBoosterDoses.label + ' (Modell)',
+            hideInLegend: true,
         };
         const stackedBars: Array<StackedBar> = [];
 
@@ -648,6 +662,8 @@ export class PlaygroundPageComponent implements OnInit {
             strokeDasharray: '5, 5',
             strokeDashoffset: '5',
             fillStriped: true,
+            label: vacDoses.label + ' (Modell)',
+            hideInLegend: true,
         };
         const stackedBars: Array<StackedBar> = [];
 
@@ -786,6 +802,8 @@ export class PlaygroundPageComponent implements OnInit {
                     strokeDasharray: '5, 5',
                     strokeDashoffset: '5',
                     fillStriped: true,
+                    label: this.simulation.vaccineUsage.getVaccineDisplayName(vName) + ' (Modell)',
+                    hideInLegend: true,
                 });
             }
         }
@@ -829,6 +847,8 @@ export class PlaygroundPageComponent implements OnInit {
             strokeDasharray: '5, 5',
             strokeDashoffset: '5',
             fillStriped: true,
+            label: vacDeliveries.label + ' (Modell)',
+            hideInLegend: true,
         };
         const vacDosesSim: DataSeries = {
             data: [],
@@ -837,6 +857,8 @@ export class PlaygroundPageComponent implements OnInit {
             strokeDasharray: '5, 5',
             strokeDashoffset: '5',
             fillStriped: true,
+            label: vacDoses.label + ' (Modell)',
+            hideInLegend: true,
         };
 
         if (this.simulation.weeklyDeliveries) {
