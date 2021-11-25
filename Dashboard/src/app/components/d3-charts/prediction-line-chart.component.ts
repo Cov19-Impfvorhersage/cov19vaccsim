@@ -79,7 +79,7 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
     private rightBarBoxes: SvgGroup;
     private rightBarLabels: SvgGroup;
     private legend: SvgGroup;
-    private tooltipDiv: d3.Selection<HTMLDivElement, unknown, null, undefined>;
+    private tooltip: d3.Selection<HTMLDivElement, unknown, null, undefined>;
 
     initialChartConfig(): PredictionLineChartConfig {
         return {
@@ -105,8 +105,8 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
         this.xAxis = this.svg.append('g').classed('x-axis', true);
         this.yAxis = this.svg.append('g').classed('y-axis', true);
         this.legend = this.svg.append('g').classed('legend', true);
-        this.tooltipDiv = d3.select(this.chartContainerRef.nativeElement).append('div');
-        this.tooltipDiv
+        this.tooltip = d3.select(this.chartContainerRef.nativeElement).append('div');
+        this.tooltip
             .style('position', 'fixed')
             .style('width', '300px')
             .style('background', 'rgba(255,255,255,0.3)')
@@ -530,17 +530,17 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
     private updateMouseEventListeners(coords: PredictionLineChartCoords): void {
         this.svg
             .on('mouseenter', (e) => {
-                this.emitTooltipUpdate(coords, e, true);
+                this.updateTooltip(coords, e, true);
             })
             .on('mousemove', (e) => {
-                this.emitTooltipUpdate(coords, e, true);
+                this.updateTooltip(coords, e, true);
             })
             .on('mouseleave', (e) => {
-                this.emitTooltipUpdate(coords, e, false);
+                this.updateTooltip(coords, e, false);
             });
     }
 
-    private emitTooltipUpdate(coords: PredictionLineChartCoords, mouseEvent: MouseEvent, show: boolean): void {
+    private updateTooltip(coords: PredictionLineChartCoords, mouseEvent: MouseEvent, show: boolean): void {
         const svgClientRect = this.svg.node().getBoundingClientRect();
         // transform coords
         const chartX = mouseEvent.clientX - svgClientRect.x;
@@ -551,7 +551,7 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
         const domainY = coords.yScale.domain();
         const xValid = hoveredDate >= domainX[0] && hoveredDate <= domainX[1];
         const yValid = hoveredValue >= domainY[0] && hoveredValue <= domainY[1];
-        const showTooltip = show && xValid && yValid;
+        const showTooltip = this.data && show && xValid && yValid;
         /*
         // optionally, round date to the nearest day
         hoveredDate.setHours( hoveredDate.getHours() > 12 ? 24 : 0);
@@ -560,11 +560,52 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
         hoveredDate.setMilliseconds(0);
         */
 
-        this.tooltipDiv
+        this.tooltip
             .style('opacity', showTooltip ? 1 : 0)
             .style('left', mouseEvent.clientX + 15 + 'px')
             .style('top', mouseEvent.clientY + 15 + 'px');
-        this.tooltipDiv.text('test tooltip text');
+        if (!showTooltip) {
+            return;
+        }
+
+        // fill the tooltip with data
+        const tooltipData: Array<{
+            // adapt if necessary
+            label: string;
+            value: string;
+        }> = [];
+
+        for (const s of this.data.series) {
+            if (!s.data || !s.data.length) {
+                continue;
+            }
+            if (s.data[0].date > hoveredDate || s.data[s.data.length - 1].date < hoveredDate) {
+                continue; // hovering outside of series data range -> skip this series
+            }
+
+            // find last point that is smaller than hovered date
+            for (let i = 0; i < s.data.length; i++) {
+                if (s.data[i].date > hoveredDate) {
+                    const dataPoint = s.data[i - 1];
+                    tooltipData.push({
+                        label: s.label,
+                        value: `${dataPoint.value} ${dataPoint.date.toISOString().split('T')[0]}`
+                    });
+                    break;
+                }
+            }
+        }
+
+        if (tooltipData.length === 0) {
+            this.tooltip.style('opacity', 0); // nothing to show
+        }
+
+        // update tooltip content
+        this.tooltip
+            .selectAll('div')
+            .data(tooltipData)
+            .join('div')
+            .text(d => d.label + ' ' + d.value);
     }
 
     /**
