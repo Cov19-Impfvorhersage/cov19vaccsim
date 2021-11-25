@@ -376,13 +376,15 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
     }
 
     private renderLegend(coords: PredictionLineChartCoords, series: DataSeries[]): void {
-        const labeledSeries = series.filter(s => !!s.label);
+        const legendEntries = series.filter(s =>
+            !!s.label && !s.hideInLegend
+        );
         const padding = 10;
 
         // legend in general (position, visibility)
         this.legend
             .attr('transform', 'translate(' + (coords.xScale(Date.UTC(2021, 0, 1)) * 1.5 + 30) + ', 35)')
-            .attr('opacity', labeledSeries.length > 0 ? 1 : 0);
+            .attr('opacity', legendEntries.length > 0 ? 1 : 0);
 
         // 0.5 movements are to make sure that the border lies exactly on a pixel and can be rendered nicely
 
@@ -395,7 +397,7 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
             .attr('x', -0.5)
             .attr('y', -0.5)
             .attr('width', 200)
-            .attr('height', labeledSeries.length * 20 + padding + padding - 8)
+            .attr('height', legendEntries.length * 20 + padding + padding - 8)
             .attr('rx', 3)
             .attr('fill', 'white')
             .attr('stroke', '#777')
@@ -405,7 +407,7 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
         // legend entries
         this.legend
             .selectAll('g.legend-entry')
-            .data(labeledSeries)
+            .data(legendEntries)
             .join(enter => {
                 const lGroup = enter.append('g');
                 lGroup

@@ -10,6 +10,7 @@ export interface DataSeries {
     fillOpacity?: number;
     fillStriped?: boolean;
     label?: string;
+    hideInLegend ?: boolean;
 }
 
 export interface DataPoint {
