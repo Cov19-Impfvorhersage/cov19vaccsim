@@ -26,6 +26,7 @@ export interface DataPartition {
 
 export interface StackedBar {
     values: {
+        label?: string;
         value: number;
         fillColor: string;
         fillOpacity?: number;

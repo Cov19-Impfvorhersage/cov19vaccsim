@@ -520,16 +520,19 @@ export class PlaygroundPageComponent implements OnInit {
                     dateStart: cw.getWeekdayInYearWeek(yWeek, 2),
                     dateEnd: cw.getWeekdayInYearWeek(yWeek, (yWeek < this.simulationStartWeek) ? 8 : 3),
                     values: [{
+                        label: vacFirstDoses.label,
                         value: data.partiallyImmunized,
                         fillColor: vacFirstDoses.fillColor,
                         fillStriped: false,
                         fillOpacity: (yWeek < this.simulationStartWeek) ? 0.9 : 0.9,
                     },{
+                        label: vacSecondDoses.label,
                         value: data.vaccineDoses - data.partiallyImmunized - data.boosterImmunized,
                         fillColor: vacSecondDoses.fillColor,
                         fillStriped: false,
                         fillOpacity: (yWeek < this.simulationStartWeek) ? 0.9 : 0.9,
                     },{
+                        label: vacBoosterDoses.label,
                         value: data.boosterImmunized,
                         fillColor: vacBoosterDoses.fillColor,
                         fillStriped: false,
@@ -581,16 +584,19 @@ export class PlaygroundPageComponent implements OnInit {
                     dateStart: cw.getWeekdayInYearWeek(yWeek, 3),
                     dateEnd: cw.getWeekdayInYearWeek(yWeek, 8),
                     values: [{
+                        label: vacFirstDosesSim.label,
                         value: data.partiallyImmunized,
                         fillColor: vacFirstDosesSim.fillColor,
                         fillStriped: true,
                         fillOpacity: 0.8,
                     },{
+                        label: vacSecondDosesSim.label,
                         value: data.vaccineDoses - data.partiallyImmunized - data.boosterImmunized,
                         fillColor: vacSecondDosesSim.fillColor,
                         fillStriped: true,
                         fillOpacity: 0.8,
                     },{
+                        label: vacBoosterDosesSim.label,
                         value: data.boosterImmunized,
                         fillColor: vacBoosterDosesSim.fillColor,
                         fillStriped: true,
@@ -694,6 +700,7 @@ export class PlaygroundPageComponent implements OnInit {
                     dateStart: cw.getWeekdayInYearWeek(week, 2),
                     dateEnd: cw.getWeekdayInYearWeek(week, (week < this.simulationStartWeek) ? 8 : 3),
                     values: [... wu(vaccinesColors.entries()).map(([vName, color]) => ({
+                        label: this.simulation.vaccineUsage.getVaccineDisplayName(vName),
                         value: Math.max(del.dosesByVaccine.get(vName) ?? 0, 0),
                         fillColor: color,
                         fillStriped: false,
@@ -772,6 +779,7 @@ export class PlaygroundPageComponent implements OnInit {
                     dateStart: cw.getWeekdayInYearWeek(yWeek, 3),
                     dateEnd: cw.getWeekdayInYearWeek(yWeek, 8),
                     values: [... wu(vaccinesColors.entries()).map(([vName, color]) => ({
+                        label: this.simulation.vaccineUsage.getVaccineDisplayName(vName),
                         value: Math.max(vacDeliveryData.dosesByVaccine.get(vName) ?? 0, 0),
                         fillColor: color,
                         fillStriped: true,

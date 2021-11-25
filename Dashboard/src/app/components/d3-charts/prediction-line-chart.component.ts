@@ -603,6 +603,9 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
             for (let i = 0; i < s.data.length; i++) {
                 if (s.data[i].date > hoveredDate) {
                     const dataPoint = s.data[i - 1];
+                    if(!s.label){
+                        continue;
+                    }
                     tooltipData.push({
                         label: s.label,
                         value: `${dataPoint.value} ${formatDate(dataPoint.date)}`
@@ -630,11 +633,11 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
                     });
                     let yVal = 0;
                     for (const v of b.values) {
-                        if(v.value <= 0){
+                        if(v.value <= 0 || !v.label){
                             continue;
                         }
                         tooltipData.push({
-                            label: v.fillColor,
+                            label: v.label,
                             value: `${v.value}`
                         });
                         yVal += v.value;
