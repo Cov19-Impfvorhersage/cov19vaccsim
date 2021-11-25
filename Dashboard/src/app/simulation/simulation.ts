@@ -209,13 +209,14 @@ export class BasicSimulation implements VaccinationSimulation {
                     // Fraction of first shots given of possible first shots (deliveries minus second shots)
                     const fraction = Math.min(1, Math.max(0, shots1 / (deliveries - (shots - shots1)))) || 1;
                     const averageShots1 = shots1 / estimateWeeks;
+                    const mostRecentShots1 = dataBeforeSim.firstDosesByVaccine.get(vName) || averageShots1;
                     const expFact = Math.min(1, Math.max(0,
                         Math.pow(
                             (dataBeforeSim.firstDosesByVaccine.get(vName) || dataBeforeSim.dosesByVaccine.get(vName))
                             / (dataNWeeksAgo.firstDosesByVaccine.get(vName) || dataNWeeksAgo.dosesByVaccine.get(vName)),
                             1 / estimateWeeks) || 1
                     ));
-                    const expStartValue = (averageShots1 * Math.pow(expFact, (estimateWeeks-1) / 2)) || averageShots1;
+                    const expStartValue = mostRecentShots1;
                     console.log('Data for last ' + estimateWeeks + ' weeks:', vName,
                         ' delivered ', deliveries,
                         'given total', shots,
@@ -224,6 +225,7 @@ export class BasicSimulation implements VaccinationSimulation {
                     perVacWillingnessData.set(vName, {
                         fraction: fraction,
                         averageNumbers: averageShots1,
+                        mostRecentWeekNumbers: mostRecentShots1,
                         exponentialNumbers: expStartValue, // Initialize running variable
                         exponentialFactor: expFact,
                     });
@@ -488,7 +490,7 @@ export class BasicSimulation implements VaccinationSimulation {
                         const interpolate = Math.max(0, Math.min(1, Math.pow(willData.fraction*1.5, 2)/1.5)) * 0.8
                         availablePplForThisVac = Math.min(availablePeople,
                             interpolate * willData.fraction * availableVaccineStockPile.get(vName) +
-                            (1-interpolate) * willData.averageNumbers
+                            (1-interpolate) * willData.mostRecentWeekNumbers
                         );
                     }
                     else if(this.params.estimateWillingPerVaccine === 'exponential') {
