@@ -559,7 +559,10 @@ export class BasicSimulation implements VaccinationSimulation {
                     let shots = availablePeople;
                     //const shots = Math.max(0, Math.min(availableVaccineStockPile.get(vNameBnt), availablePeople));
                     if(this.params.boosterCatchUp){
-                        shots = Math.max(shots, shots + (maxPeopleAvailableForBooster - cumBoosterImmunized - shots) * 0.25);
+                        shots = Math.max(shots,
+                            Math.min(maxPeopleAvailableForBooster - cumBoosterImmunized, dataBeforeSim.boosterImmunized), // number of booster shots given the week before the simulation
+                            shots + (maxPeopleAvailableForBooster - cumBoosterImmunized - shots) * 0.3 // exponential decay
+                        );
                     }
 
                     givenBoosterShots.set(vNameBnt, shots);
