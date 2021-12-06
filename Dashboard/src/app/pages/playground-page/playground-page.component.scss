@@ -75,29 +75,36 @@ p {
         max-height: 105vw;
     }
 }
-:host ::ng-deep .chart_card mat-slider.simulation-start {
-    padding: 0;
-    margin-top: -15px;
-    margin-bottom: -10px;
+:host ::ng-deep .chart_card {
 
-
-    // No colors on track
-    /*.mat-slider-track-background {
-        background-color: theming.mat-color($accent);
-    }*/
-    .mat-slider-track-fill {
-        background-color: rgba(0, 0, 0, 0.26);
+    mat-tab-body.mat-tab-body-active {
+        z-index: 10; // So that the chart tooltip is rendered over the slider thumb
     }
 
-    .mat-slider-thumb {
-        width: 0;
-        height: 0;
-        border-top: 10px solid transparent;
-        border-left: 20px solid theming.mat-color($accent);
-        border-bottom: 10px solid transparent;
-        border-radius: 0;
-        background: transparent;
-        border-right: 0;
+    mat-slider.simulation-start {
+        padding: 0;
+        margin-top: -15px;
+        margin-bottom: -10px;
+
+
+        // No colors on track
+        /*.mat-slider-track-background {
+            background-color: theming.mat-color($accent);
+        }*/
+        .mat-slider-track-fill {
+            background-color: rgba(0, 0, 0, 0.26);
+        }
+
+        .mat-slider-thumb {
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-left: 20px solid theming.mat-color($accent);
+            border-bottom: 10px solid transparent;
+            border-radius: 0;
+            background: transparent;
+            border-right: 0;
+        }
     }
 }
 
