@@ -593,7 +593,15 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
         }> = [];
 
         const formatDate = (d: Date) => d.toLocaleDateString('default', {day: '2-digit', month: '2-digit', year: 'numeric'});
-        const yFormatter = (v: number) => d3.format(this.config.yAxisPercent ? '.1~%' : '.3~s')(v * this.config.yAxisScaleFactor);
+        const percentPrecision = Math.max(0,
+            Math.round(1
+                -Math.log10(
+                this.config.yAxisScaleFactor * (this.data.yMax-this.data.yMin)
+            )))
+        const yFormatter = (v: number) => d3.format(
+            this.config.yAxisPercent ?
+                '.'+percentPrecision+'%'
+                : '.3s')(v * this.config.yAxisScaleFactor);
 
         let headerText = '';
         let headerDate = null;
