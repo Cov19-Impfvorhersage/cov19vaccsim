@@ -636,28 +636,28 @@ export class PlaygroundPageComponent implements OnInit {
     buildChart7DayVaccinations(): void {
         const newData: PredictionLineChartData = {
             yMin: 0,
-            yMax: 5_000_000,
+            yMax: 7_000_000,
             series: [],
             partitions: [],
         };
         const vacFirstDoses: DataSeries = {
             data: [],
-            fillColor: this.vaccinationsPalette.once.fillColor,
-            strokeColor: this.vaccinationsPalette.once.strokeColor,
+            fillColor: '#ffffff',
+            strokeColor: '#e0ba2a',
             fillOpacity: 0,
             label: 'Erste Impfungen (inkl. J&J)',
         };
         const vacSecondDoses: DataSeries = {
             data: [],
-            fillColor: this.vaccinationsPalette.fully.fillColor,
-            strokeColor: this.vaccinationsPalette.fully.strokeColor,
+            fillColor: '#ffffff',
+            strokeColor: '#3890ab',
             fillOpacity: 0,
             label: 'Zweite Impfungen',
         };
         const vacBoosterDoses: DataSeries = {
             data: [],
-            fillColor: this.vaccinationsPalette.booster.fillColor,
-            strokeColor: this.vaccinationsPalette.booster.strokeColor,
+            fillColor: '#ffffff',
+            strokeColor: '#1f6c42',
             fillOpacity: 0,
             label: 'Booster-Impfungen',
         };
