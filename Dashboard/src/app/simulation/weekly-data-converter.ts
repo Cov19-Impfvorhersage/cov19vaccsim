@@ -1,12 +1,17 @@
 import * as d3 from 'd3';
-import {DeliveriesData, VaccinationsData, ZilabImpfsimlieferungenDataRow} from './data-interfaces/raw-data.interfaces';
+import {
+    DeliveriesData,
+    VaccinationsData,
+    VaccineDeliveryPrognosisData,
+    ZilabImpfsimlieferungenDataRow
+} from './data-interfaces/raw-data.interfaces';
 import {
     emptyDeliveryWeek,
     IVaccinationWeek,
     WeeklyDeliveryData,
     WeeklyVaccinationData
 } from './data-interfaces/simulation-data.interfaces';
-import {getYearWeekOfDate, weekAfter, YearWeek, yws} from './calendarweek/calendarweek';
+import {getYearWeekOfDate, weekAfter, YearWeek, yws, ywt} from './calendarweek/calendarweek';
 import {normalizeVaccineName} from './data-interfaces/vaccine-names';
 
 
@@ -162,6 +167,7 @@ export function calculateWeeklyVaccinations(vaccinations: d3.DSVParsedArray<Vacc
 
 
 export function extractDeliveriesInfo(
+        deliveryPrognosis: VaccineDeliveryPrognosisData,
         zilabImpfsimLieferungenData: ZilabImpfsimlieferungenDataRow[],
         verteilungszenario: string,
         extendUntil: YearWeek): WeeklyDeliveryData {
@@ -179,6 +185,17 @@ export function extractDeliveriesInfo(
             const r = transformedData.get(yWeek);
             r.dosesByVaccine.set(vName, (r.dosesByVaccine.get(vName) || 0) + row.dosen_kw);
         }
+    }
+    // overwrite entries where our own prognosis data exists
+    for (const [week, data] of Object.entries(deliveryPrognosis.data)){
+        const yWeek = yws(ywt(week)); // normalize YearWeek
+        const wData = emptyDeliveryWeek();
+
+        for (const [vName, number] of Object.entries(data)) {
+            wData.dosesByVaccine.set(normalizeVaccineName(vName), Number(number));
+        }
+
+        transformedData.set(yWeek, wData);
     }
     // Extend future deliveries until the current end of the simulation
     let yWeek = lastyWeek;

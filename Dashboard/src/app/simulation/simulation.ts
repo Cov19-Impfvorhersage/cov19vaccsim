@@ -658,7 +658,11 @@ export class BasicSimulation implements VaccinationSimulation {
             this.weeklyDeliveries = calculateWeeklyDeliveries(this.dataloader.deliveries);
         }
         if (!this.plannedDeliveries || this.params.deliveryScenario !== this.currentDeliveryScenario){
-            this.plannedDeliveries = extractDeliveriesInfo(this.dataloader.zilabImpfsimLieferungenData, this.params.deliveryScenario, this.simulationEndWeek);
+            this.plannedDeliveries = extractDeliveriesInfo(
+                this.dataloader.vaccineDeliveryPrognosis,
+                this.dataloader.zilabImpfsimLieferungenData,
+                this.params.deliveryScenario,
+                this.simulationEndWeek);
             this.currentDeliveryScenario = this.params.deliveryScenario;
         }
         return true;

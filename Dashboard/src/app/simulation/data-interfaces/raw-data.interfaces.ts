@@ -199,3 +199,16 @@ export interface IVaccineUsageData {
         }
     }
 }
+
+/**
+ * Interface of Vaccine Usage Data from data folder
+ */
+export interface VaccineDeliveryPrognosisData {
+    description: string;
+    source: string | string[];
+    data: {
+        [yearweek: string]: {
+            [vaccname: string]: number
+        }
+    };
+}

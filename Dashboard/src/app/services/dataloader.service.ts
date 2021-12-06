@@ -5,7 +5,7 @@ import {
     CosmoWillingnessData,
     DeliveriesData,
     PopulationData, PriorityGroupsData, UpdateDatesData,
-    VaccinationsData, VaccineUsageData,
+    VaccinationsData, VaccineDeliveryPrognosisData, VaccineUsageData,
     ZilabImpfsimlieferungenDataRow
 } from '../simulation/data-interfaces/raw-data.interfaces';
 import {Observable} from 'rxjs';
@@ -31,6 +31,7 @@ export class DataloaderService {
     population: PopulationData;
     priorities: PriorityGroupsData;
     vaccineUsage: VaccineUsageData;
+    vaccineDeliveryPrognosis: VaccineDeliveryPrognosisData;
     vaccinationWillingness: CosmoWillingnessData;
 
     loadData(): Observable<any> {
@@ -89,6 +90,14 @@ export class DataloaderService {
                         obs.next();
                     });
             }
+            if (!this.vaccineDeliveryPrognosis) {
+                this.http.get<VaccineDeliveryPrognosisData>('data/impfstoff_lieferprognose.json')
+                    .subscribe(data => {
+                        this.vaccineDeliveryPrognosis = data;
+                        console.log(this.vaccineDeliveryPrognosis, 'Vaccine Delivery Prognosis Data');
+                        obs.next();
+                    });
+            }
             if (!this.vaccineUsage) {
                 this.http.get<VaccineUsageData>('https://raw.githubusercontent.com/Cov19-Impfvorhersage/cov19vaccsim/master/Dashboard/data/impfstoffeinsatz_deutschland.json')
                     .subscribe(data => {
@@ -120,6 +129,7 @@ export class DataloaderService {
             && !!this.updateDates.vaccinationsLastUpdated
             && !!this.zilabImpfsimLieferungenData
             && !!this.vaccinationWillingness
+            && !!this.vaccineDeliveryPrognosis
             && !!this.vaccineUsage
             && !!this.population
             && !!this.priorities;
