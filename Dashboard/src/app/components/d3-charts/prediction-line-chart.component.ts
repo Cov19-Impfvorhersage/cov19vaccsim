@@ -111,7 +111,8 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
         this.tooltip
             .style('position', 'fixed')
             //.style('width', '300px')
-            .style('pointer-events', 'none');
+            .style('pointer-events', 'none')
+            .style('opacity', 0);
         this.tooltip.append('div').classed('header', true);
         this.tooltip.append('table').classed('values', true);
     }
