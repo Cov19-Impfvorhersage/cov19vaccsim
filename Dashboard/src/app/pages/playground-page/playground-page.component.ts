@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import * as wu from 'wu';
 import { DataPoint, DataSeries, StackedBar } from '../../components/d3-charts/data.interfaces';
-import { PredictionLineChartConfig, PredictionLineChartData } from '../../components/d3-charts/prediction-line-chart.component';
+import { PredictionLineChartData } from '../../components/d3-charts/prediction-line-chart.component';
 import { DataloaderService } from '../../services/dataloader.service';
 import * as cw from '../../simulation/calendarweek/calendarweek';
 import { getWeekdayInYearWeek, getYearWeekOfDate, YearWeek } from '../../simulation/calendarweek/calendarweek';
 import { ISimulationResults } from '../../simulation/data-interfaces/simulation-data.interfaces';
 import { BasicSimulation } from '../../simulation/simulation';
 import { relu, sum } from '../../simulation/vaccine-map-helper';
+import { ChartConfig } from './helpers/chart-config';
 
 @Component({
     selector: 'app-playground-page',
@@ -106,35 +107,10 @@ export class PlaygroundPageComponent implements OnInit {
         ],
         partitions: [],
     };
-    chartPopulationConfig: PredictionLineChartConfig = {
-        yAxisLabel: '', // 'Bevölkerung',
-        yAxisScaleFactor: 1,
-        yAxisPercent: false,
-    };
     chartWeeklyVaccinations: PredictionLineChartData = this.chartPopulation;
-    chartWeeklyVaccinationsConfig: PredictionLineChartConfig = {
-        yAxisLabel: '', // 'Impfdosen',
-        yAxisScaleFactor: 1,
-        yAxisPercent: false,
-    };
     chart7DayVaccinations: PredictionLineChartData = this.chartPopulation;
-    chart7DayVaccinationsConfig: PredictionLineChartConfig = {
-        yAxisLabel: '', // 'Impfdosen',
-        yAxisScaleFactor: 1,
-        yAxisPercent: false,
-    };
     chartWeeklyDeliveries: PredictionLineChartData = this.chartPopulation;
-    chartWeeklyDeliveriesConfig: PredictionLineChartConfig = {
-        yAxisLabel: '', // 'Impfdosen',
-        yAxisScaleFactor: 1,
-        yAxisPercent: false,
-    };
     chartCumulativeDeliveries: PredictionLineChartData = this.chartPopulation;
-    chartCumulativeDeliveriesConfig: PredictionLineChartConfig = {
-        yAxisLabel: '', // 'Impfdosen',
-        yAxisScaleFactor: 1,
-        yAxisPercent: false,
-    };
     simulationStartWeekNum = 5;
     simulationStartWeek: YearWeek = cw.yws([2021, this.simulationStartWeekNum]);
     availableAgeLimits = [5, 12, 16];
@@ -147,8 +123,8 @@ export class PlaygroundPageComponent implements OnInit {
 
     displayPartitioning = Object.keys(this.simulation.partitionings)[0];
     featureFlagYAxisScale = true;
-    displayYAxisScale = 'num';
-    displayYAxisScaleTimeframe = 'week';
+
+    chartConfig: ChartConfig;
 
     private simulationResults: ISimulationResults;
 
@@ -156,6 +132,7 @@ export class PlaygroundPageComponent implements OnInit {
         window.scrollTo(0, 0);
         this.dataloader.loadData().subscribe(() => {
             this.loaded = true;
+            this.chartConfig = new ChartConfig(this.dataloader.population.data.total);
             this.simulation.prepareData();
             this.prepareSimulationStartSlider();
             this.simulationStartWeek = getYearWeekOfDate(this.dataloader.lastRefreshVaccinations, 1);
@@ -198,45 +175,8 @@ export class PlaygroundPageComponent implements OnInit {
         this.buildChart7DayVaccinations();
         this.buildChartWeeklyDeliveries();
         this.buildChartCumulativeDeliveries();
-        this.buildYScaleConfigurations();
+        this.chartConfig.updateConfigs();
     }
-
-
-    buildYScaleConfigurations(): void {
-        let scale = 1;
-        let percent = false;
-        if (this.displayYAxisScale === 'percent') {
-            scale = 1 / this.dataloader.population.data.total;
-            percent = true;
-        }
-        const weeklyScale = scale * (this.displayYAxisScaleTimeframe === 'day' ? 1 / 7 : 1);
-        this.chartPopulationConfig = {
-            ...this.chartPopulationConfig,
-            yAxisScaleFactor: scale,
-            yAxisPercent: percent,
-        };
-        this.chartCumulativeDeliveriesConfig = {
-            ...this.chartCumulativeDeliveriesConfig,
-            yAxisScaleFactor: scale,
-            yAxisPercent: percent,
-        };
-        this.chartWeeklyVaccinationsConfig = {
-            ...this.chartWeeklyVaccinationsConfig,
-            yAxisScaleFactor: weeklyScale,
-            yAxisPercent: percent,
-        };
-        this.chartWeeklyDeliveriesConfig = {
-            ...this.chartWeeklyDeliveriesConfig,
-            yAxisScaleFactor: weeklyScale,
-            yAxisPercent: percent,
-        };
-        this.chart7DayVaccinationsConfig = {
-            ...this.chart7DayVaccinationsConfig,
-            yAxisScaleFactor: weeklyScale,
-            yAxisPercent: percent,
-        };
-    }
-
 
     buildChartPopulation(): void {
         const newData: PredictionLineChartData = {
