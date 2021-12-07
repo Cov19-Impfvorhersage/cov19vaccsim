@@ -21,28 +21,6 @@ import { relu, sum } from '../../simulation/vaccine-map-helper';
 })
 export class PlaygroundPageComponent implements OnInit {
 
-    // TEMP
-    stackedBars: StackedBar[] = [
-        {
-            dateStart: new Date(2021, 1, 1),
-            dateEnd: new Date(2021, 2, 1),
-            values: [
-                {value: 10e6, fillColor: 'red'},
-                {value: 10e6, fillColor: 'green'},
-                {value: 10e6, fillColor: 'blue'},
-            ]
-        },
-        {
-            dateStart: new Date(2021, 3, 1),
-            dateEnd: new Date(2021, 3, 10),
-            values: [
-                {value: 20e6, fillColor: 'red'},
-                {value: 30e6, fillColor: 'green'},
-                {value: 40e6, fillColor: 'blue'},
-            ]
-        },
-    ];
-
     constructor(public dataloader: DataloaderService) {
     }
 
@@ -409,7 +387,6 @@ export class PlaygroundPageComponent implements OnInit {
         ];
 
         this.chartPopulation = newData;
-        //this.chartPopulation.stackedBars = this.stackedBars; // TEMP
     }
 
 
