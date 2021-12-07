@@ -24,49 +24,11 @@ export class PlaygroundPageComponent implements OnInit {
     simulation = new BasicSimulation(this.dataloader);
     loaded = false;
 
-    chartPopulation: PredictionLineChartData = {
-        yMin: 0,
-        yMax: 10,
-        series: [
-            // one series = one line + fill below
-            {
-                data: [
-                    {value: 5, date: new Date(2021, 0, 1)},
-                    {value: 6, date: new Date(2021, 0, 2)},
-                    {value: 2, date: new Date(2021, 0, 3)},
-                    {value: 7, date: new Date(2021, 0, 6)},
-                ],
-                fillColor: '#ff4848',
-                strokeColor: '#ff0000',
-            },
-            {
-                data: [
-                    {value: 8, date: new Date(2021, 0, 4)},
-                    {value: 4, date: new Date(2021, 0, 5)},
-                    {value: 3, date: new Date(2021, 0, 6)},
-                    {value: 5, date: new Date(2021, 0, 7)},
-                ],
-                fillColor: '#487cff',
-                strokeColor: '#0000ff',
-            },
-            {
-                data: [
-                    {value: 3, date: new Date(2021, 0, 1)},
-                    {value: 10, date: new Date(2021, 0, 5)},
-                    {value: 3, date: new Date(2021, 0, 9)},
-                ],
-                fillColor: '#46bf3d',
-                strokeColor: '#39a401',
-                strokeDasharray: '5, 5',
-                strokeDashoffset: '5'
-            },
-        ],
-        partitions: [],
-    };
-    chartWeeklyVaccinations: PredictionLineChartData = this.chartPopulation;
-    chart7DayVaccinations: PredictionLineChartData = this.chartPopulation;
-    chartWeeklyDeliveries: PredictionLineChartData = this.chartPopulation;
-    chartCumulativeDeliveries: PredictionLineChartData = this.chartPopulation;
+    chartPopulation: PredictionLineChartData;
+    chartWeeklyVaccinations: PredictionLineChartData;
+    chart7DayVaccinations: PredictionLineChartData;
+    chartWeeklyDeliveries: PredictionLineChartData;
+    chartCumulativeDeliveries: PredictionLineChartData;
     simulationStartWeekNum = 5;
     simulationStartWeek: YearWeek = cw.yws([2021, this.simulationStartWeekNum]);
     availableAgeLimits = [5, 12, 16];
