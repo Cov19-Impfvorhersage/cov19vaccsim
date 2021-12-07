@@ -22,7 +22,7 @@ export class PlaygroundPageComponent implements OnInit {
     simulation = new BasicSimulation(this.dataloader);
     loaded = false;
 
-    vaccinationsPalette = {
+    private vaccinationsPalette = {
         once: {
             fillColor: '#8cd0cd',
             strokeColor: '#6fb6b3',
@@ -36,7 +36,7 @@ export class PlaygroundPageComponent implements OnInit {
             strokeColor: '#20412f',
         }
     };
-    populationPalette = [
+    private populationPalette = [
         '#a2d9ac',
         '#69b164',
         '#468b43',
@@ -44,19 +44,19 @@ export class PlaygroundPageComponent implements OnInit {
         '#12520d',
         '#0c3d07',
     ];
-    populationPaletteLarge = [
+    private populationPaletteLarge = [
         '#e9fcec',
         '#c2eac8',
         ...this.populationPalette,
         '#0a2f05',
         '#061d02',
     ];
-    populationSpecialColors = {
+    private populationSpecialColors = {
         unwilling: '#ddd',
         contraindicated: '#aaa',
     };
 
-    vaccinePalette = [
+    private vaccinePalette = [
         '#4477AA',
         '#CC3311',
         '#CCBB44',
@@ -150,7 +150,7 @@ export class PlaygroundPageComponent implements OnInit {
     displayYAxisScale = 'num';
     displayYAxisScaleTimeframe = 'week';
 
-    simulationResults: ISimulationResults;
+    private simulationResults: ISimulationResults;
 
     ngOnInit(): void {
         window.scrollTo(0, 0);
@@ -389,7 +389,7 @@ export class PlaygroundPageComponent implements OnInit {
     }
 
 
-    buildChartWeeklyVaccinations(): void {
+    private buildChartWeeklyVaccinations(): void {
         const newData: PredictionLineChartData = {
             yMin: 0,
             yMax: 10_000_000,
@@ -584,7 +584,7 @@ export class PlaygroundPageComponent implements OnInit {
         this.chartWeeklyVaccinations = newData;
     }
 
-    buildChart7DayVaccinations(): void {
+    private buildChart7DayVaccinations(): void {
         const newData: PredictionLineChartData = {
             yMin: 0,
             yMax: 7_000_000,
@@ -675,7 +675,7 @@ export class PlaygroundPageComponent implements OnInit {
         this.chart7DayVaccinations = newData;
     }
 
-    buildChartWeeklyDeliveries(): void {
+    private buildChartWeeklyDeliveries(): void {
         const newData: PredictionLineChartData = {
             yMin: 0,
             yMax: 10_000_000,
@@ -868,7 +868,7 @@ export class PlaygroundPageComponent implements OnInit {
         this.chartWeeklyDeliveries = newData;
     }
 
-    buildChartCumulativeDeliveries(): void {
+    private buildChartCumulativeDeliveries(): void {
         const newData: PredictionLineChartData = {
             yMin: 0,
             yMax: this.dataloader.population ? this.dataloader.population.data.total * 2.5 : 10000000,
