@@ -9,6 +9,7 @@ import { ISimulationResults } from '../../simulation/data-interfaces/simulation-
 import { BasicSimulation } from '../../simulation/simulation';
 import { relu, sum } from '../../simulation/vaccine-map-helper';
 import { ChartConfig } from './helpers/chart-config';
+import { ColorPalettes } from './helpers/color-palettes';
 
 @Component({
     selector: 'app-playground-page',
@@ -22,51 +23,6 @@ export class PlaygroundPageComponent implements OnInit {
 
     simulation = new BasicSimulation(this.dataloader);
     loaded = false;
-
-    private vaccinationsPalette = {
-        once: {
-            fillColor: '#8cd0cd',
-            strokeColor: '#6fb6b3',
-        },
-        fully: {
-            fillColor: '#54a98f',
-            strokeColor: '#4a8a60',
-        },
-        booster: {
-            fillColor: '#2c725c',
-            strokeColor: '#20412f',
-        }
-    };
-    private populationPalette = [
-        '#a2d9ac',
-        '#69b164',
-        '#468b43',
-        '#186a10',
-        '#12520d',
-        '#0c3d07',
-    ];
-    private populationPaletteLarge = [
-        '#e9fcec',
-        '#c2eac8',
-        ...this.populationPalette,
-        '#0a2f05',
-        '#061d02',
-    ];
-    private populationSpecialColors = {
-        unwilling: '#ddd',
-        contraindicated: '#aaa',
-    };
-
-    private vaccinePalette = [
-        '#4477AA',
-        '#CC3311',
-        '#CCBB44',
-        '#228833',
-        '#EE6677',
-        '#66CCEE',
-        '#AA3377',
-        '#BBBBBB',
-    ];
 
     chartPopulation: PredictionLineChartData = {
         yMin: 0,
@@ -127,6 +83,7 @@ export class PlaygroundPageComponent implements OnInit {
     chartConfig: ChartConfig;
 
     private simulationResults: ISimulationResults;
+    private colors: ColorPalettes = new ColorPalettes();
 
     ngOnInit(): void {
         window.scrollTo(0, 0);
@@ -190,22 +147,23 @@ export class PlaygroundPageComponent implements OnInit {
             ],
         };
 
+        const { once, fully, booster } = this.colors.vaccinationsPal;
         const vacAtLeastOnce: DataSeries = {
             data: [],
-            fillColor: this.vaccinationsPalette.once.fillColor,
-            strokeColor: this.vaccinationsPalette.once.strokeColor,
+            fillColor: once.fillColor,
+            strokeColor: once.strokeColor,
             label: 'Mindestens Erstgeimpft'
         };
         const vacFully: DataSeries = {
             data: [],
-            fillColor: this.vaccinationsPalette.fully.fillColor,
-            strokeColor: this.vaccinationsPalette.fully.strokeColor,
+            fillColor: fully.fillColor,
+            strokeColor: fully.strokeColor,
             label: 'Vollständig Immunisiert'
         };
         const vacBooster: DataSeries = {
             data: [],
-            fillColor: this.vaccinationsPalette.booster.fillColor,
-            strokeColor: this.vaccinationsPalette.booster.strokeColor,
+            fillColor: booster.fillColor,
+            strokeColor: booster.strokeColor,
             label: 'Booster-Immunisiert'
         };
         const vacAtLeastOnceSim: DataSeries = {
@@ -297,13 +255,13 @@ export class PlaygroundPageComponent implements OnInit {
             const parts = [];
             let colorI = 0;
             const partitions = this.simulation.partitionings[this.displayPartitioning].partitions;
-            const palette = partitions.filter(p => !(p.id in this.populationSpecialColors)).length > this.populationPalette.length ?
-                this.populationPaletteLarge
-                : this.populationPalette;
+            const palette = partitions.filter(p => !(p.id in this.colors.populationSpecial)).length > this.colors.populationPalS.length ?
+                this.colors.populationPalL
+                : this.colors.populationPalS;
             for (const p of partitions) {
                 let c;
-                if (p.id in this.populationSpecialColors) {
-                    c = this.populationSpecialColors[p.id];
+                if (p.id in this.colors.populationSpecial) {
+                    c = this.colors.populationSpecial[p.id];
                 } else {
                     c = palette[colorI++];
                 }
@@ -355,22 +313,23 @@ export class PlaygroundPageComponent implements OnInit {
             label: vacDeliveries.label + ' (Modell)',
             hideInLegend: true,
         };
+        const { once, fully, booster } = this.colors.vaccinationsPal;
         const vacFirstDoses: DataSeries = {
             data: [],
-            fillColor: this.vaccinationsPalette.once.fillColor,
-            strokeColor: this.vaccinationsPalette.once.strokeColor,
+            fillColor: once.fillColor,
+            strokeColor: once.strokeColor,
             label: 'Erste Impfungen (inkl. J&J)',
         };
         const vacSecondDoses: DataSeries = {
             data: [],
-            fillColor: this.vaccinationsPalette.fully.fillColor,
-            strokeColor: this.vaccinationsPalette.fully.strokeColor,
+            fillColor: fully.fillColor,
+            strokeColor: fully.strokeColor,
             label: 'Zweite Impfungen',
         };
         const vacBoosterDoses: DataSeries = {
             data: [],
-            fillColor: this.vaccinationsPalette.booster.fillColor,
-            strokeColor: this.vaccinationsPalette.booster.strokeColor,
+            fillColor: booster.fillColor,
+            strokeColor: booster.strokeColor,
             label: 'Booster-Impfungen',
         };
         const vacFirstDosesSim: DataSeries = {
@@ -630,7 +589,7 @@ export class PlaygroundPageComponent implements OnInit {
         let colorI = 0;
         for (const vName of this.simulation.vaccineUsage.getVaccinesPriorityList()) {
             vaccinesWithDeliveries.set(vName, false);
-            vaccinesColors.set(vName, this.vaccinePalette[colorI++]);
+            vaccinesColors.set(vName, this.colors.vaccinePal[colorI++]);
         }
 
         const vacDoses: DataSeries = {
