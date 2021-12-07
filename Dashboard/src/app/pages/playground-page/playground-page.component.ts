@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as wu from 'wu';
 import { DataPoint, DataSeries, StackedBar } from '../../components/d3-charts/data.interfaces';
-import {
-    PredictionLineChartConfig,
-    PredictionLineChartData
-} from '../../components/d3-charts/prediction-line-chart.component';
+import { PredictionLineChartConfig, PredictionLineChartData } from '../../components/d3-charts/prediction-line-chart.component';
 import { DataloaderService } from '../../services/dataloader.service';
 import * as cw from '../../simulation/calendarweek/calendarweek';
 import { getWeekdayInYearWeek, getYearWeekOfDate, YearWeek } from '../../simulation/calendarweek/calendarweek';
@@ -532,9 +529,10 @@ export class PlaygroundPageComponent implements OnInit {
         if (this.simulationResults) {
             // Attach line to week before
             let date = cw.getWeekdayInYearWeek(this.simulationStartWeek, 1);
+            const weeklyData = this.simulation.weeklyDeliveriesScenario.get(cw.weekBefore(this.simulationStartWeek));
             vacDeliveriesSim.data.push({
                 date,
-                value: wu(this.simulation.weeklyDeliveriesScenario.get(cw.weekBefore(this.simulationStartWeek)).dosesByVaccine.values()).map(relu).reduce(sum)
+                value: wu(weeklyData.dosesByVaccine.values()).map(relu).reduce(sum),
             });
             for (const [yWeek, data] of this.simulationResults.weeklyData.entries()) {
                 // Plotpunkt immer am Montag nach der Woche, also wenn Woche vorbei
@@ -720,7 +718,9 @@ export class PlaygroundPageComponent implements OnInit {
                 for (const vName of del.cumDosesByVaccine.keys()) {
                     // iterate over cum doses because the weekly one doesn't list 0-dose-deliveries...
                     const value = Math.max(del.dosesByVaccine.get(vName) ?? 0, 0);
-                    vacDeliveries.has(vName) || vacDeliveries.set(vName, []);
+                    if (!vacDeliveries.has(vName)) {
+                        vacDeliveries.set(vName, []);
+                    }
                     const dataPoints = vacDeliveries.get(vName);
                     dataPoints.push({
                         date: getWeekdayInYearWeek(week, 8),
@@ -780,9 +780,11 @@ export class PlaygroundPageComponent implements OnInit {
             for (const vName of vacDeliveryData.cumDosesByVaccine.keys()) {
                 // iterate over cum doses because the weekly one doesn't list 0-dose-deliveries...
                 const value = Math.max(vacDeliveryData.dosesByVaccine.get(vName) ?? 0, 0);
-                vacDeliveriesSim.has(vName) || vacDeliveriesSim.set(vName, []);
-                const datapoints = vacDeliveriesSim.get(vName);
-                datapoints.push({
+                if (!vacDeliveriesSim.has(vName)) {
+                    vacDeliveriesSim.set(vName, []);
+                }
+                const dataPoints = vacDeliveriesSim.get(vName);
+                dataPoints.push({
                     date,
                     value
                 });
@@ -801,9 +803,11 @@ export class PlaygroundPageComponent implements OnInit {
                 for (const vName of vacDeliveryData2.cumDosesByVaccine.keys()) {
                     // iterate over cum doses because the weekly one doesn't list 0-dose-deliveries...
                     const value = Math.max(vacDeliveryData2.dosesByVaccine.get(vName) ?? 0, 0);
-                    vacDeliveriesSim.has(vName) || vacDeliveriesSim.set(vName, []);
-                    const datapoints = vacDeliveriesSim.get(vName);
-                    datapoints.push({
+                    if (!vacDeliveriesSim.has(vName)) {
+                        vacDeliveriesSim.set(vName, []);
+                    }
+                    const dataPoints = vacDeliveriesSim.get(vName);
+                    dataPoints.push({
                         date,
                         value
                     });
@@ -936,9 +940,10 @@ export class PlaygroundPageComponent implements OnInit {
                 date,
                 value: dataAttach.cumVaccineDoses
             });
+            const weeklyData = this.simulation.weeklyDeliveriesScenario.get(cw.weekBefore(this.simulationStartWeek));
             vacDeliveriesSim.data.push({
                 date: dateWeek,
-                value: wu(this.simulation.weeklyDeliveriesScenario.get(cw.weekBefore(this.simulationStartWeek)).cumDosesByVaccine.values()).reduce(sum)
+                value: wu(weeklyData.cumDosesByVaccine.values()).reduce(sum),
             });
             for (const [yWeek, data] of this.simulationResults.weeklyData.entries()) {
                 // Plotpunkt immer am Montag nach der Woche, also wenn Woche vorbei
