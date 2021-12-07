@@ -4,7 +4,8 @@ import * as wu from 'wu';
 import { DataPoint, DataSeries, StackedBar } from '../../components/d3-charts/data.interfaces';
 import {
     PredictionLineChartConfig,
-    PredictionLineChartData, TooltipUpdate
+    PredictionLineChartData,
+    TooltipUpdate
 } from '../../components/d3-charts/prediction-line-chart.component';
 import { DataloaderService } from '../../services/dataloader.service';
 import * as cw from '../../simulation/calendarweek/calendarweek';
@@ -40,7 +41,7 @@ export class PlaygroundPageComponent implements OnInit {
             fillColor: '#2c725c',
             strokeColor: '#20412f',
         }
-    }
+    };
     populationPartitionPalette = [
         '#a2d9ac',
         '#69b164',
@@ -211,28 +212,33 @@ export class PlaygroundPageComponent implements OnInit {
     buildYScaleConfigurations(): void {
         let scale = 1;
         let percent = false;
-        if(this.displayYAxisScale === 'percent'){
+        if (this.displayYAxisScale === 'percent') {
             scale = 1 / this.dataloader.population.data.total;
             percent = true;
         }
-        let weeklyScale = scale * (this.displayYAxisScaleTimeframe === 'day' ? 1/7 : 1);
-        this.chartPopulationConfig = {... this.chartPopulationConfig,
+        let weeklyScale = scale * (this.displayYAxisScaleTimeframe === 'day' ? 1 / 7 : 1);
+        this.chartPopulationConfig = {
+            ...this.chartPopulationConfig,
             yAxisScaleFactor: scale,
             yAxisPercent: percent,
         };
-        this.chartCumulativeDeliveriesConfig = {... this.chartCumulativeDeliveriesConfig,
+        this.chartCumulativeDeliveriesConfig = {
+            ...this.chartCumulativeDeliveriesConfig,
             yAxisScaleFactor: scale,
             yAxisPercent: percent,
         };
-        this.chartWeeklyVaccinationsConfig = {... this.chartWeeklyVaccinationsConfig,
+        this.chartWeeklyVaccinationsConfig = {
+            ...this.chartWeeklyVaccinationsConfig,
             yAxisScaleFactor: weeklyScale,
             yAxisPercent: percent,
         };
-        this.chartWeeklyDeliveriesConfig = {... this.chartWeeklyDeliveriesConfig,
+        this.chartWeeklyDeliveriesConfig = {
+            ...this.chartWeeklyDeliveriesConfig,
             yAxisScaleFactor: weeklyScale,
             yAxisPercent: percent,
         };
-        this.chart7DayVaccinationsConfig = {... this.chart7DayVaccinationsConfig,
+        this.chart7DayVaccinationsConfig = {
+            ...this.chart7DayVaccinationsConfig,
             yAxisScaleFactor: weeklyScale,
             yAxisPercent: percent,
         };
@@ -479,7 +485,7 @@ export class PlaygroundPageComponent implements OnInit {
             }
         }*/
         // Add first datapoint so that the chart is always scaled the same
-        if(this.dataloader.vaccinations) {
+        if (this.dataloader.vaccinations) {
             vacDeliveries.data.push({
                 date: this.dataloader.vaccinations[0].date,
                 value: 0
@@ -513,13 +519,13 @@ export class PlaygroundPageComponent implements OnInit {
                         fillColor: vacFirstDoses.fillColor,
                         fillStriped: false,
                         fillOpacity: (yWeek < this.simulationStartWeek) ? 0.9 : 0.9,
-                    },{
+                    }, {
                         label: vacSecondDoses.label,
                         value: data.vaccineDoses - data.partiallyImmunized - data.boosterImmunized,
                         fillColor: vacSecondDoses.fillColor,
                         fillStriped: false,
                         fillOpacity: (yWeek < this.simulationStartWeek) ? 0.9 : 0.9,
-                    },{
+                    }, {
                         label: vacBoosterDoses.label,
                         value: data.boosterImmunized,
                         fillColor: vacBoosterDoses.fillColor,
@@ -529,7 +535,7 @@ export class PlaygroundPageComponent implements OnInit {
                 });
             }
             // remove last week if it is not complete yet
-            if(this.dataloader.lastRefreshVaccinations.getUTCDay() !== 0) {
+            if (this.dataloader.lastRefreshVaccinations.getUTCDay() !== 0) {
                 vacFirstDoses.data.pop();
                 vacSecondDoses.data.pop();
                 vacBoosterDoses.data.pop();
@@ -577,13 +583,13 @@ export class PlaygroundPageComponent implements OnInit {
                         fillColor: vacFirstDosesSim.fillColor,
                         fillStriped: true,
                         fillOpacity: 0.8,
-                    },{
+                    }, {
                         label: vacSecondDosesSim.label,
                         value: data.vaccineDoses - data.partiallyImmunized - data.boosterImmunized,
                         fillColor: vacSecondDosesSim.fillColor,
                         fillStriped: true,
                         fillOpacity: 0.8,
-                    },{
+                    }, {
                         label: vacBoosterDosesSim.label,
                         value: data.boosterImmunized,
                         fillColor: vacBoosterDosesSim.fillColor,
@@ -657,12 +663,15 @@ export class PlaygroundPageComponent implements OnInit {
                 vacFirstDoses7Days.unshift(vacDay.dosen_erst_differenz_zum_vortag);
                 vacSecondDoses7Days.unshift(vacDay.dosen_zweit_differenz_zum_vortag);
                 vacBoosterDoses7Days.unshift(vacDay.dosen_dritt_differenz_zum_vortag);
-                if(vacFirstDoses7Days.length > 7)
+                if (vacFirstDoses7Days.length > 7) {
                     vacFirstDoses7Days.pop();
-                if(vacSecondDoses7Days.length > 7)
+                }
+                if (vacSecondDoses7Days.length > 7) {
                     vacSecondDoses7Days.pop();
-                if(vacBoosterDoses7Days.length > 7)
+                }
+                if (vacBoosterDoses7Days.length > 7) {
                     vacBoosterDoses7Days.pop();
+                }
 
                 vacFirstDoses.data.push({
                     date: vacDay.date,
@@ -679,7 +688,7 @@ export class PlaygroundPageComponent implements OnInit {
 
                 let shiftedDate = new Date(vacDay.date);
                 shiftedDate.setUTCDate(shiftedDate.getUTCDate() + this.simulation.params.boosterIntervalWeeks * 7);
-                if(getYearWeekOfDate(shiftedDate) < this.simulation.simulationEndWeek) {
+                if (getYearWeekOfDate(shiftedDate) < this.simulation.simulationEndWeek) {
                     vacFullyImmunizedShifted.data.push({
                         date: shiftedDate,
                         value: vacSecondDoses7Days.reduce(sum)
@@ -775,7 +784,7 @@ export class PlaygroundPageComponent implements OnInit {
                 stackedBars.push({
                     dateStart: cw.getWeekdayInYearWeek(week, 2),
                     dateEnd: cw.getWeekdayInYearWeek(week, (week < this.simulationStartWeek) ? 8 : 3),
-                    values: [... wu(vaccinesColors.entries()).map(([vName, color]) => ({
+                    values: [...wu(vaccinesColors.entries()).map(([vName, color]) => ({
                         label: this.simulation.vaccineUsage.getVaccineDisplayName(vName),
                         value: Math.max(del.dosesByVaccine.get(vName) ?? 0, 0),
                         fillColor: color,
@@ -788,7 +797,7 @@ export class PlaygroundPageComponent implements OnInit {
         }
 
         // Add first datapoint so that the chart is always scaled the same
-        if(this.dataloader.vaccinations) {
+        if (this.dataloader.vaccinations) {
             vacDoses.data.push({
                 date: this.dataloader.vaccinations[0].date,
                 value: 0
@@ -803,7 +812,7 @@ export class PlaygroundPageComponent implements OnInit {
                 });
             }
             // remove last week if it is not complete yet
-            if(this.dataloader.lastRefreshVaccinations.getUTCDay() !== 0) {
+            if (this.dataloader.lastRefreshVaccinations.getUTCDay() !== 0) {
                 vacDoses.data.pop();
             }
         }
@@ -854,7 +863,7 @@ export class PlaygroundPageComponent implements OnInit {
                 stackedBars.push({
                     dateStart: cw.getWeekdayInYearWeek(yWeek, 3),
                     dateEnd: cw.getWeekdayInYearWeek(yWeek, 8),
-                    values: [... wu(vaccinesColors.entries()).map(([vName, color]) => ({
+                    values: [...wu(vaccinesColors.entries()).map(([vName, color]) => ({
                         label: this.simulation.vaccineUsage.getVaccineDisplayName(vName),
                         value: Math.max(vacDeliveryData.dosesByVaccine.get(vName) ?? 0, 0),
                         fillColor: color,
@@ -1007,19 +1016,22 @@ export class PlaygroundPageComponent implements OnInit {
     // Preserve original property order
     originalOrder = (a: KeyValue<any, any>, b: KeyValue<any, any>): number => {
         return 0;
-    }
+    };
 
     setWillingnessDate(): void {
         this.resetWillingness();
     }
+
     resetWillingness(): void {
         this.simulation.params.fractionWilling = 1 - this.simulation.willingness.getUnwillingFraction();
         this.runSimulation();
     }
+
     reset2ndWillingness(): void {
         this.simulation.params.fractionTakingSecondDose = 0.96;
         this.runSimulation();
     }
+
     reset3rdWillingness(): void {
         this.simulation.params.fractionTakingThirdDose = 0.76;
         this.runSimulation();
@@ -1028,6 +1040,7 @@ export class PlaygroundPageComponent implements OnInit {
     // experimental tooltip things
     experimentalTooltipUpdate: TooltipUpdate;
     experimentalTooltipText = '';
+
     updateTooltip(upd: TooltipUpdate): void {
         // the chart provides updates on each mouse movement
         // use them to decide the content of the tooltip
