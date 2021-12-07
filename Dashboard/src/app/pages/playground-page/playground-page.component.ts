@@ -1,4 +1,3 @@
-import { KeyValue } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import * as wu from 'wu';
 import { DataPoint, DataSeries, StackedBar } from '../../components/d3-charts/data.interfaces';
@@ -9,7 +8,6 @@ import {
 import { DataloaderService } from '../../services/dataloader.service';
 import * as cw from '../../simulation/calendarweek/calendarweek';
 import { getWeekdayInYearWeek, getYearWeekOfDate, YearWeek } from '../../simulation/calendarweek/calendarweek';
-import { zilabImpfsimVerteilungszenarien } from '../../simulation/data-interfaces/raw-data.interfaces';
 import { ISimulationResults } from '../../simulation/data-interfaces/simulation-data.interfaces';
 import { BasicSimulation } from '../../simulation/simulation';
 import { relu, sum } from '../../simulation/vaccine-map-helper';
@@ -41,7 +39,7 @@ export class PlaygroundPageComponent implements OnInit {
             strokeColor: '#20412f',
         }
     };
-    populationPartitionPalette = [
+    populationPalette = [
         '#a2d9ac',
         '#69b164',
         '#468b43',
@@ -49,14 +47,14 @@ export class PlaygroundPageComponent implements OnInit {
         '#12520d',
         '#0c3d07',
     ];
-    populationPartitionPaletteLarge = [
+    populationPaletteLarge = [
         '#e9fcec',
         '#c2eac8',
-        ...this.populationPartitionPalette,
+        ...this.populationPalette,
         '#0a2f05',
         '#061d02',
     ];
-    populationPartitionSpecialColors = {
+    populationSpecialColors = {
         unwilling: '#ddd',
         contraindicated: '#aaa',
     };
@@ -142,7 +140,6 @@ export class PlaygroundPageComponent implements OnInit {
     };
     simulationStartWeekNum = 5;
     simulationStartWeek: YearWeek = cw.yws([2021, this.simulationStartWeekNum]);
-    availableDeliveryScenarios = zilabImpfsimVerteilungszenarien;
     availableAgeLimits = [5, 12, 16];
     simulationStartSlider = {
         min: 1,
@@ -160,7 +157,7 @@ export class PlaygroundPageComponent implements OnInit {
 
     ngOnInit(): void {
         window.scrollTo(0, 0);
-        this.dataloader.loadData().subscribe(value => {
+        this.dataloader.loadData().subscribe(() => {
             this.loaded = true;
             this.simulation.prepareData();
             this.prepareSimulationStartSlider();
@@ -363,13 +360,13 @@ export class PlaygroundPageComponent implements OnInit {
             const parts = [];
             let colorI = 0;
             const partitions = this.simulation.partitionings[this.displayPartitioning].partitions;
-            const palette = partitions.filter(p => !(p.id in this.populationPartitionSpecialColors)).length > this.populationPartitionPalette.length ?
-                this.populationPartitionPaletteLarge
-                : this.populationPartitionPalette;
+            const palette = partitions.filter(p => !(p.id in this.populationSpecialColors)).length > this.populationPalette.length ?
+                this.populationPaletteLarge
+                : this.populationPalette;
             for (const p of partitions) {
                 let c;
-                if (p.id in this.populationPartitionSpecialColors) {
-                    c = this.populationPartitionSpecialColors[p.id];
+                if (p.id in this.populationSpecialColors) {
+                    c = this.populationSpecialColors[p.id];
                 } else {
                     c = palette[colorI++];
                 }
@@ -500,15 +497,6 @@ export class PlaygroundPageComponent implements OnInit {
         }
         if (this.simulation.weeklyVaccinations) {
             for (const [yWeek, data] of this.simulation.weeklyVaccinations.entries()) {
-                const date = cw.getWeekdayInYearWeek(yWeek, 8);
-                /*vacFirstDoses.data.push({
-                    date,
-                    value: data.partiallyImmunized
-                });
-                vacSecondDoses.data.push({
-                    date,
-                    value: data.vaccineDoses
-                });*/
                 stackedBars.push({
                     dateStart: cw.getWeekdayInYearWeek(yWeek, 2),
                     dateEnd: cw.getWeekdayInYearWeek(yWeek, (yWeek < this.simulationStartWeek) ? 8 : 3),
@@ -727,21 +715,14 @@ export class PlaygroundPageComponent implements OnInit {
         };
         const stackedBars: Array<StackedBar> = [];
 
-        /*if (this.dataloader.vaccinations) {
-            for (const vacDay of this.dataloader.vaccinations) {
-                vacDoses.data.push({
-                    date: vacDay.date,
-                    value: vacDay.dosen_differenz_zum_vortag * 7
-                });
-            }
-        }*/
         if (this.simulation.weeklyDeliveries) {
             for (const [week, del] of this.simulation.weeklyDeliveries.entries()) {
-                for (const vName of del.cumDosesByVaccine.keys()) { // iterate over cum doses because the weekly one doesn't list 0-dose-deliveries...
+                for (const vName of del.cumDosesByVaccine.keys()) {
+                    // iterate over cum doses because the weekly one doesn't list 0-dose-deliveries...
                     const value = Math.max(del.dosesByVaccine.get(vName) ?? 0, 0);
                     vacDeliveries.has(vName) || vacDeliveries.set(vName, []);
-                    const datapoints = vacDeliveries.get(vName);
-                    datapoints.push({
+                    const dataPoints = vacDeliveries.get(vName);
+                    dataPoints.push({
                         date: getWeekdayInYearWeek(week, 8),
                         value
                     });
@@ -796,7 +777,8 @@ export class PlaygroundPageComponent implements OnInit {
             });
 
             const vacDeliveryData = this.simulation.weeklyDeliveriesScenario.get(cw.weekBefore(this.simulationStartWeek));
-            for (const vName of vacDeliveryData.cumDosesByVaccine.keys()) { // iterate over cum doses because the weekly one doesn't list 0-dose-deliveries...
+            for (const vName of vacDeliveryData.cumDosesByVaccine.keys()) {
+                // iterate over cum doses because the weekly one doesn't list 0-dose-deliveries...
                 const value = Math.max(vacDeliveryData.dosesByVaccine.get(vName) ?? 0, 0);
                 vacDeliveriesSim.has(vName) || vacDeliveriesSim.set(vName, []);
                 const datapoints = vacDeliveriesSim.get(vName);
@@ -816,7 +798,8 @@ export class PlaygroundPageComponent implements OnInit {
                 });
 
                 const vacDeliveryData2 = this.simulation.weeklyDeliveriesScenario.get(yWeek);
-                for (const vName of vacDeliveryData2.cumDosesByVaccine.keys()) { // iterate over cum doses because the weekly one doesn't list 0-dose-deliveries...
+                for (const vName of vacDeliveryData2.cumDosesByVaccine.keys()) {
+                    // iterate over cum doses because the weekly one doesn't list 0-dose-deliveries...
                     const value = Math.max(vacDeliveryData2.dosesByVaccine.get(vName) ?? 0, 0);
                     vacDeliveriesSim.has(vName) || vacDeliveriesSim.set(vName, []);
                     const datapoints = vacDeliveriesSim.get(vName);
@@ -847,18 +830,17 @@ export class PlaygroundPageComponent implements OnInit {
         const vacDeliveriesDataSeries: DataSeries[] = [];
         const vacDeliveriesSimDataSeries: DataSeries[] = [];
 
-        colorI = 0;
         for (const [vName, hasDeliveries] of vaccinesWithDeliveries) {
             if (hasDeliveries) {
                 const color = vaccinesColors.get(vName); // this.vaccinePalette[colorI++];
                 vacDeliveriesDataSeries.unshift({
-                    data: [], // vacDeliveries.get(vName) ?? [],
+                    data: [],
                     fillColor: color,
                     strokeColor: color,
                     label: this.simulation.vaccineUsage.getVaccineDisplayName(vName),
                 });
                 vacDeliveriesSimDataSeries.unshift({
-                    data: [], // vacDeliveriesSim.get(vName) ?? [],
+                    data: [],
                     fillColor: color,
                     strokeColor: color,
                     strokeDasharray: '5, 5',
@@ -983,7 +965,7 @@ export class PlaygroundPageComponent implements OnInit {
     }
 
     // Preserve original property order
-    originalOrder = (a: KeyValue<any, any>, b: KeyValue<any, any>): number => {
+    originalOrder = (): number => {
         return 0;
     }
 
