@@ -48,14 +48,6 @@ interface PredictionLineChartCoords {
     minValue: number;
 }
 
-export interface TooltipUpdate {
-    showTooltip: boolean;
-    mouseEvent: MouseEvent;
-    hoveredDate: Date;
-    coords: PredictionLineChartCoords;
-    svgClientRect: DOMRect;
-}
-
 type SvgGroup = d3.Selection<SVGGElement, unknown, null, undefined>;
 
 @Component({
