@@ -30,7 +30,7 @@
                                                 (Insb. beim Alter, da ja nicht strikt nach Alter geimpft wird).">
                                     <mat-icon class="tooltip-info">help</mat-icon>
                                     <mat-label>Aufteilung im rechten Balken</mat-label>
-                                    <mat-select [(ngModel)]="displayPartitioning" (selectionChange)="buildChartPopulation()" >
+                                    <mat-select [(ngModel)]="displayPartitioning" (selectionChange)="changePartitioning()" >
                                         <ng-container *ngFor="let p of simulation.partitionings | keyvalue: originalOrder">
                                             <mat-option [value]="p.key">{{p.value.title}}</mat-option>
                                         </ng-container>
