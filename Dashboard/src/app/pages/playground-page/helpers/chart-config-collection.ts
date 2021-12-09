@@ -1,4 +1,5 @@
 import { ChartConfig } from '../../../components/d3-charts/prediction-line-chart.component';
+import { DataloaderService } from '../../../services/dataloader.service';
 
 export class ChartConfigCollection {
 
@@ -39,7 +40,7 @@ export class ChartConfigCollection {
         yAxisPercent: false,
     };
 
-    constructor(public populationTotal: number) {
+    constructor(private dataloader: DataloaderService) {
     }
 
     setScaleMode(mode: 'num' | 'percent'): void {
@@ -54,7 +55,7 @@ export class ChartConfigCollection {
 
     updateConfigs(): void {
         const percent = this.displayYAxisScale === 'percent';
-        const scale = percent ? 1 / this.populationTotal : 1;
+        const scale = percent ? 1 / this.dataloader.population.data.total : 1;
         const weeklyScale = scale * (this.displayYAxisScaleTimeframe === 'day' ? 1 / 7 : 1);
         this.chartPopulationConfig = {
             ...this.chartPopulationConfig,

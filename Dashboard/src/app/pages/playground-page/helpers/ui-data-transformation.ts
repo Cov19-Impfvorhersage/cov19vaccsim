@@ -31,6 +31,8 @@ export class UiDataTransformation {
         this.chartCumulativeDeliveries = this.buildChartCumulativeDeliveries(dataloader, simulation, results);
     }
 
+    // keep the functions below pure: data in, data out, no state changes
+
     buildChartPopulation(
         dataloader: DataloaderService,
         simulation: BasicSimulation,
