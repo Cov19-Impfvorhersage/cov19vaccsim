@@ -89,19 +89,25 @@ export class PlaygroundPageComponent implements OnInit {
         this.simulationStartWeek = cw.yws([cw.ywt(this.simulationStartWeek)[0], this.simulationStartWeekNum]);
         this.simulation.simulationStartWeek = this.simulationStartWeek;
         this.simulationResults = this.simulation.runSimulation();
-        this.chartPopulation = this.buildChartPopulation(this.dataloader, this.simulation, this.simulationResults);
-        this.chartWeeklyVaccinations = this.buildChartWeeklyVaccinations(this.dataloader, this.simulation, this.simulationResults);
+        this.chartPopulation = this.buildChartPopulation(this.dataloader, this.simulation, this.simulationResults, this.colors);
+        this.chartWeeklyVaccinations
+            = this.buildChartWeeklyVaccinations(this.dataloader, this.simulation, this.simulationResults, this.colors);
         this.chart7DayVaccinations = this.buildChart7DayVaccinations(this.dataloader, this.simulation);
-        this.chartWeeklyDeliveries = this.buildChartWeeklyDeliveries(this.dataloader, this.simulation, this.simulationResults);
+        this.chartWeeklyDeliveries = this.buildChartWeeklyDeliveries(this.dataloader, this.simulation, this.simulationResults, this.colors);
         this.chartCumulativeDeliveries = this.buildChartCumulativeDeliveries(this.dataloader, this.simulation, this.simulationResults);
         this.chartConfig.updateConfigs();
     }
 
     changePartitioning(): void {
-        this.chartPopulation = this.buildChartPopulation(this.dataloader, this.simulation, this.simulationResults);
+        this.chartPopulation = this.buildChartPopulation(this.dataloader, this.simulation, this.simulationResults, this.colors);
     }
 
-    buildChartPopulation(dataloader: DataloaderService, simulation: BasicSimulation, results: ISimulationResults): ChartData {
+    private buildChartPopulation(
+        dataloader: DataloaderService,
+        simulation: BasicSimulation,
+        results: ISimulationResults,
+        colors: ColorPalettes,
+    ): ChartData {
         const newData: ChartData = {
             yMin: 0,
             yMax: dataloader.population ? dataloader.population.data.total : 10000000,
@@ -113,7 +119,7 @@ export class PlaygroundPageComponent implements OnInit {
             ],
         };
 
-        const { once, fully, booster } = this.colors.vaccinationsPal;
+        const { once, fully, booster } = colors.vaccinationsPal;
         const vacAtLeastOnce: DataSeries = {
             data: [],
             fillColor: once.fillColor,
@@ -182,10 +188,10 @@ export class PlaygroundPageComponent implements OnInit {
 
         if (results) {
             // Attach line to week before
-            let date = cw.getWeekdayInYearWeek(this.simulationStartWeek, 1);
-            let dataAttach = simulation.weeklyVaccinations.get(cw.weekBefore(this.simulationStartWeek));
+            let date = cw.getWeekdayInYearWeek(simulation.simulationStartWeek, 1);
+            let dataAttach = simulation.weeklyVaccinations.get(cw.weekBefore(simulation.simulationStartWeek));
             // If Sim start is the current week, attach line directly to week in progress
-            if (this.simulationStartWeek === cw.getYearWeekOfDate(dataloader.lastRefreshVaccinations, 1)) {
+            if (simulation.simulationStartWeek === cw.getYearWeekOfDate(dataloader.lastRefreshVaccinations, 1)) {
                 date = dataloader.lastRefreshVaccinations;
                 dataAttach = simulation.weeklyVaccinations.get(cw.getYearWeekOfDate(dataloader.lastRefreshVaccinations));
             }
@@ -221,13 +227,13 @@ export class PlaygroundPageComponent implements OnInit {
             const parts = [];
             let colorI = 0;
             const partitions = simulation.partitionings[this.displayPartitioning].partitions;
-            const palette = partitions.filter(p => !(p.id in this.colors.populationSpecial)).length > this.colors.populationPalS.length ?
-                this.colors.populationPalL
-                : this.colors.populationPalS;
+            const palette = partitions.filter(p => !(p.id in colors.populationSpecial)).length > colors.populationPalS.length ?
+                colors.populationPalL
+                : colors.populationPalS;
             for (const p of partitions) {
                 let c;
-                if (p.id in this.colors.populationSpecial) {
-                    c = this.colors.populationSpecial[p.id];
+                if (p.id in colors.populationSpecial) {
+                    c = colors.populationSpecial[p.id];
                 } else {
                     c = palette[colorI++];
                 }
@@ -253,7 +259,12 @@ export class PlaygroundPageComponent implements OnInit {
     }
 
 
-    private buildChartWeeklyVaccinations(dataloader: DataloaderService, simulation: BasicSimulation, results: ISimulationResults): ChartData {
+    private buildChartWeeklyVaccinations(
+        dataloader: DataloaderService,
+        simulation: BasicSimulation,
+        results: ISimulationResults,
+        colors: ColorPalettes
+    ): ChartData {
         const newData: ChartData = {
             yMin: 0,
             yMax: 10_000_000,
@@ -279,7 +290,7 @@ export class PlaygroundPageComponent implements OnInit {
             label: vacDeliveries.label + ' (Modell)',
             hideInLegend: true,
         };
-        const { once, fully, booster } = this.colors.vaccinationsPal;
+        const { once, fully, booster } = colors.vaccinationsPal;
         const vacFirstDoses: DataSeries = {
             data: [],
             fillColor: once.fillColor,
@@ -361,25 +372,25 @@ export class PlaygroundPageComponent implements OnInit {
             for (const [yWeek, data] of simulation.weeklyVaccinations.entries()) {
                 stackedBars.push({
                     dateStart: cw.getWeekdayInYearWeek(yWeek, 2),
-                    dateEnd: cw.getWeekdayInYearWeek(yWeek, (yWeek < this.simulationStartWeek) ? 8 : 3),
+                    dateEnd: cw.getWeekdayInYearWeek(yWeek, (yWeek < simulation.simulationStartWeek) ? 8 : 3),
                     values: [{
                         label: vacFirstDoses.label,
                         value: data.partiallyImmunized,
                         fillColor: vacFirstDoses.fillColor,
                         fillStriped: false,
-                        fillOpacity: (yWeek < this.simulationStartWeek) ? 0.9 : 0.9,
+                        fillOpacity: (yWeek < simulation.simulationStartWeek) ? 0.9 : 0.9,
                     }, {
                         label: vacSecondDoses.label,
                         value: data.vaccineDoses - data.partiallyImmunized - data.boosterImmunized,
                         fillColor: vacSecondDoses.fillColor,
                         fillStriped: false,
-                        fillOpacity: (yWeek < this.simulationStartWeek) ? 0.9 : 0.9,
+                        fillOpacity: (yWeek < simulation.simulationStartWeek) ? 0.9 : 0.9,
                     }, {
                         label: vacBoosterDoses.label,
                         value: data.boosterImmunized,
                         fillColor: vacBoosterDoses.fillColor,
                         fillStriped: false,
-                        fillOpacity: (yWeek < this.simulationStartWeek) ? 0.9 : 0.9,
+                        fillOpacity: (yWeek < simulation.simulationStartWeek) ? 0.9 : 0.9,
                     }],
                 });
             }
@@ -393,8 +404,8 @@ export class PlaygroundPageComponent implements OnInit {
 
         if (results) {
             // Attach line to week before
-            let date = cw.getWeekdayInYearWeek(this.simulationStartWeek, 1);
-            const weeklyData = simulation.weeklyDeliveriesScenario.get(cw.weekBefore(this.simulationStartWeek));
+            let date = cw.getWeekdayInYearWeek(simulation.simulationStartWeek, 1);
+            const weeklyData = simulation.weeklyDeliveriesScenario.get(cw.weekBefore(simulation.simulationStartWeek));
             vacDeliveriesSim.data.push({
                 date,
                 value: wu(weeklyData.dosesByVaccine.values()).map(relu).reduce(sum),
@@ -540,7 +551,12 @@ export class PlaygroundPageComponent implements OnInit {
         return newData;
     }
 
-    private buildChartWeeklyDeliveries(dataloader: DataloaderService, simulation: BasicSimulation, results: ISimulationResults): ChartData {
+    private buildChartWeeklyDeliveries(
+        dataloader: DataloaderService,
+        simulation: BasicSimulation,
+        results: ISimulationResults,
+        colors: ColorPalettes,
+    ): ChartData {
         const newData: ChartData = {
             yMin: 0,
             yMax: 10_000_000,
@@ -555,7 +571,7 @@ export class PlaygroundPageComponent implements OnInit {
         let colorI = 0;
         for (const vName of simulation.vaccineUsage.getVaccinesPriorityList()) {
             vaccinesWithDeliveries.set(vName, false);
-            vaccinesColors.set(vName, this.colors.vaccinePal[colorI++]);
+            vaccinesColors.set(vName, colors.vaccinePal[colorI++]);
         }
 
         const vacDoses: DataSeries = {
@@ -598,13 +614,13 @@ export class PlaygroundPageComponent implements OnInit {
 
                 stackedBars.push({
                     dateStart: cw.getWeekdayInYearWeek(week, 2),
-                    dateEnd: cw.getWeekdayInYearWeek(week, (week < this.simulationStartWeek) ? 8 : 3),
+                    dateEnd: cw.getWeekdayInYearWeek(week, (week < simulation.simulationStartWeek) ? 8 : 3),
                     values: [...wu(vaccinesColors.entries()).map(([vName, color]) => ({
                         label: simulation.vaccineUsage.getVaccineDisplayName(vName),
                         value: Math.max(del.dosesByVaccine.get(vName) ?? 0, 0),
                         fillColor: color,
                         fillStriped: false,
-                        fillOpacity: (week < this.simulationStartWeek) ? 0.9 : 0,
+                        fillOpacity: (week < simulation.simulationStartWeek) ? 0.9 : 0,
                         vacName: vName,
                     }))],
                 });
@@ -634,14 +650,14 @@ export class PlaygroundPageComponent implements OnInit {
 
         if (results) {
             // Attach line to week before
-            let date = cw.getWeekdayInYearWeek(this.simulationStartWeek, 1);
-            const dataAttach = simulation.weeklyVaccinations.get(cw.weekBefore(this.simulationStartWeek));
+            let date = cw.getWeekdayInYearWeek(simulation.simulationStartWeek, 1);
+            const dataAttach = simulation.weeklyVaccinations.get(cw.weekBefore(simulation.simulationStartWeek));
             vacDosesSim.data.push({
                 date,
                 value: dataAttach.vaccineDoses
             });
 
-            const vacDeliveryData = simulation.weeklyDeliveriesScenario.get(cw.weekBefore(this.simulationStartWeek));
+            const vacDeliveryData = simulation.weeklyDeliveriesScenario.get(cw.weekBefore(simulation.simulationStartWeek));
             for (const vName of vacDeliveryData.cumDosesByVaccine.keys()) {
                 // iterate over cum doses because the weekly one doesn't list 0-dose-deliveries...
                 const value = Math.max(vacDeliveryData.dosesByVaccine.get(vName) ?? 0, 0);
@@ -701,7 +717,7 @@ export class PlaygroundPageComponent implements OnInit {
 
         for (const [vName, hasDeliveries] of vaccinesWithDeliveries) {
             if (hasDeliveries) {
-                const color = vaccinesColors.get(vName); // this.vaccinePalette[colorI++];
+                const color = vaccinesColors.get(vName);
                 vacDeliveriesDataSeries.unshift({
                     data: [],
                     fillColor: color,
@@ -733,7 +749,11 @@ export class PlaygroundPageComponent implements OnInit {
         return newData;
     }
 
-    private buildChartCumulativeDeliveries(dataloader: DataloaderService, simulation: BasicSimulation, results: ISimulationResults): ChartData {
+    private buildChartCumulativeDeliveries(
+        dataloader: DataloaderService,
+        simulation: BasicSimulation,
+        results: ISimulationResults,
+    ): ChartData {
         const newData: ChartData = {
             yMin: 0,
             yMax: dataloader.population ? dataloader.population.data.total * 2.5 : 10000000,
@@ -793,11 +813,11 @@ export class PlaygroundPageComponent implements OnInit {
 
         if (results) {
             // Attach line to week before
-            let date = cw.getWeekdayInYearWeek(this.simulationStartWeek, 1);
+            let date = cw.getWeekdayInYearWeek(simulation.simulationStartWeek, 1);
             const dateWeek = date;
-            let dataAttach = simulation.weeklyVaccinations.get(cw.weekBefore(this.simulationStartWeek));
+            let dataAttach = simulation.weeklyVaccinations.get(cw.weekBefore(simulation.simulationStartWeek));
             // If Sim start is the current week, attach line directly to week in progress
-            if (this.simulationStartWeek === cw.getYearWeekOfDate(dataloader.lastRefreshVaccinations, 1)) {
+            if (simulation.simulationStartWeek === cw.getYearWeekOfDate(dataloader.lastRefreshVaccinations, 1)) {
                 date = dataloader.lastRefreshVaccinations;
                 dataAttach = simulation.weeklyVaccinations.get(cw.getYearWeekOfDate(dataloader.lastRefreshVaccinations));
             }
@@ -805,7 +825,7 @@ export class PlaygroundPageComponent implements OnInit {
                 date,
                 value: dataAttach.cumVaccineDoses
             });
-            const weeklyData = simulation.weeklyDeliveriesScenario.get(cw.weekBefore(this.simulationStartWeek));
+            const weeklyData = simulation.weeklyDeliveriesScenario.get(cw.weekBefore(simulation.simulationStartWeek));
             vacDeliveriesSim.data.push({
                 date: dateWeek,
                 value: wu(weeklyData.cumDosesByVaccine.values()).reduce(sum),
