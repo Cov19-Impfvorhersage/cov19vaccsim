@@ -11,6 +11,26 @@ import { ColorPalettes } from './color-palettes';
 
 export class UiDataTransformation {
 
+    chartPopulation: ChartData;
+    chartWeeklyVaccinations: ChartData;
+    chart7DayVaccinations: ChartData;
+    chartWeeklyDeliveries: ChartData;
+    chartCumulativeDeliveries: ChartData;
+
+    rebuildAllCharts(
+        dataloader: DataloaderService,
+        simulation: BasicSimulation,
+        results: ISimulationResults,
+        colors: ColorPalettes,
+        displayPartitioning: string,
+    ): void {
+        this.chartPopulation = this.buildChartPopulation(dataloader, simulation, results, colors, displayPartitioning);
+        this.chartWeeklyVaccinations = this.buildChartWeeklyVaccinations(dataloader, simulation, results, colors);
+        this.chart7DayVaccinations = this.buildChart7DayVaccinations(dataloader, simulation);
+        this.chartWeeklyDeliveries = this.buildChartWeeklyDeliveries(dataloader, simulation, results, colors);
+        this.chartCumulativeDeliveries = this.buildChartCumulativeDeliveries(dataloader, simulation, results);
+    }
+
     buildChartPopulation(
         dataloader: DataloaderService,
         simulation: BasicSimulation,

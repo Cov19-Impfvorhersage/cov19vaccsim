@@ -40,7 +40,7 @@
                             <app-prediction-line-chart
                                 class="dummy-chart"
                                 style="width: 100%"
-                                [data]="chartPopulation"
+                                [data]="uiData.chartPopulation"
                                 [config]="chartConfig.chartPopulationConfig"
                             ></app-prediction-line-chart>
                         </mat-tab>
@@ -59,7 +59,7 @@
                             <app-prediction-line-chart
                                 class="dummy-chart"
                                 style="width: 100%"
-                                [data]="chartWeeklyVaccinations"
+                                [data]="uiData.chartWeeklyVaccinations"
                                 [config]="chartConfig.chartWeeklyVaccinationsConfig"
                             ></app-prediction-line-chart>
                         </mat-tab>
@@ -78,7 +78,7 @@
                             <app-prediction-line-chart
                                 class="dummy-chart"
                                 style="width: 100%"
-                                [data]="chart7DayVaccinations"
+                                [data]="uiData.chart7DayVaccinations"
                                 [config]="chartConfig.chart7DayVaccinationsConfig"
                             ></app-prediction-line-chart>
                         </mat-tab>
@@ -97,7 +97,7 @@
                             <app-prediction-line-chart
                                 class="dummy-chart"
                                 style="width: 100%"
-                                [data]="chartWeeklyDeliveries"
+                                [data]="uiData.chartWeeklyDeliveries"
                                 [config]="chartConfig.chartWeeklyDeliveriesConfig"
                             ></app-prediction-line-chart>
                         </mat-tab>
@@ -111,7 +111,7 @@
                             <app-prediction-line-chart
                                 class="dummy-chart"
                                 style="width: 100%"
-                                [data]="chartCumulativeDeliveries"
+                                [data]="uiData.chartCumulativeDeliveries"
                                 [config]="chartConfig.chartCumulativeDeliveriesConfig"
                             ></app-prediction-line-chart>
                         </mat-tab>

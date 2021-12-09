@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartData } from '../../components/d3-charts/prediction-line-chart.component';
 import { DataloaderService } from '../../services/dataloader.service';
 import * as cw from '../../simulation/calendarweek/calendarweek';
 import { getYearWeekOfDate, YearWeek } from '../../simulation/calendarweek/calendarweek';
@@ -20,13 +19,11 @@ export class PlaygroundPageComponent implements OnInit {
     }
 
     simulation = new BasicSimulation(this.dataloader);
+    chartConfig: ChartConfigCollection;
+    uiData: UiDataTransformation = new UiDataTransformation();
+
     loaded = false;
 
-    chartPopulation: ChartData;
-    chartWeeklyVaccinations: ChartData;
-    chart7DayVaccinations: ChartData;
-    chartWeeklyDeliveries: ChartData;
-    chartCumulativeDeliveries: ChartData;
     simulationStartWeekNum = 5;
     simulationStartWeek: YearWeek = cw.yws([2021, this.simulationStartWeekNum]);
     availableAgeLimits = [5, 12, 16];
@@ -39,9 +36,6 @@ export class PlaygroundPageComponent implements OnInit {
 
     displayPartitioning: string = Object.keys(this.simulation.partitionings)[0];
     featureFlagYAxisScale = true;
-
-    chartConfig: ChartConfigCollection;
-    uiData: UiDataTransformation = new UiDataTransformation();
 
     private simulationResults: ISimulationResults;
     private colors: ColorPalettes = new ColorPalettes();
@@ -88,16 +82,18 @@ export class PlaygroundPageComponent implements OnInit {
         this.simulationStartWeek = cw.yws([cw.ywt(this.simulationStartWeek)[0], this.simulationStartWeekNum]);
         this.simulation.simulationStartWeek = this.simulationStartWeek;
         this.simulationResults = this.simulation.runSimulation();
-        this.chartPopulation = this.uiData.buildChartPopulation(this.dataloader, this.simulation, this.simulationResults, this.colors, this.displayPartitioning);
-        this.chartWeeklyVaccinations = this.uiData.buildChartWeeklyVaccinations(this.dataloader, this.simulation, this.simulationResults, this.colors);
-        this.chart7DayVaccinations = this.uiData.buildChart7DayVaccinations(this.dataloader, this.simulation);
-        this.chartWeeklyDeliveries = this.uiData.buildChartWeeklyDeliveries(this.dataloader, this.simulation, this.simulationResults, this.colors);
-        this.chartCumulativeDeliveries = this.uiData.buildChartCumulativeDeliveries(this.dataloader, this.simulation, this.simulationResults);
+        this.uiData.rebuildAllCharts(this.dataloader, this.simulation, this.simulationResults, this.colors, this.displayPartitioning);
         this.chartConfig.updateConfigs();
     }
 
     changePartitioning(): void {
-        this.chartPopulation = this.uiData.buildChartPopulation(this.dataloader, this.simulation, this.simulationResults, this.colors, this.displayPartitioning);
+        this.uiData.chartPopulation = this.uiData.buildChartPopulation(
+            this.dataloader,
+            this.simulation,
+            this.simulationResults,
+            this.colors,
+            this.displayPartitioning
+        );
     }
 
     // Preserve original property order
