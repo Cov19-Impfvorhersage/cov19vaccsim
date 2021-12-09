@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import * as wu from 'wu';
 import { DataPoint, DataSeries, StackedBar } from '../../components/d3-charts/data.interfaces';
-import { PredictionLineChartData } from '../../components/d3-charts/prediction-line-chart.component';
+import { ChartData } from '../../components/d3-charts/prediction-line-chart.component';
 import { DataloaderService } from '../../services/dataloader.service';
 import * as cw from '../../simulation/calendarweek/calendarweek';
 import { getWeekdayInYearWeek, getYearWeekOfDate, YearWeek } from '../../simulation/calendarweek/calendarweek';
 import { ISimulationResults } from '../../simulation/data-interfaces/simulation-data.interfaces';
 import { BasicSimulation } from '../../simulation/simulation';
 import { relu, sum } from '../../simulation/vaccine-map-helper';
-import { ChartConfig } from './helpers/chart-config';
+import { ChartConfigCollection } from './helpers/chart-config-collection';
 import { ColorPalettes } from './helpers/color-palettes';
 
 @Component({
@@ -24,11 +24,11 @@ export class PlaygroundPageComponent implements OnInit {
     simulation = new BasicSimulation(this.dataloader);
     loaded = false;
 
-    chartPopulation: PredictionLineChartData;
-    chartWeeklyVaccinations: PredictionLineChartData;
-    chart7DayVaccinations: PredictionLineChartData;
-    chartWeeklyDeliveries: PredictionLineChartData;
-    chartCumulativeDeliveries: PredictionLineChartData;
+    chartPopulation: ChartData;
+    chartWeeklyVaccinations: ChartData;
+    chart7DayVaccinations: ChartData;
+    chartWeeklyDeliveries: ChartData;
+    chartCumulativeDeliveries: ChartData;
     simulationStartWeekNum = 5;
     simulationStartWeek: YearWeek = cw.yws([2021, this.simulationStartWeekNum]);
     availableAgeLimits = [5, 12, 16];
@@ -42,7 +42,7 @@ export class PlaygroundPageComponent implements OnInit {
     displayPartitioning = Object.keys(this.simulation.partitionings)[0];
     featureFlagYAxisScale = true;
 
-    chartConfig: ChartConfig;
+    chartConfig: ChartConfigCollection;
 
     private simulationResults: ISimulationResults;
     private colors: ColorPalettes = new ColorPalettes();
@@ -51,7 +51,7 @@ export class PlaygroundPageComponent implements OnInit {
         window.scrollTo(0, 0);
         this.dataloader.loadData().subscribe(() => {
             this.loaded = true;
-            this.chartConfig = new ChartConfig(this.dataloader.population.data.total);
+            this.chartConfig = new ChartConfigCollection(this.dataloader.population.data.total);
             this.simulation.prepareData();
             this.prepareSimulationStartSlider();
             this.simulationStartWeek = getYearWeekOfDate(this.dataloader.lastRefreshVaccinations, 1);
@@ -101,8 +101,8 @@ export class PlaygroundPageComponent implements OnInit {
         this.chartPopulation = this.buildChartPopulation(this.dataloader, this.simulation, this.simulationResults);
     }
 
-    buildChartPopulation(dataloader: DataloaderService, simulation: BasicSimulation, results: ISimulationResults): PredictionLineChartData {
-        const newData: PredictionLineChartData = {
+    buildChartPopulation(dataloader: DataloaderService, simulation: BasicSimulation, results: ISimulationResults): ChartData {
+        const newData: ChartData = {
             yMin: 0,
             yMax: dataloader.population ? dataloader.population.data.total : 10000000,
             series: [],
@@ -253,8 +253,8 @@ export class PlaygroundPageComponent implements OnInit {
     }
 
 
-    private buildChartWeeklyVaccinations(dataloader: DataloaderService, simulation: BasicSimulation, results: ISimulationResults): PredictionLineChartData {
-        const newData: PredictionLineChartData = {
+    private buildChartWeeklyVaccinations(dataloader: DataloaderService, simulation: BasicSimulation, results: ISimulationResults): ChartData {
+        const newData: ChartData = {
             yMin: 0,
             yMax: 10_000_000,
             series: [],
@@ -449,8 +449,8 @@ export class PlaygroundPageComponent implements OnInit {
         return newData;
     }
 
-    private buildChart7DayVaccinations(dataloader: DataloaderService, simulation: BasicSimulation): PredictionLineChartData {
-        const newData: PredictionLineChartData = {
+    private buildChart7DayVaccinations(dataloader: DataloaderService, simulation: BasicSimulation): ChartData {
+        const newData: ChartData = {
             yMin: 0,
             yMax: 7_000_000,
             series: [],
@@ -540,8 +540,8 @@ export class PlaygroundPageComponent implements OnInit {
         return newData;
     }
 
-    private buildChartWeeklyDeliveries(dataloader: DataloaderService, simulation: BasicSimulation, results: ISimulationResults): PredictionLineChartData {
-        const newData: PredictionLineChartData = {
+    private buildChartWeeklyDeliveries(dataloader: DataloaderService, simulation: BasicSimulation, results: ISimulationResults): ChartData {
+        const newData: ChartData = {
             yMin: 0,
             yMax: 10_000_000,
             series: [],
@@ -733,8 +733,8 @@ export class PlaygroundPageComponent implements OnInit {
         return newData;
     }
 
-    private buildChartCumulativeDeliveries(dataloader: DataloaderService, simulation: BasicSimulation, results: ISimulationResults): PredictionLineChartData {
-        const newData: PredictionLineChartData = {
+    private buildChartCumulativeDeliveries(dataloader: DataloaderService, simulation: BasicSimulation, results: ISimulationResults): ChartData {
+        const newData: ChartData = {
             yMin: 0,
             yMax: dataloader.population ? dataloader.population.data.total * 2.5 : 10000000,
             series: [],

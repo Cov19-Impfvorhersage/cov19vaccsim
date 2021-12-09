@@ -1,6 +1,6 @@
-import { PredictionLineChartConfig } from '../../../components/d3-charts/prediction-line-chart.component';
+import { ChartConfig } from '../../../components/d3-charts/prediction-line-chart.component';
 
-export class ChartConfig {
+export class ChartConfigCollection {
 
     // modes
 
@@ -9,31 +9,31 @@ export class ChartConfig {
 
     // configs
 
-    chartPopulationConfig: PredictionLineChartConfig = {
+    chartPopulationConfig: ChartConfig = {
         yAxisLabel: '', // 'Bevölkerung',
         yAxisScaleFactor: 1,
         yAxisPercent: false,
     };
 
-    chartWeeklyVaccinationsConfig: PredictionLineChartConfig = {
+    chartWeeklyVaccinationsConfig: ChartConfig = {
         yAxisLabel: '', // 'Impfdosen',
         yAxisScaleFactor: 1,
         yAxisPercent: false,
     };
 
-    chart7DayVaccinationsConfig: PredictionLineChartConfig = {
+    chart7DayVaccinationsConfig: ChartConfig = {
         yAxisLabel: '', // 'Impfdosen',
         yAxisScaleFactor: 1,
         yAxisPercent: false,
     };
 
-    chartWeeklyDeliveriesConfig: PredictionLineChartConfig = {
+    chartWeeklyDeliveriesConfig: ChartConfig = {
         yAxisLabel: '', // 'Impfdosen',
         yAxisScaleFactor: 1,
         yAxisPercent: false,
     };
 
-    chartCumulativeDeliveriesConfig: PredictionLineChartConfig = {
+    chartCumulativeDeliveriesConfig: ChartConfig = {
         yAxisLabel: '', // 'Impfdosen',
         yAxisScaleFactor: 1,
         yAxisPercent: false,

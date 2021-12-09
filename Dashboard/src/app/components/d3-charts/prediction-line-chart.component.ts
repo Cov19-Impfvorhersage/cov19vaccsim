@@ -4,14 +4,14 @@ import * as d3 from 'd3';
 import { ChartBase } from './chart-base/chart-base.directive';
 import { DataPartition, DataPoint, DataSeries, StackedBar } from './data.interfaces';
 
-export interface PredictionLineChartConfig {
+export interface ChartConfig {
     yAxisLabel: string;
     fillOpacity?: number;
     yAxisScaleFactor?: number;
     yAxisPercent?: boolean;
 }
 
-export interface PredictionLineChartData {
+export interface ChartData {
     yMin: number;
     yMax: number;
     series: DataSeries[];
@@ -63,7 +63,7 @@ type SvgGroup = d3.Selection<SVGGElement, unknown, null, undefined>;
     templateUrl: 'chart-base/chart-base.directive.html',
     styleUrls: ['chart-base/chart-base.directive.scss'],
 })
-export class PredictionLineChartComponent extends ChartBase<PredictionLineChartConfig, PredictionLineChartData> {
+export class PredictionLineChartComponent extends ChartBase<ChartConfig, ChartData> {
 
     private defs: d3.Selection<SVGDefsElement, unknown, null, undefined>;
     private xAxis: SvgGroup;
@@ -82,7 +82,7 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
     private tooltip: d3.Selection<HTMLDivElement, unknown, null, undefined>;
     private tooltipDots: SvgGroup;
 
-    initialChartConfig(): PredictionLineChartConfig {
+    initialChartConfig(): ChartConfig {
         return {
             yAxisLabel: 'yAxisLabel',
             fillOpacity: 0.5,
