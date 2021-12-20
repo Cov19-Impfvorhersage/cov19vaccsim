@@ -108,7 +108,7 @@ export class DataloaderService {
                     });
             }
             if (!this.vaccineUsage) {
-                this.http.get<VaccineUsageData>('https://raw.githubusercontent.com/Cov19-Impfvorhersage/cov19vaccsim/master/Dashboard/data/impfstoffeinsatz_deutschland.json')
+                this.http.get<VaccineUsageData>('data/impfstoffeinsatz_deutschland.json')
                     .subscribe(data => {
                         this.vaccineUsage = data;
                         console.log(this.vaccineUsage, 'Vaccine Usage Data');

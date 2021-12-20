@@ -164,6 +164,20 @@
             }
         },
         {
+            "name": "novavax",
+            "displayName": "Novavax",
+            "timeline": {
+                "2021-12-20": {
+                    "ages": ">=18",
+                    "2nd_dose_weeks": "",
+                    "description": "Am 20.12. empfohlen durch die EMA für Personen ab 18 Jahren",
+                    "source": [
+                        "https://www.ema.europa.eu/en/news/"
+                    ]
+                }
+            }
+        },
+        {
             "name": "curevac",
             "displayName": "Curevac"
         },

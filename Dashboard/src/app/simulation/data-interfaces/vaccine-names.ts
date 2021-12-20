@@ -23,6 +23,10 @@ export const vaccineNames = {
     ],
     sanofi: [
         'Sanofi/GSK'
+    ],
+    novavax: [
+        'novavax',
+        'Novavax',
     ]
 };
 const vaccineNameTranslationTable: Map<string, string> = new Map([]);
