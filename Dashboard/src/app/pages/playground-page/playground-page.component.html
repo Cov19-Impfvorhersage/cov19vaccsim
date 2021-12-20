@@ -278,11 +278,11 @@
                         </div>
                         <div class="slider-with-reset" fxLayout="row" fxLayoutAlign="space-between center">
                             <div fxFlex="1 0 auto" >
-                                <mat-slider [(ngModel)]="ui.simulation.params.boosterIntervalWeeks" min="16" max="28" step="1"
+                                <mat-slider [(ngModel)]="ui.simulation.params.boosterIntervalWeeks" min="10" max="28" step="1"
                                             (change)="runSimulation();"></mat-slider>
                             </div>
                             <div fxFlex="0 0 auto" >
-                                <button mat-icon-button aria-label="Zurücksetzen" (click)="ui.simulation.params.boosterIntervalWeeks = 26; runSimulation();">
+                                <button mat-icon-button aria-label="Zurücksetzen" (click)="ui.simulation.params.boosterIntervalWeeks = 16; runSimulation();">
                                     <mat-icon>restore</mat-icon>
                                 </button>
                             </div>

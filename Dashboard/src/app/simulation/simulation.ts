@@ -88,7 +88,7 @@ export class BasicSimulation implements VaccinationSimulation {
         keep2ndDosesBack: 0,
         extraIntervalWeeks: 0,
         extraIntervalWeeksOnlyFuture: false,
-        boosterIntervalWeeks: 26,
+        boosterIntervalWeeks: 16,
         boosterCatchUp: true,
         fractionTakingSecondDose: 0.96,
         fractionTakingThirdDose: 0.86,
