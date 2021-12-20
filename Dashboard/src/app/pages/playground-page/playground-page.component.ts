@@ -114,7 +114,7 @@ export class PlaygroundPageComponent implements OnInit {
     }
 
     reset3rdWillingness(): void {
-        this.ui.simulation.params.fractionTakingThirdDose = 0.76;
+        this.ui.simulation.params.fractionTakingThirdDose = 0.86;
         this.runSimulation();
     }
 

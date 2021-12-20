@@ -91,7 +91,7 @@ export class BasicSimulation implements VaccinationSimulation {
         boosterIntervalWeeks: 26,
         boosterCatchUp: true,
         fractionTakingSecondDose: 0.96,
-        fractionTakingThirdDose: 0.76,
+        fractionTakingThirdDose: 0.86,
         fractionWilling: 0.80,
         vaccinesUsed: new Map(),
     };
