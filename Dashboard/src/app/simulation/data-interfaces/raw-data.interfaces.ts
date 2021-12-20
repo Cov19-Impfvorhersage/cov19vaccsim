@@ -206,6 +206,7 @@ export interface IVaccineUsageData {
 export interface VaccineDeliveryPrognosisData {
     description: string;
     source: string | string[];
+    last_update: Date;
     data: {
         [yearweek: string]: {
             [vaccname: string]: number

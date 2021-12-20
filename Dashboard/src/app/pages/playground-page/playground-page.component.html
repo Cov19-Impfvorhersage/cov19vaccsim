@@ -134,7 +134,7 @@
                 Datenbasis:
                 <span class="line">Impfungen lt. RKI (Stand {{dataloader.updateDates.vaccinationsLastUpdated | date:'shortDate'}}),&nbsp;</span>
                 <span class="line">Lieferungen lt. BMG (Stand {{dataloader.updateDates.deliveryLastUpdated | date:'shortDate'}}),&nbsp;</span>
-                <span class="line">Lieferpläne lt. Zi-Datalab / BMG</span>
+                <span class="line">Lieferpläne grob abgeschätzt (siehe unten)<!-- lt. Zi-Datalab / BMG (Stand {{dataloader.vaccineDeliveryPrognosis.last_update | date:'shortDate'}})--></span>
             </mat-card-subtitle>
         </mat-card>
     </div>
@@ -565,7 +565,9 @@
                         Historische Impf- und Lieferdaten stammen vom <a href="https://impfdashboard.de">Offiziellen Impfdashboard (impfdashboard.de)</a> und damit vom RKI & BMG.
                     </li>
                     <li>
-                        Zukünftige Lieferpläne stammen vom <a href="https://www.zidatasciencelab.de/cov19vaccsim/">Zi Datascience Lab</a> und damit vom BMG.
+                        Zukünftige Lieferpläne stammen vom <a href="https://www.zidatasciencelab.de/cov19vaccsim/">Zi Datascience Lab</a> und aus der <a href="https://www.bundesgesundheitsministerium.de/fileadmin/Dateien/3_Downloads/C/Coronavirus/Impfstoff/Lieferprognosen_aller_Hersteller_2021.pdf">PDF des BMG</a>.<br>
+                        Aktuell (Mitte Dezember) sind die angegebenen Lieferpläne allerdings sehr chaotisch (u.a. wegen der Halbierung der Moderna-Boosterdosis) und es fehlen zukünftige Angaben,
+                        sodass als Lieferplan erst mal alte Angaben verwendet, und über alle zukünftigen Wochen fortgeschrieben werden, bis bessere Daten verfügbar sind.
                     </li>
                     <li>
                         Daten zur Impfbereitschaft stammen von der <a href="https://projekte.uni-erfurt.de/cosmo2020/">COSMO Studie der Universität Erfurt</a>.

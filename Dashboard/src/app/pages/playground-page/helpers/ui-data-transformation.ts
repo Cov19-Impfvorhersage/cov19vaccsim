@@ -478,7 +478,7 @@ export class UiDataTransformation {
     ): ChartData {
         const newData: ChartData = {
             yMin: 0,
-            yMax: 10_000_000,
+            yMax: 12_000_000,
             series: [],
             partitions: [],
         };
