@@ -611,7 +611,7 @@ export class PredictionLineChartComponent extends ChartBase<ChartConfig, ChartDa
                 if (s.data[i].date > hoveredDate) {
                     const dataPoint = s.data[i - 1];
                     if (s.data[i].date > headerDate || headerDate == null){
-                        headerDate = s.data[i].date;
+                        headerDate = dataPoint.date;
                         headerText = formatDate(headerDate);
                     }
                     tooltipData.push({
