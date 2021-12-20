@@ -17,7 +17,7 @@
                     <mat-tab-group animationDuration="0">
                         <mat-tab label="Geimpfte Bevölkerung">
                             <div class="top-bar">
-                                <mat-button-toggle-group class="slim" *ngIf="featureFlagYAxisScale" [(ngModel)]="displayYAxisScale" (change)="buildYScaleConfigurations()">
+                                <mat-button-toggle-group class="slim" *ngIf="featureFlagYAxisScale" [value]="ui.chartConfig.displayYAxisScale" (change)="ui.chartConfig.setScaleMode($event.value)">
                                     <mat-button-toggle value="num"><span class="onlyWide">Personen</span><span class="onlySmall"># P.</span></mat-button-toggle>
                                     <mat-button-toggle value="percent"><span class="onlyWide">Prozent</span><span class="onlySmall">% Bev.</span></mat-button-toggle>
                                 </mat-button-toggle-group>
@@ -30,8 +30,8 @@
                                                 (Insb. beim Alter, da ja nicht strikt nach Alter geimpft wird).">
                                     <mat-icon class="tooltip-info">help</mat-icon>
                                     <mat-label>Aufteilung im rechten Balken</mat-label>
-                                    <mat-select [(ngModel)]="displayPartitioning" (selectionChange)="buildChartPopulation()" >
-                                        <ng-container *ngFor="let p of simulation.partitionings | keyvalue: originalOrder">
+                                    <mat-select [(ngModel)]="displayPartitioning" (selectionChange)="changePartitioning()" >
+                                        <ng-container *ngFor="let p of ui.simulation.partitionings | keyvalue: originalOrder">
                                             <mat-option [value]="p.key">{{p.value.title}}</mat-option>
                                         </ng-container>
                                     </mat-select>
@@ -40,18 +40,18 @@
                             <app-prediction-line-chart
                                 class="dummy-chart"
                                 style="width: 100%"
-                                [data]="chartPopulation"
-                                [config]="chartPopulationConfig"
+                                [data]="ui.dataTransform.chartPopulation"
+                                [config]="ui.chartConfig.chartPopulationConfig"
                             ></app-prediction-line-chart>
                         </mat-tab>
                         <mat-tab label="Wöchentliche Impfungen">
                             <div class="top-bar">
-                                <mat-button-toggle-group class="slim" *ngIf="featureFlagYAxisScale" [(ngModel)]="displayYAxisScale" (change)="buildYScaleConfigurations()">
+                                <mat-button-toggle-group class="slim" *ngIf="featureFlagYAxisScale" [value]="ui.chartConfig.displayYAxisScale" (change)="ui.chartConfig.setScaleMode($event.value)">
                                     <mat-button-toggle value="num"><span class="onlyWide">Anzahl Impfdosen</span><span class="onlySmall"># Dosen</span></mat-button-toggle>
                                     <mat-button-toggle value="percent"><span class="onlyWide">Prozent der Bevölkerung</span><span class="onlySmall">% Bev.</span></mat-button-toggle>
                                 </mat-button-toggle-group>
                                 &nbsp;<span class="onlySmall">pro &nbsp;</span>
-                                <mat-button-toggle-group class="slim" *ngIf="featureFlagYAxisScale" [(ngModel)]="displayYAxisScaleTimeframe" (change)="buildYScaleConfigurations()">
+                                <mat-button-toggle-group class="slim" *ngIf="featureFlagYAxisScale" [value]="ui.chartConfig.displayYAxisScaleTimeframe" (change)="ui.chartConfig.setScaleTimeframe($event.value)">
                                     <mat-button-toggle value="week"><span class="onlyWide">pro Woche</span><span class="onlySmall">Woche</span></mat-button-toggle>
                                     <mat-button-toggle value="day"><span class="onlyWide">pro Tag</span><span class="onlySmall">Tag</span></mat-button-toggle>
                                 </mat-button-toggle-group>
@@ -59,18 +59,18 @@
                             <app-prediction-line-chart
                                 class="dummy-chart"
                                 style="width: 100%"
-                                [data]="chartWeeklyVaccinations"
-                                [config]="chartWeeklyVaccinationsConfig"
+                                [data]="ui.dataTransform.chartWeeklyVaccinations"
+                                [config]="ui.chartConfig.chartWeeklyVaccinationsConfig"
                             ></app-prediction-line-chart>
                         </mat-tab>
                         <mat-tab label="7-Tage Schnitt Impfungen">
                             <div class="top-bar">
-                                <mat-button-toggle-group class="slim" *ngIf="featureFlagYAxisScale" [(ngModel)]="displayYAxisScale" (change)="buildYScaleConfigurations()">
+                                <mat-button-toggle-group class="slim" *ngIf="featureFlagYAxisScale" [value]="ui.chartConfig.displayYAxisScale" (change)="ui.chartConfig.setScaleMode($event.value)">
                                     <mat-button-toggle value="num"><span class="onlyWide">Anzahl Impfdosen</span><span class="onlySmall"># Dosen</span></mat-button-toggle>
                                     <mat-button-toggle value="percent"><span class="onlyWide">Prozent der Bevölkerung</span><span class="onlySmall">% Bev.</span></mat-button-toggle>
                                 </mat-button-toggle-group>
                                 &nbsp;<span class="onlySmall">pro &nbsp;</span>
-                                <mat-button-toggle-group class="slim" *ngIf="featureFlagYAxisScale" [(ngModel)]="displayYAxisScaleTimeframe" (change)="buildYScaleConfigurations()">
+                                <mat-button-toggle-group class="slim" *ngIf="featureFlagYAxisScale" [value]="ui.chartConfig.displayYAxisScaleTimeframe" (change)="ui.chartConfig.setScaleTimeframe($event.value)">
                                     <mat-button-toggle value="week"><span class="onlyWide">pro Woche</span><span class="onlySmall">Woche</span></mat-button-toggle>
                                     <mat-button-toggle value="day"><span class="onlyWide">pro Tag</span><span class="onlySmall">Tag</span></mat-button-toggle>
                                 </mat-button-toggle-group>
@@ -78,18 +78,18 @@
                             <app-prediction-line-chart
                                 class="dummy-chart"
                                 style="width: 100%"
-                                [data]="chart7DayVaccinations"
-                                [config]="chart7DayVaccinationsConfig"
+                                [data]="ui.dataTransform.chart7DayVaccinations"
+                                [config]="ui.chartConfig.chart7DayVaccinationsConfig"
                             ></app-prediction-line-chart>
                         </mat-tab>
                         <mat-tab label="Wöchentliche Lieferungen">
                             <div class="top-bar">
-                                <mat-button-toggle-group class="slim" *ngIf="featureFlagYAxisScale" [(ngModel)]="displayYAxisScale" (change)="buildYScaleConfigurations()">
+                                <mat-button-toggle-group class="slim" *ngIf="featureFlagYAxisScale" [value]="ui.chartConfig.displayYAxisScale" (change)="ui.chartConfig.setScaleMode($event.value)">
                                     <mat-button-toggle value="num"><span class="onlyWide">Anzahl Impfdosen</span><span class="onlySmall"># Dosen</span></mat-button-toggle>
                                     <mat-button-toggle value="percent"><span class="onlyWide">Prozent der Bevölkerung</span><span class="onlySmall">% Bev.</span></mat-button-toggle>
                                 </mat-button-toggle-group>
                                 &nbsp;<span class="onlySmall">pro &nbsp;</span>
-                                <mat-button-toggle-group class="slim" *ngIf="featureFlagYAxisScale" [(ngModel)]="displayYAxisScaleTimeframe" (change)="buildYScaleConfigurations()">
+                                <mat-button-toggle-group class="slim" *ngIf="featureFlagYAxisScale" [value]="ui.chartConfig.displayYAxisScaleTimeframe" (change)="ui.chartConfig.setScaleTimeframe($event.value)">
                                     <mat-button-toggle value="week"><span class="onlyWide">pro Woche</span><span class="onlySmall">Woche</span></mat-button-toggle>
                                     <mat-button-toggle value="day"><span class="onlyWide">pro Tag</span><span class="onlySmall">Tag</span></mat-button-toggle>
                                 </mat-button-toggle-group>
@@ -97,13 +97,13 @@
                             <app-prediction-line-chart
                                 class="dummy-chart"
                                 style="width: 100%"
-                                [data]="chartWeeklyDeliveries"
-                                [config]="chartWeeklyDeliveriesConfig"
+                                [data]="ui.dataTransform.chartWeeklyDeliveries"
+                                [config]="ui.chartConfig.chartWeeklyDeliveriesConfig"
                             ></app-prediction-line-chart>
                         </mat-tab>
                         <mat-tab label="Impfdosen insgesamt">
                             <div class="top-bar">
-                                <mat-button-toggle-group class="slim" *ngIf="featureFlagYAxisScale" [(ngModel)]="displayYAxisScale" (change)="buildYScaleConfigurations()">
+                                <mat-button-toggle-group class="slim" *ngIf="featureFlagYAxisScale" [value]="ui.chartConfig.displayYAxisScale" (change)="ui.chartConfig.setScaleMode($event.value)">
                                     <mat-button-toggle value="num"><span class="onlyWide">Anzahl</span><span class="onlySmall">#</span> Impfdosen</mat-button-toggle>
                                     <mat-button-toggle value="percent"><span class="onlyWide">Prozent</span><span class="onlySmall">%</span> der Bevölkerung</mat-button-toggle>
                                 </mat-button-toggle-group>
@@ -111,8 +111,8 @@
                             <app-prediction-line-chart
                                 class="dummy-chart"
                                 style="width: 100%"
-                                [data]="chartCumulativeDeliveries"
-                                [config]="chartCumulativeDeliveriesConfig"
+                                [data]="ui.dataTransform.chartCumulativeDeliveries"
+                                [config]="ui.chartConfig.chartCumulativeDeliveriesConfig"
                             ></app-prediction-line-chart>
                         </mat-tab>
                     </mat-tab-group>
@@ -152,12 +152,12 @@
                         <div fxLayout="row" fxLayoutAlign="space-between center">
                             <div>Boosterbereitschaft</div>
                             <div fxFlex="0 0 auto" >
-                                <strong>{{simulation.params.fractionTakingThirdDose*100 | number:'1.0-0'}} % </strong>
+                                <strong>{{ui.simulation.params.fractionTakingThirdDose*100 | number:'1.0-0'}} % </strong>
                             </div>
                         </div>
                         <div class="slider-with-reset" fxLayout="row" fxLayoutAlign="space-between center">
                             <div fxFlex="1 0 auto" >
-                                <mat-slider [(ngModel)]="simulation.params.fractionTakingThirdDose" min=".5" max="1.0" step="0.01"
+                                <mat-slider [(ngModel)]="ui.simulation.params.fractionTakingThirdDose" min=".5" max="1.0" step="0.01"
                                             (change)="runSimulation();"></mat-slider>
                             </div>
                             <div fxFlex="0 0 auto" >
@@ -173,12 +173,12 @@
                         <div fxLayout="row" fxLayoutAlign="space-between center">
                             <div>Zweitimpfbereitschaft</div>
                             <div fxFlex="0 0 auto" >
-                                <strong>{{simulation.params.fractionTakingSecondDose*100 | number:'1.0-0'}} % </strong>
+                                <strong>{{ui.simulation.params.fractionTakingSecondDose*100 | number:'1.0-0'}} % </strong>
                             </div>
                         </div>
                         <div class="slider-with-reset" fxLayout="row" fxLayoutAlign="space-between center">
                             <div fxFlex="1 0 auto" >
-                                <mat-slider [(ngModel)]="simulation.params.fractionTakingSecondDose" min=".5" max="1.0" step="0.01"
+                                <mat-slider [(ngModel)]="ui.simulation.params.fractionTakingSecondDose" min=".5" max="1.0" step="0.01"
                                             (change)="runSimulation();"></mat-slider>
                             </div>
                             <div fxFlex="0 0 auto" >
@@ -195,12 +195,12 @@
                         <div fxLayout="row" fxLayoutAlign="space-between center">
                             <div>Impfbereitschaft:</div>
                             <div fxFlex="0 0 auto" >
-                                <strong>{{simulation.params.fractionWilling*100 | number:'1.0-0'}} % </strong>impfbereit
+                                <strong>{{ui.simulation.params.fractionWilling*100 | number:'1.0-0'}} % </strong>impfbereit
                             </div>
                         </div>
                         <div class="slider-with-reset" fxLayout="row" fxLayoutAlign="space-between center">
                             <div fxFlex="1 0 auto" >
-                                <mat-slider [(ngModel)]="simulation.params.fractionWilling" min=".5" max="1.0" step="0.01"
+                                <mat-slider [(ngModel)]="ui.simulation.params.fractionWilling" min=".5" max="1.0" step="0.01"
                                             (change)="runSimulation();"></mat-slider>
                             </div>
                             <div fxFlex="0 0 auto" >
@@ -222,8 +222,8 @@
                                 <mat-form-field color="accent" appearance="outline" class="slim"
                                                 style="width: auto; min-width: 10em;"
                                                 matTooltip="">
-                                    <mat-select [(ngModel)]="simulation.params.estimateWillingPerVaccine" (selectionChange)="setWillingnessDate()" >
-                                        <ng-container *ngFor="let p of simulation.availableWillingnessEstimationOptions | keyvalue: originalOrder">
+                                    <mat-select [(ngModel)]="ui.simulation.params.estimateWillingPerVaccine" (selectionChange)="setWillingnessDate()" >
+                                        <ng-container *ngFor="let p of ui.simulation.availableWillingnessEstimationOptions | keyvalue: originalOrder">
                                             <mat-option [value]="p.key">{{p.value}}</mat-option>
                                         </ng-container>
                                     </mat-select>
@@ -240,8 +240,8 @@
                                 <mat-form-field color="accent" appearance="outline" class="slim"
                                                 style="width: auto; min-width: 10em;"
                                                 matTooltip="">
-                                    <mat-select [(ngModel)]="simulation.willingness.cosmoDate" (selectionChange)="setWillingnessDate()" >
-                                        <ng-container *ngFor="let p of simulation.availableWillingnessOptions | keyvalue: originalOrder">
+                                    <mat-select [(ngModel)]="ui.simulation.willingness.cosmoDate" (selectionChange)="setWillingnessDate()" >
+                                        <ng-container *ngFor="let p of ui.simulation.availableWillingnessOptions | keyvalue: originalOrder">
                                             <mat-option [value]="p.key">{{p.value}}</mat-option>
                                         </ng-container>
                                     </mat-select>
@@ -252,14 +252,14 @@
 
                     <div class="settings_row"
                          matTooltip="Personen, für die Impfungen zugelassen wären, die aber nicht bereit sind, sich impfen zu lassen.">
-                        <mat-slide-toggle [(ngModel)]="simulation.params.considerNotWilling"
+                        <mat-slide-toggle [(ngModel)]="ui.simulation.params.considerNotWilling"
                                           (change)="runSimulation();" labelPosition="before">
                             Impfunwillige beachten
                         </mat-slide-toggle>
                     </div>
                     <div class="settings_row"
                          matTooltip="Personen, die sich nur zögerlich impfen lassen; Lässt vor allem den Graph schöner aussehen. Details siehe Einschränkungen.">
-                        <mat-slide-toggle [(ngModel)]="simulation.params.considerHesitating"
+                        <mat-slide-toggle [(ngModel)]="ui.simulation.params.considerHesitating"
                                           (change)="runSimulation();" labelPosition="before">
                             Impfzögerliche beachten
                         </mat-slide-toggle>
@@ -273,16 +273,16 @@
                         <div fxLayout="row" fxLayoutAlign="space-between center">
                             <div>Abstand zur Boosterimpfung:</div>
                             <div fxFlex="0 0 auto" >
-                                {{simulation.params.boosterIntervalWeeks}} Wochen
+                                {{ui.simulation.params.boosterIntervalWeeks}} Wochen
                             </div>
                         </div>
                         <div class="slider-with-reset" fxLayout="row" fxLayoutAlign="space-between center">
                             <div fxFlex="1 0 auto" >
-                                <mat-slider [(ngModel)]="simulation.params.boosterIntervalWeeks" min="16" max="28" step="1"
+                                <mat-slider [(ngModel)]="ui.simulation.params.boosterIntervalWeeks" min="16" max="28" step="1"
                                             (change)="runSimulation();"></mat-slider>
                             </div>
                             <div fxFlex="0 0 auto" >
-                                <button mat-icon-button aria-label="Zurücksetzen" (click)="simulation.params.boosterIntervalWeeks = 26; runSimulation();">
+                                <button mat-icon-button aria-label="Zurücksetzen" (click)="ui.simulation.params.boosterIntervalWeeks = 26; runSimulation();">
                                     <mat-icon>restore</mat-icon>
                                 </button>
                             </div>
@@ -290,7 +290,7 @@
                     </div>
                     <div class="settings_row"
                          matTooltip="Boosterimpfungen, die bereits möglich sind, aber noch nicht gegeben wurden, innerhalb der nächsten paar Wochen der Simulation aufholen">
-                        <mat-slide-toggle [(ngModel)]="simulation.params.boosterCatchUp"
+                        <mat-slide-toggle [(ngModel)]="ui.simulation.params.boosterCatchUp"
                                           (change)="runSimulation();" labelPosition="before">
                             Boosterimpfungen aufholen
                         </mat-slide-toggle>
@@ -299,19 +299,19 @@
                         <div fxLayout="row" fxLayoutAlign="space-between center">
                             <div>Abstand Erst- zu Zweitimpfung:</div>
                             <div fxFlex="0 0 auto" >
-                                <span *ngIf="simulation.params.extraIntervalWeeks==0"> laut STIKO</span>
-                                <span *ngIf="simulation.params.extraIntervalWeeks>0"><strong>{{simulation.params.extraIntervalWeeks}}
+                                <span *ngIf="ui.simulation.params.extraIntervalWeeks==0"> laut STIKO</span>
+                                <span *ngIf="ui.simulation.params.extraIntervalWeeks>0"><strong>{{ui.simulation.params.extraIntervalWeeks}}
                                     Wochen länger</strong></span>
-                                <span *ngIf="simulation.params.extraIntervalWeeks<0"><strong>{{-simulation.params.extraIntervalWeeks}}
+                                <span *ngIf="ui.simulation.params.extraIntervalWeeks<0"><strong>{{-ui.simulation.params.extraIntervalWeeks}}
                                     Wochen kürzer</strong></span>
                             </div>
                         </div>
-                        <mat-slider [(ngModel)]="simulation.params.extraIntervalWeeks" min="-4" max="4" step="1"
+                        <mat-slider [(ngModel)]="ui.simulation.params.extraIntervalWeeks" min="-4" max="4" step="1"
                                     (change)="runSimulation();"></mat-slider>
                     </div>
                     <div class="settings_row"
                          matTooltip="Extra Abstand zwischen Erst- und Zweitimpfung nicht auf Personen anwenden, die bereits vor Simulationsbeginn erstgeimpft wurden.">
-                        <mat-slide-toggle [(ngModel)]="simulation.params.extraIntervalWeeksOnlyFuture"
+                        <mat-slide-toggle [(ngModel)]="ui.simulation.params.extraIntervalWeeksOnlyFuture"
                                           (change)="runSimulation();" labelPosition="before">
                             Extra Abstand nur Neuimpfungen
                         </mat-slide-toggle>
@@ -320,10 +320,10 @@
                         <div fxLayout="row" fxLayoutAlign="space-between center">
                             <div>Rückstellungen für Zweitimpfungen:</div>
                             <div fxFlex="0 0 auto" >
-                                <strong>{{simulation.params.keep2ndDosesBack*100 | number:'1.0-0'}} % </strong>
+                                <strong>{{ui.simulation.params.keep2ndDosesBack*100 | number:'1.0-0'}} % </strong>
                             </div>
                         </div>
-                        <mat-slider [(ngModel)]="simulation.params.keep2ndDosesBack" min="0" max="1.0" step="0.05"
+                        <mat-slider [(ngModel)]="ui.simulation.params.keep2ndDosesBack" min="0" max="1.0" step="0.05"
                                     (change)="runSimulation();"></mat-slider>
                     </div>
                 </div>
@@ -331,12 +331,12 @@
                 <div>
                     <h2><strong>Zulassung</strong></h2>
                     <div class="settings_row" matTooltip="Personen, die keinen der aktuell verfügbaren Impfstoffe erhalten können, z.B. weil sie zu jung sind.">
-                        <mat-slide-toggle [(ngModel)]="simulation.params.considerContraindicated"
+                        <mat-slide-toggle [(ngModel)]="ui.simulation.params.considerContraindicated"
                                           (change)="runSimulation();" labelPosition="before">
                             Kontraindizierte beachten
                         </mat-slide-toggle>
                         <div style="margin-left: 1.5rem;">
-                            <mat-radio-group class="my-radio-group" [(ngModel)]="simulation.params.contraindicationAge"
+                            <mat-radio-group class="my-radio-group" [(ngModel)]="ui.simulation.params.contraindicationAge"
                                              (change)="runSimulation();">
                                 <ng-container *ngFor="let age of availableAgeLimits">
                                     <mat-radio-button class="my-radio-button" [value]="age">Impfungen ab {{age}}
@@ -349,11 +349,11 @@
                         <p matTooltip="Welche Impfstoffe für die Simulation beachtet werden sollen." >Ausfall / Zulassung simulieren:</p>
                         <div style="margin-left: 1.5rem;">
                             <p
-                                *ngFor="let vacc of simulation.params.vaccinesUsed | keyvalue: originalOrder">
+                                *ngFor="let vacc of ui.simulation.params.vaccinesUsed | keyvalue: originalOrder">
                                 <mat-checkbox [(ngModel)]="vacc.value.used"
                                               (change)="runSimulation();" labelPosition="before">
-                                    {{simulation.vaccineUsage.getVaccineDisplayName(vacc.key)}}
-                                    <span *ngIf="simulation.vaccineUsage.isVaccineUsed(simulationStartWeek, vacc.key)" class="textbadge">Zugelassen</span>
+                                    {{ui.simulation.vaccineUsage.getVaccineDisplayName(vacc.key)}}
+                                    <span *ngIf="ui.simulation.vaccineUsage.isVaccineUsed(simulationStartWeek, vacc.key)" class="textbadge">Zugelassen</span>
                                 </mat-checkbox>
                             </p>
                         </div>
@@ -367,7 +367,7 @@
                     </div>
                     <div class="settings_row"
                          matTooltip="Zweitimpfungen für mit Astra-Zeneca Erstgeimpfte nach der aktuellen STIKO-Empfehlung ab KW 27 mit BioNtech-Impfstoff und 4-wöchigem Abstand durchführen">
-                        <mat-slide-toggle [(ngModel)]="simulation.params.astra2ndToBiontech"
+                        <mat-slide-toggle [(ngModel)]="ui.simulation.params.astra2ndToBiontech"
                                           (change)="runSimulation();" labelPosition="before">
                             Astra 2. Impfungen mit BioNtech
                         </mat-slide-toggle>
@@ -380,16 +380,16 @@
                         <div fxLayout="row" fxLayoutAlign="space-between center">
                             <div>Liefermenge:</div>
                             <div fxFlex="0 0 auto" >
-                                <strong>{{simulation.params.deliveryAmountFactor*100 | number:'1.0-0'}} %</strong>
+                                <strong>{{ui.simulation.params.deliveryAmountFactor*100 | number:'1.0-0'}} %</strong>
                             </div>
                         </div>
                         <div class="slider-with-reset" fxLayout="row" fxLayoutAlign="space-between center">
                             <div fxFlex="1 0 auto" >
-                                <mat-slider [(ngModel)]="simulation.params.deliveryAmountFactor" min=".8" max="1.2" step="0.01"
+                                <mat-slider [(ngModel)]="ui.simulation.params.deliveryAmountFactor" min=".8" max="1.2" step="0.01"
                                             (change)="runSimulation();"></mat-slider>
                             </div>
                             <div fxFlex="0 0 auto" >
-                                <button mat-icon-button aria-label="Zurücksetzen" (click)="simulation.params.deliveryAmountFactor = 1; runSimulation();">
+                                <button mat-icon-button aria-label="Zurücksetzen" (click)="ui.simulation.params.deliveryAmountFactor = 1; runSimulation();">
                                     <mat-icon>restore</mat-icon>
                                 </button>
                             </div>
@@ -398,7 +398,7 @@
                     <!-- <div class="settings_row">
                         <p matTooltip="Lieferungsszenarien des ZI-Data Labs basierend auf den Ankündigungen der Hersteller">Verteilung der Lieferungen:</p>
                         <div style="margin-left: 1.5rem;">
-                            <mat-radio-group class="my-radio-group" [(ngModel)]="simulation.params.deliveryScenario"
+                            <mat-radio-group class="my-radio-group" [(ngModel)]="uiDataService.simulation.params.deliveryScenario"
                                              (change)="runSimulation();">
                                 <ng-container *ngFor="let szenario of availableDeliveryScenarios">
                                     <mat-radio-button class="my-radio-button" [value]="szenario">{{szenario}}
@@ -409,7 +409,7 @@
                     </div> -->
 
                     <div class="settings_row">
-                        <mat-slide-toggle [(ngModel)]="simulation.params.considerStockPile"
+                        <mat-slide-toggle [(ngModel)]="ui.simulation.params.considerStockPile"
                                           matTooltip="Lagerbestand, der zu Beginn der Simulation besteht, in die Simulation mit einfließen lassen.
                                           Überschätzt dadurch meist die Impfungen der nächsten Woche."
                                           (change)="runSimulation();" labelPosition="before">

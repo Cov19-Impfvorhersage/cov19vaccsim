@@ -4,14 +4,14 @@ import * as d3 from 'd3';
 import { ChartBase } from './chart-base/chart-base.directive';
 import { DataPartition, DataPoint, DataSeries, StackedBar } from './data.interfaces';
 
-export interface PredictionLineChartConfig {
+export interface ChartConfig {
     yAxisLabel: string;
     fillOpacity?: number;
     yAxisScaleFactor?: number;
     yAxisPercent?: boolean;
 }
 
-export interface PredictionLineChartData {
+export interface ChartData {
     yMin: number;
     yMax: number;
     series: DataSeries[];
@@ -48,14 +48,6 @@ interface PredictionLineChartCoords {
     minValue: number;
 }
 
-export interface TooltipUpdate {
-    showTooltip: boolean;
-    mouseEvent: MouseEvent;
-    hoveredDate: Date;
-    coords: PredictionLineChartCoords;
-    svgClientRect: DOMRect;
-}
-
 type SvgGroup = d3.Selection<SVGGElement, unknown, null, undefined>;
 
 @Component({
@@ -63,7 +55,7 @@ type SvgGroup = d3.Selection<SVGGElement, unknown, null, undefined>;
     templateUrl: 'chart-base/chart-base.directive.html',
     styleUrls: ['chart-base/chart-base.directive.scss'],
 })
-export class PredictionLineChartComponent extends ChartBase<PredictionLineChartConfig, PredictionLineChartData> {
+export class PredictionLineChartComponent extends ChartBase<ChartConfig, ChartData> {
 
     private defs: d3.Selection<SVGDefsElement, unknown, null, undefined>;
     private xAxis: SvgGroup;
@@ -82,7 +74,7 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
     private tooltip: d3.Selection<HTMLDivElement, unknown, null, undefined>;
     private tooltipDots: SvgGroup;
 
-    initialChartConfig(): PredictionLineChartConfig {
+    initialChartConfig(): ChartConfig {
         return {
             yAxisLabel: 'yAxisLabel',
             fillOpacity: 0.5,
@@ -110,7 +102,7 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
         this.tooltip = d3.select(this.chartContainerRef.nativeElement).append('div').classed('tooltip', true);
         this.tooltip
             .style('position', 'fixed')
-            //.style('width', '300px')
+            // .style('width', '300px')
             .style('pointer-events', 'none')
             .style('opacity', 0);
         this.tooltip.append('div').classed('header', true);
@@ -563,12 +555,12 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
         hoveredDate.setMilliseconds(0);
         */
 
-        const tooltipPosX = (mouseEvent.clientX >123) ? mouseEvent.clientX + 15 : mouseEvent.clientX + 15;
+        const tooltipPosX = (mouseEvent.clientX > 123) ? mouseEvent.clientX + 15 : mouseEvent.clientX + 15;
         const tooltipPosY = mouseEvent.clientY + 15;
 
         this.tooltip
             .style('opacity', showTooltip ? 1 : 0)
-            .style('left',  tooltipPosX+ 'px')
+            .style('left',  tooltipPosX + 'px')
             .style('top', tooltipPosY + 'px');
 
         if (!showTooltip) {
@@ -595,12 +587,12 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
         const formatDate = (d: Date) => d.toLocaleDateString('default', {day: '2-digit', month: '2-digit', year: 'numeric'});
         const percentPrecision = Math.max(0,
             Math.round(1
-                -Math.log10(
-                this.config.yAxisScaleFactor * (this.data.yMax-this.data.yMin)
-            )))
+                - Math.log10(
+                this.config.yAxisScaleFactor * (this.data.yMax - this.data.yMin)
+            )));
         const yFormatter = (v: number) => d3.format(
             this.config.yAxisPercent ?
-                '.'+percentPrecision+'%'
+                '.' + percentPrecision + '%'
                 : '.3s')(v * this.config.yAxisScaleFactor);
 
         let headerText = '';
@@ -618,7 +610,7 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
             for (let i = 0; i < s.data.length; i++) {
                 if (s.data[i].date > hoveredDate) {
                     const dataPoint = s.data[i - 1];
-                    if(s.data[i].date > headerDate || headerDate == null){
+                    if (s.data[i].date > headerDate || headerDate == null){
                         headerDate = s.data[i].date;
                         headerText = formatDate(headerDate);
                     }
@@ -647,10 +639,10 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
                         label: 'stacked bar date range',
                         value: `${formatDate(b.dateStart)} - ${formatDate(b.dateEnd)}`,
                     });*/
-                    headerText = `${formatDate(b.dateStart)} - ${formatDate(b.dateEnd)}`
+                    headerText = `${formatDate(b.dateStart)} - ${formatDate(b.dateEnd)}`;
                     let yVal = 0;
                     for (const v of b.values) {
-                        if(v.value <= 0 || !v.label){
+                        if (v.value <= 0 || !v.label){
                             continue;
                         }
                         tooltipData.push({
@@ -704,8 +696,8 @@ export class PredictionLineChartComponent extends ChartBase<PredictionLineChartC
             .attr('cx', d => d.x)
             .attr('cy', d => d.y)
             .attr('fill', d => d.color)
-            //.attr('fill', d => d.filled ? d.color : 'transparent')
-            //.attr('stroke', d => d.color)
+            // .attr('fill', d => d.filled ? d.color : 'transparent')
+            // .attr('stroke', d => d.color)
             .attr('stroke', 'white')
             .attr('r', 6)
             .attr('stroke-width', 2);
