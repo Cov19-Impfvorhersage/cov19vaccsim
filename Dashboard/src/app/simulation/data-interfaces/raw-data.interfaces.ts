@@ -93,6 +93,13 @@ export interface UpdateDatesData {
     vaccinationsLastUpdated?: Date;
     deliveryLastUpdated?: Date;
 }
+/**
+ * Interface of Metadata Data from impfdashboard.de
+ */
+export interface UpdateDatesDataRaw {
+    vaccinationsLastUpdated?: Date | string;
+    deliveryLastUpdated?: Date | string;
+}
 
 
 /**

@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 import {
     CosmoWillingnessData,
     DeliveriesData,
-    PopulationData, PriorityGroupsData, UpdateDatesData,
+    PopulationData, PriorityGroupsData, UpdateDatesData, UpdateDatesDataRaw,
     VaccinationsData, VaccineDeliveryPrognosisData, VaccineUsageData,
     ZilabImpfsimlieferungenDataRow
 } from '../simulation/data-interfaces/raw-data.interfaces';
@@ -56,12 +56,21 @@ export class DataloaderService {
                     });
             }
             if (!this.updateDates.vaccinationsLastUpdated) {
-                this.http.get<UpdateDatesData>('https://impfdashboard.de/static/data/metadata.json')
+                this.http.get<UpdateDatesDataRaw>('https://impfdashboard.de/static/data/metadata.json')
                     .subscribe(data => {
-                        this.updateDates = data;
+                        this.updateDates = {};
                         // Make sure string dates are converted to date objects
-                        this.updateDates.vaccinationsLastUpdated = new Date(this.updateDates.vaccinationsLastUpdated)
-                        this.updateDates.deliveryLastUpdated = new Date(this.updateDates.deliveryLastUpdated)
+                        // String splitting fixes date parsing on Safari browser
+                        if(typeof data.vaccinationsLastUpdated == 'string'){
+                            this.updateDates.vaccinationsLastUpdated = new Date(data.vaccinationsLastUpdated.split(' ')[0])
+                        }else{
+                            this.updateDates.vaccinationsLastUpdated = new Date(data.vaccinationsLastUpdated);
+                        }
+                        if(typeof data.deliveryLastUpdated == 'string'){
+                            this.updateDates.deliveryLastUpdated = new Date(data.deliveryLastUpdated.split(' ')[0])
+                        }else{
+                            this.updateDates.deliveryLastUpdated = new Date(data.deliveryLastUpdated);
+                        }
                         console.log(this.updateDates, 'Impfdashboard last update dates');
                         obs.next();
                     });
