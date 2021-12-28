@@ -11,6 +11,14 @@ import { getYearWeekOfDate, YearWeek } from '../../simulation/calendarweek/calen
 })
 export class PlaygroundPageComponent implements OnInit {
 
+    tabs = [
+        {url: 'population-vaccination', title: 'Geimpfte Bevölkerung'},
+        {url: 'weekly-vaccination', title: 'Wöchentliche Impfungen'},
+        {url: 'average-vaccination', title: '7-Tage Schnitt Impfungen'},
+        {url: 'weekly-deliveries', title: 'Wöchentliche Lieferungen'},
+        {url: 'total-deliveries', title: 'Impfdosen insgesamt'},
+    ];
+
     loaded = false;
 
     simulationStartWeekNum = 5;

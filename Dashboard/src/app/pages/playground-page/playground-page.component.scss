@@ -2,6 +2,10 @@
 @use '~@angular/material/theming';
 @import '../../../styles.colors';
 
+a.tab-link {
+    color: initial;
+}
+
 h2, h3 {
     margin: 16px 0 5px;
 }

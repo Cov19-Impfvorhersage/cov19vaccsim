@@ -14,23 +14,18 @@
                     color="accent">
                 </mat-progress-spinner>
                 <div *ngIf="loaded">
-                    <mat-tab-group animationDuration="0">
-                        <mat-tab label="Geimpfte Bevölkerung">
-                            <app-population-vaccination></app-population-vaccination>
-                        </mat-tab>
-                        <mat-tab label="Wöchentliche Impfungen">
-                            <app-weekly-vaccination></app-weekly-vaccination>
-                        </mat-tab>
-                        <mat-tab label="7-Tage Schnitt Impfungen">
-                            <app-average-vaccination></app-average-vaccination>
-                        </mat-tab>
-                        <mat-tab label="Wöchentliche Lieferungen">
-                            <app-weekly-deliveries></app-weekly-deliveries>
-                        </mat-tab>
-                        <mat-tab label="Impfdosen insgesamt">
-                            <app-total-deliveries></app-total-deliveries>
-                        </mat-tab>
-                    </mat-tab-group>
+                    <nav mat-tab-nav-bar>
+                        <a
+                            *ngFor="let tab of tabs"
+                            mat-tab-link
+                            [routerLink]="tab.url"
+                            class="tab-link"
+                            routerLinkActive="active"
+                            #rla="routerLinkActive"
+                            [active]="rla.isActive"
+                        >{{tab.title}}</a>
+                    </nav>
+                    <router-outlet></router-outlet>
                     <div matTooltip="Startwoche der Simulation.
                                 Nützlich, um die Simulation mit echten Daten zu vergleichen;
                                 allerdings ist zu beachten, dass stets die neuesten Lieferdaten & -Ankündigungen verwendet werden.">
