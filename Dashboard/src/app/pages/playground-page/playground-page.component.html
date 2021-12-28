@@ -253,10 +253,10 @@
                         <div style="margin-left: 1.5rem;">
                             <mat-radio-group class="my-radio-group" [(ngModel)]="ui.simulation.params.contraindicationAge"
                                              (change)="runSimulation();">
-                                <ng-container *ngFor="let age of availableAgeLimits">
+                                <div *ngFor="let age of availableAgeLimits">
                                     <mat-radio-button class="my-radio-button" [value]="age">Impfungen ab {{age}}
-                                    </mat-radio-button><br/>
-                                </ng-container>
+                                    </mat-radio-button>
+                                </div>
                             </mat-radio-group>
                         </div>
                     </div>
