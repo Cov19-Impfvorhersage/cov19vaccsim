@@ -3,7 +3,6 @@ import { DataloaderService } from '../../services/dataloader.service';
 import { UiDataService } from '../../services/ui-data.service';
 import * as cw from '../../simulation/calendarweek/calendarweek';
 import { getYearWeekOfDate, YearWeek } from '../../simulation/calendarweek/calendarweek';
-import { ISimulationResults } from '../../simulation/data-interfaces/simulation-data.interfaces';
 
 @Component({
     selector: 'app-playground-page',
@@ -26,8 +25,6 @@ export class PlaygroundPageComponent implements OnInit {
 
     displayPartitioning: string;
     featureFlagYAxisScale = true;
-
-    private simulationResults: ISimulationResults;
 
     constructor(public dataloader: DataloaderService, public ui: UiDataService) {
         this.displayPartitioning = Object.keys(this.ui.simulation.partitionings)[0];
@@ -73,11 +70,11 @@ export class PlaygroundPageComponent implements OnInit {
     runSimulation(): void {
         this.simulationStartWeek = cw.yws([cw.ywt(this.simulationStartWeek)[0], this.simulationStartWeekNum]);
         this.ui.simulation.simulationStartWeek = this.simulationStartWeek;
-        this.simulationResults = this.ui.simulation.runSimulation();
+        this.ui.simulationResults = this.ui.simulation.runSimulation();
         this.ui.dataTransform.rebuildAllCharts(
             this.dataloader,
             this.ui.simulation,
-            this.simulationResults,
+            this.ui.simulationResults,
             this.ui.colors,
             this.displayPartitioning
         );
@@ -88,7 +85,7 @@ export class PlaygroundPageComponent implements OnInit {
         this.ui.dataTransform.chartPopulation = this.ui.dataTransform.buildChartPopulation(
             this.dataloader,
             this.ui.simulation,
-            this.simulationResults,
+            this.ui.simulationResults,
             this.ui.colors,
             this.displayPartitioning
         );
