@@ -1,13 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { MaterialModule} from '../material/material.module'
+import { MaterialModule} from '../material/material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { D3ChartsModule } from './components/d3-charts/d3-charts.module';
 import { StartComponent } from './pages/start/start.component';
 import * as PlotlyJS from 'plotly.js/dist/plotly.js';
-import { PlotlyModule ,PlotlyService} from 'angular-plotly.js';
+import { PlotlyModule, PlotlyService} from 'angular-plotly.js';
 import * as SVLocale from 'plotly.js/lib/locales/de.js';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MapComponent } from './components/leafletmap/map/map.component';
@@ -30,6 +30,7 @@ import { WeeklyVaccinationComponent } from './pages/playground-page/vaccination-
 import { AverageVaccinationComponent } from './pages/playground-page/vaccination-charts/average-vaccination.component';
 import { WeeklyDeliveriesComponent } from './pages/playground-page/vaccination-charts/weekly-deliveries.component';
 import { TotalDeliveriesComponent } from './pages/playground-page/vaccination-charts/total-deliveries.component';
+import { InfoComponent } from './pages/playground-page/info/info.component';
 
 PlotlyModule.plotlyjs = PlotlyJS;
 
@@ -53,6 +54,7 @@ registerLocaleData(locales, 'de');
     AverageVaccinationComponent,
     WeeklyDeliveriesComponent,
     TotalDeliveriesComponent,
+    InfoComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,7 +71,7 @@ registerLocaleData(locales, 'de');
 
 
   ],
-  providers: [{provide: LOCALE_ID, useValue: 'de-DE' },PlotlyService,
+  providers: [{provide: LOCALE_ID, useValue: 'de-DE' }, PlotlyService,
 
   // This needs to be uncommented to provide  auth
   { provide: HTTP_INTERCEPTORS,
