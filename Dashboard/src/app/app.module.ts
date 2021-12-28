@@ -28,7 +28,8 @@ import { PlaygroundPageComponent } from './pages/playground-page/playground-page
 import { PopulationVaccinationComponent } from './pages/playground-page/vaccination-charts/population-vaccination.component';
 import { WeeklyVaccinationComponent } from './pages/playground-page/vaccination-charts/weekly-vaccination.component';
 import { AverageVaccinationComponent } from './pages/playground-page/vaccination-charts/average-vaccination.component';
-import { WeeklyDeliveriesComponent } from './pages/playground-page/vaccination-charts/weekly-deliveries.component'
+import { WeeklyDeliveriesComponent } from './pages/playground-page/vaccination-charts/weekly-deliveries.component';
+import { TotalDeliveriesComponent } from './pages/playground-page/vaccination-charts/total-deliveries.component';
 
 PlotlyModule.plotlyjs = PlotlyJS;
 
@@ -51,6 +52,7 @@ registerLocaleData(locales, 'de');
     WeeklyVaccinationComponent,
     AverageVaccinationComponent,
     WeeklyDeliveriesComponent,
+    TotalDeliveriesComponent,
   ],
   imports: [
     BrowserModule,
