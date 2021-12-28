@@ -85,16 +85,6 @@ export class PlaygroundPageComponent implements OnInit {
         this.ui.chartConfig.updateConfigs();
     }
 
-    changePartitioning(): void {
-        this.ui.dataTransform.chartPopulation = this.ui.dataTransform.buildChartPopulation(
-            this.dataloader,
-            this.ui.simulation,
-            this.ui.simulationResults,
-            this.ui.colors,
-            this.ui.displayPartitioning
-        );
-    }
-
     // Preserve original property order
     originalOrder = (): number => {
         return 0;
