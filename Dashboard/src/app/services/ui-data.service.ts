@@ -19,12 +19,14 @@ export class UiDataService {
     simulation: BasicSimulation;
     simulationResults: ISimulationResults | null = null;
     chartConfig: ChartConfigCollection;
+    displayPartitioning: string;
 
     constructor(public dataloader: DataloaderService) {
         this.colors = new ColorPalettes();
         this.dataTransform = new UiDataTransformation();
         this.simulation = new BasicSimulation(dataloader);
         this.chartConfig = new ChartConfigCollection(dataloader);
+        this.displayPartitioning = Object.keys(this.simulation.partitionings)[0];
     }
 
 }

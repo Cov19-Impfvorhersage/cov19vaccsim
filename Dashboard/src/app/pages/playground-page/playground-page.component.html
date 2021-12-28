@@ -16,33 +16,7 @@
                 <div *ngIf="loaded">
                     <mat-tab-group animationDuration="0">
                         <mat-tab label="Geimpfte Bevölkerung">
-                            <div class="top-bar">
-                                <mat-button-toggle-group class="slim" *ngIf="featureFlagYAxisScale" [value]="ui.chartConfig.displayYAxisScale" (change)="ui.chartConfig.setScaleMode($event.value)">
-                                    <mat-button-toggle value="num"><span class="onlyWide">Personen</span><span class="onlySmall"># P.</span></mat-button-toggle>
-                                    <mat-button-toggle value="percent"><span class="onlyWide">Prozent</span><span class="onlySmall">% Bev.</span></mat-button-toggle>
-                                </mat-button-toggle-group>
-
-                                <mat-form-field color="accent" appearance="outline" class="slim"
-                                                style="position: absolute; right: 0; width: 25em; max-width: 60%;"
-                                                matTooltip="Aufteilung der Bevölkerung im rechten Balken der Grafik.
-                                                Hat keinen Einfluss auf die Simulation, die nur von der Impfbereitschaft abhängt,
-                                                daher entspricht die Reihenfolge der Blöcke auch nicht automatisch der logischen Impfreihenfolge
-                                                (Insb. beim Alter, da ja nicht strikt nach Alter geimpft wird).">
-                                    <mat-icon class="tooltip-info">help</mat-icon>
-                                    <mat-label>Aufteilung im rechten Balken</mat-label>
-                                    <mat-select [(ngModel)]="displayPartitioning" (selectionChange)="changePartitioning()" >
-                                        <ng-container *ngFor="let p of ui.simulation.partitionings | keyvalue: originalOrder">
-                                            <mat-option [value]="p.key">{{p.value.title}}</mat-option>
-                                        </ng-container>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
-                            <app-prediction-line-chart
-                                class="dummy-chart"
-                                style="width: 100%"
-                                [data]="ui.dataTransform.chartPopulation"
-                                [config]="ui.chartConfig.chartPopulationConfig"
-                            ></app-prediction-line-chart>
+                            <app-population-vaccination></app-population-vaccination>
                         </mat-tab>
                         <mat-tab label="Wöchentliche Impfungen">
                             <div class="top-bar">
@@ -57,7 +31,7 @@
                                 </mat-button-toggle-group>
                             </div>
                             <app-prediction-line-chart
-                                class="dummy-chart"
+                                class="main-chart"
                                 style="width: 100%"
                                 [data]="ui.dataTransform.chartWeeklyVaccinations"
                                 [config]="ui.chartConfig.chartWeeklyVaccinationsConfig"
@@ -76,7 +50,7 @@
                                 </mat-button-toggle-group>
                             </div>
                             <app-prediction-line-chart
-                                class="dummy-chart"
+                                class="main-chart"
                                 style="width: 100%"
                                 [data]="ui.dataTransform.chart7DayVaccinations"
                                 [config]="ui.chartConfig.chart7DayVaccinationsConfig"
@@ -95,7 +69,7 @@
                                 </mat-button-toggle-group>
                             </div>
                             <app-prediction-line-chart
-                                class="dummy-chart"
+                                class="main-chart"
                                 style="width: 100%"
                                 [data]="ui.dataTransform.chartWeeklyDeliveries"
                                 [config]="ui.chartConfig.chartWeeklyDeliveriesConfig"
@@ -109,7 +83,7 @@
                                 </mat-button-toggle-group>
                             </div>
                             <app-prediction-line-chart
-                                class="dummy-chart"
+                                class="main-chart"
                                 style="width: 100%"
                                 [data]="ui.dataTransform.chartCumulativeDeliveries"
                                 [config]="ui.chartConfig.chartCumulativeDeliveriesConfig"

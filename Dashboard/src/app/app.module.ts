@@ -24,7 +24,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from './services/interceptor-service.service';
 import { PrivateComponent } from './pages/private/private.component';
 import { MethodsComponent } from './pages/methods/methods.component';
-import { PlaygroundPageComponent } from './pages/playground-page/playground-page.component'
+import { PlaygroundPageComponent } from './pages/playground-page/playground-page.component';
+import { PopulationVaccinationComponent } from './pages/playground-page/vaccination-charts/population-vaccination.component'
 
 PlotlyModule.plotlyjs = PlotlyJS;
 
@@ -42,8 +43,8 @@ registerLocaleData(locales, 'de');
     ProfileComponent,
     PrivateComponent,
     MethodsComponent,
-    PlaygroundPageComponent
-
+    PlaygroundPageComponent,
+    PopulationVaccinationComponent,
   ],
   imports: [
     BrowserModule,

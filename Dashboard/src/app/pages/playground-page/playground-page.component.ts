@@ -23,11 +23,9 @@ export class PlaygroundPageComponent implements OnInit {
         width: 0.5,
     };
 
-    displayPartitioning: string;
     featureFlagYAxisScale = true;
 
     constructor(public dataloader: DataloaderService, public ui: UiDataService) {
-        this.displayPartitioning = Object.keys(this.ui.simulation.partitionings)[0];
     }
 
 
@@ -76,7 +74,7 @@ export class PlaygroundPageComponent implements OnInit {
             this.ui.simulation,
             this.ui.simulationResults,
             this.ui.colors,
-            this.displayPartitioning
+            this.ui.displayPartitioning
         );
         this.ui.chartConfig.updateConfigs();
     }
@@ -87,7 +85,7 @@ export class PlaygroundPageComponent implements OnInit {
             this.ui.simulation,
             this.ui.simulationResults,
             this.ui.colors,
-            this.displayPartitioning
+            this.ui.displayPartitioning
         );
     }
 
