@@ -23,8 +23,6 @@ export class PlaygroundPageComponent implements OnInit {
         width: 0.5,
     };
 
-    featureFlagYAxisScale = true;
-
     constructor(public dataloader: DataloaderService, public ui: UiDataService) {
     }
 

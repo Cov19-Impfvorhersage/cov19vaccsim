@@ -7,7 +7,7 @@ import { UiDataService } from '../../../services/ui-data.service';
     selector: 'app-population-vaccination',
     template: `
         <div class="top-bar">
-            <mat-button-toggle-group class="slim" *ngIf="featureFlagYAxisScale" [value]="ui.chartConfig.displayYAxisScale"
+            <mat-button-toggle-group class="slim" *ngIf="ui.featureFlagYAxisScale" [value]="ui.chartConfig.displayYAxisScale"
                                      (change)="ui.chartConfig.setScaleMode($event.value)">
                 <mat-button-toggle value="num"><span class="onlyWide">Personen</span><span class="onlySmall"># P.</span></mat-button-toggle>
                 <mat-button-toggle value="percent"><span class="onlyWide">Prozent</span><span class="onlySmall">% Bev.</span>
@@ -39,8 +39,6 @@ import { UiDataService } from '../../../services/ui-data.service';
     styleUrls: ['./vaccination-charts.styles.scss']
 })
 export class PopulationVaccinationComponent {
-
-    featureFlagYAxisScale = true;
 
     constructor(public dataloader: DataloaderService, public ui: UiDataService) {
     }

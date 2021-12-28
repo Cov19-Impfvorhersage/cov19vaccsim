@@ -21,6 +21,8 @@ export class UiDataService {
     chartConfig: ChartConfigCollection;
     displayPartitioning: string;
 
+    featureFlagYAxisScale = true;
+
     constructor(public dataloader: DataloaderService) {
         this.colors = new ColorPalettes();
         this.dataTransform = new UiDataTransformation();
