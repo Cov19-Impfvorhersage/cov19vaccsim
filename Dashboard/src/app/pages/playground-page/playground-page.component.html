@@ -31,7 +31,7 @@
                                 allerdings ist zu beachten, dass stets die neuesten Lieferdaten & -Ankündigungen verwendet werden.">
                         <mat-icon class="tooltip-info" style="margin-left: 0.5em; margin-top: 0.1em;">help</mat-icon>
                         <mat-slider class="simulation-start"
-                                    [(ngModel)]="simulationStartWeekNum"
+                                    [(ngModel)]="simulationStartSliderValue"
                                     (change)="runSimulation();"
                                     [min]="simulationStartSlider.min" [max]="simulationStartSlider.max" step="1"
                                     [style]="'width: '+simulationStartSlider.width*100+'%; margin-left: '+simulationStartSlider.startOffset*100+'%;'"

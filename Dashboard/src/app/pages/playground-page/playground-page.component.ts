@@ -21,8 +21,9 @@ export class PlaygroundPageComponent implements OnInit {
 
     loaded = false;
 
-    simulationStartWeekNum = 5;
-    simulationStartWeek: YearWeek = cw.yws([2021, this.simulationStartWeekNum]);
+    simulationStartSliderMinYW: YearWeek = cw.yws([2021, 10]);
+    simulationStartSliderValue = 5;
+    simulationStartWeek: YearWeek = cw.weekAfter(this.simulationStartSliderMinYW, this.simulationStartSliderValue);
     availableAgeLimits = [5, 12, 16];
     simulationStartSlider = {
         min: 1,
@@ -42,7 +43,7 @@ export class PlaygroundPageComponent implements OnInit {
             this.ui.simulation.prepareData();
             this.prepareSimulationStartSlider();
             this.simulationStartWeek = getYearWeekOfDate(this.dataloader.lastRefreshVaccinations, 1);
-            this.simulationStartWeekNum = cw.ywt(this.simulationStartWeek)[1];
+            this.simulationStartSliderValue = cw.weekDiff(this.simulationStartSliderMinYW, this.simulationStartWeek);
             this.ui.simulation.params.fractionWilling = 1 - this.ui.simulation.willingness.getUnwillingFraction();
             this.runSimulation();
         });
@@ -50,11 +51,10 @@ export class PlaygroundPageComponent implements OnInit {
 
     prepareSimulationStartSlider(): void {
         const realDataEndYW = getYearWeekOfDate(this.dataloader.lastRefreshVaccinations, 1);
-        const realDataEndYWT = cw.ywt(realDataEndYW);
         const graphFirstDate = this.dataloader.vaccinations[0].date;
         const graphLastDate = cw.getWeekdayInYearWeek(this.ui.simulation.simulationEndWeek, 8);
         const graphWidthTime = graphLastDate.getTime() - graphFirstDate.getTime();
-        const sliderStartDate = cw.getWeekdayInYearWeek(cw.yws([realDataEndYWT[0], 1]), 1);
+        const sliderStartDate = cw.getWeekdayInYearWeek(this.simulationStartSliderMinYW, 1);
         const sliderEndDate = cw.getWeekdayInYearWeek(realDataEndYW, 7);
 
         console.log('Graph start / end date', graphFirstDate, graphLastDate);
@@ -64,15 +64,16 @@ export class PlaygroundPageComponent implements OnInit {
         const graphWidthOfFull = 0.93;
 
         // minimum just hardcoded
-        this.simulationStartSlider.min = 1;
+        this.simulationStartSlider.min = 0;
         // maximum is the last week of actual data we have
-        this.simulationStartSlider.max = realDataEndYWT[1];
+        this.simulationStartSlider.max = cw.weekDiff(this.simulationStartSliderMinYW, realDataEndYW);
+        console.log("Slider max", this.simulationStartSlider.max);
         this.simulationStartSlider.startOffset = (sliderStartDate.getTime() - graphFirstDate.getTime()) / graphWidthTime * graphWidthOfFull;
         this.simulationStartSlider.width = (sliderEndDate.getTime() - sliderStartDate.getTime()) / graphWidthTime * graphWidthOfFull;
     }
 
     runSimulation(): void {
-        this.simulationStartWeek = cw.yws([cw.ywt(this.simulationStartWeek)[0], this.simulationStartWeekNum]);
+        this.simulationStartWeek = cw.weekAfter(this.simulationStartSliderMinYW, this.simulationStartSliderValue);
         this.ui.simulation.simulationStartWeek = this.simulationStartWeek;
         this.ui.simulationResults = this.ui.simulation.runSimulation();
         this.ui.dataTransform.rebuildAllCharts(
