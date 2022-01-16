@@ -35,7 +35,8 @@ const routes: Routes = [
                 component: TotalDeliveriesComponent,
             },
             {
-                path: '**',
+                path: '',
+                pathMatch: 'full',
                 redirectTo: 'population-vaccination',
             }
         ]
@@ -54,7 +55,7 @@ const routes: Routes = [
     },
     {
         path: '**',
-        component: StartComponent
+        redirectTo: 'population-vaccination',
     }
 
 ];
