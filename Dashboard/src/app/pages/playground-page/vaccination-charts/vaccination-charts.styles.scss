@@ -1,0 +1,62 @@
+@use '~@angular/material/core/style/variables';
+@use '~@angular/material/theming';
+@import '../../../../styles.colors';
+
+.top-bar {
+    box-sizing: border-box;
+    width: 100%;
+    height: 2.5em;
+    max-height: 2.5em;
+    overflow: visible;
+    margin-top: 0.5em;
+    padding-left: 1em;
+
+    mat-button-toggle-group {
+        margin-top: 0;
+    }
+}
+
+.main-chart {
+    width: 100%;
+    height: 69vh;
+    max-height: 105vw;
+}
+
+.tooltip-info {
+    position: absolute;
+    margin-left: -2.2em;
+    font-size: 1em;
+    color: #bbb;
+}
+
+
+.onlySmall {
+    display: none;
+}
+.onlyWide {
+    display: initial;
+}
+@media(variables.$mat-small) {
+
+    .onlySmall {
+        display: initial;
+    }
+    .onlyWide {
+        display: none;
+    }
+
+    // This is actually defined in angular material but for some reason it doesn't load so we have to redefine it again...
+    :host ::ng-deep .mat-tab-label {
+        padding: 0 12px;
+    }
+
+    .chart_card > mat-card-content {
+        margin-top: -16px;
+        margin-left: -16px;
+        margin-right: -16px;
+        /*
+        padding-top: 0;
+        padding-left: 0;
+        padding-right: 0;*/
+    }
+}

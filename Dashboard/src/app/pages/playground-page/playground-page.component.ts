@@ -3,7 +3,6 @@ import { DataloaderService } from '../../services/dataloader.service';
 import { UiDataService } from '../../services/ui-data.service';
 import * as cw from '../../simulation/calendarweek/calendarweek';
 import { getYearWeekOfDate, YearWeek } from '../../simulation/calendarweek/calendarweek';
-import { ISimulationResults } from '../../simulation/data-interfaces/simulation-data.interfaces';
 
 @Component({
     selector: 'app-playground-page',
@@ -11,6 +10,14 @@ import { ISimulationResults } from '../../simulation/data-interfaces/simulation-
     styleUrls: ['./playground-page.component.scss']
 })
 export class PlaygroundPageComponent implements OnInit {
+
+    tabs = [
+        {url: 'population-vaccination', title: 'Geimpfte Bevölkerung'},
+        {url: 'weekly-vaccination', title: 'Wöchentliche Impfungen'},
+        {url: 'average-vaccination', title: '7-Tage Schnitt Impfungen'},
+        {url: 'weekly-deliveries', title: 'Wöchentliche Lieferungen'},
+        {url: 'total-deliveries', title: 'Impfdosen insgesamt'},
+    ];
 
     loaded = false;
 
@@ -24,13 +31,7 @@ export class PlaygroundPageComponent implements OnInit {
         width: 0.5,
     };
 
-    displayPartitioning: string;
-    featureFlagYAxisScale = true;
-
-    private simulationResults: ISimulationResults;
-
     constructor(public dataloader: DataloaderService, public ui: UiDataService) {
-        this.displayPartitioning = Object.keys(this.ui.simulation.partitionings)[0];
     }
 
 
@@ -73,25 +74,15 @@ export class PlaygroundPageComponent implements OnInit {
     runSimulation(): void {
         this.simulationStartWeek = cw.yws([cw.ywt(this.simulationStartWeek)[0], this.simulationStartWeekNum]);
         this.ui.simulation.simulationStartWeek = this.simulationStartWeek;
-        this.simulationResults = this.ui.simulation.runSimulation();
+        this.ui.simulationResults = this.ui.simulation.runSimulation();
         this.ui.dataTransform.rebuildAllCharts(
             this.dataloader,
             this.ui.simulation,
-            this.simulationResults,
+            this.ui.simulationResults,
             this.ui.colors,
-            this.displayPartitioning
+            this.ui.displayPartitioning
         );
         this.ui.chartConfig.updateConfigs();
-    }
-
-    changePartitioning(): void {
-        this.ui.dataTransform.chartPopulation = this.ui.dataTransform.buildChartPopulation(
-            this.dataloader,
-            this.ui.simulation,
-            this.simulationResults,
-            this.ui.colors,
-            this.displayPartitioning
-        );
     }
 
     // Preserve original property order
