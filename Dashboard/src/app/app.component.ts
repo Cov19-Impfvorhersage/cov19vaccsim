@@ -1,32 +1,36 @@
-import { Component , OnInit} from '@angular/core';
-import { ApiService } from './services/api.service';
-import { AuthService } from './services/auth.service';
-import {MatIconRegistry} from '@angular/material/icon';
-import {DomSanitizer} from '@angular/platform-browser';
-
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatIconRegistry } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'COVID-19 Impfkampagne in Deutschland';
+    title = 'COVID-19 Impfkampagne in Deutschland';
 
-  constructor(
-    iconRegistry: MatIconRegistry,
-    sanitizer: DomSanitizer
-  ) {
-      iconRegistry.addSvgIcon(
-          'github',
-          sanitizer.bypassSecurityTrustResourceUrl('assets/img/GitHub-Mark.svg'));
-  }
+    constructor(
+        iconRegistry: MatIconRegistry,
+        sanitizer: DomSanitizer,
+        router: Router
+    ) {
+        iconRegistry.addSvgIcon(
+            'github',
+            sanitizer.bypassSecurityTrustResourceUrl('assets/img/GitHub-Mark.svg')
+        );
 
-  ngOnInit() {
-  }
-
-
-  logout(){
-  }
+        // check for scheduled redirects (github-pages specific)
+        let comingFrom = localStorage.getItem('coming-from');
+        if (comingFrom) {
+            localStorage.removeItem('coming-from');
+            comingFrom = comingFrom.replace('cov19vaccsim/', './');
+            console.log(`Found redirect request to ${comingFrom}. Redirecting...`);
+            router.navigate([comingFrom]).catch(error => {
+                console.warn(`Redirect to ${comingFrom} failed!`, error);
+            });
+        }
+    }
 
 }
