@@ -62,7 +62,7 @@ export class BasicSimulation implements VaccinationSimulation {
     }
 
     simulationStartWeek: YearWeek = cw.yws([2021, 10]);
-    simulationEndWeek: YearWeek = cw.yws([2022, 8]);
+    simulationEndWeek: YearWeek = cw.yws([2022, 21]);
 
     /** Delay between vaccines being delivered and them being available for usage */
     vaccineDeliveryDelayWeeks = 1;
