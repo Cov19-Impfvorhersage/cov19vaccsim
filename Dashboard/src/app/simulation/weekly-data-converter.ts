@@ -195,6 +195,7 @@ export function extractDeliveriesInfo(
             wData.dosesByVaccine.set(normalizeVaccineName(vName), Number(number));
         }
 
+        lastyWeek = lastyWeek >= yWeek ? lastyWeek : yWeek;
         transformedData.set(yWeek, wData);
     }
     // Extend future deliveries until the current end of the simulation

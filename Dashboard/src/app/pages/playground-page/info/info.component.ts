@@ -149,9 +149,9 @@ import { Component } from '@angular/core';
                                 Historische Impf- und Lieferdaten stammen vom <a href="https://impfdashboard.de">Offiziellen Impfdashboard (impfdashboard.de)</a> und damit vom RKI & BMG.
                             </li>
                             <li>
-                                Zukünftige Lieferpläne stammen vom <a href="https://www.zidatasciencelab.de/cov19vaccsim/">Zi Datascience Lab</a> und aus der <a href="https://www.bundesgesundheitsministerium.de/fileadmin/Dateien/3_Downloads/C/Coronavirus/Impfstoff/Lieferprognosen_aller_Hersteller_2021.pdf">PDF des BMG</a>.<br>
-                                Aktuell (Mitte Dezember) sind die angegebenen Lieferpläne allerdings sehr chaotisch (u.a. wegen der Halbierung der Moderna-Boosterdosis) und es fehlen zukünftige Angaben,
-                                sodass als Lieferplan erst mal alte Angaben verwendet, und über alle zukünftigen Wochen fortgeschrieben werden, bis bessere Daten verfügbar sind.
+                                Zukünftige Lieferpläne stammen vom <a href="https://www.zidatasciencelab.de/cov19vaccsim/">Zi Datascience Lab</a> und aus den <a href="https://www.bundesgesundheitsministerium.de/coronavirus/faq-covid-19-impfung.html">FAQ des BMG</a>.<br>
+                                Aktuell (Ende Februar) sind allerdings nur konkrete Zahlen für Novavax verfügbar, da die Impfstoffe von BioNTech und Moderna genug auf Lager sind.
+                                Für alle zukünftigen Wochen, für die keine Daten bekannt sind, werden daher einfach die letzten ungefähren Zahlen fortgeschrieben.
                             </li>
                             <li>
                                 Daten zur Impfbereitschaft stammen von der <a href="https://projekte.uni-erfurt.de/cosmo2020/">COSMO Studie der Universität Erfurt</a>.
