@@ -1,0 +1,33 @@
+{
+    "description": "Daten zu den prognostizierten Lieferungen an Impfstoffen für Deutschland.\nLieferungen die nach Plan an Covax gespendet werden, werden hier nicht beachtet.\nVerdoppelte Anzahl der Moderna-Dosen durch halbierung der Boosterdosis wird teilweise beachtet.",
+    "source": [
+        "https://www.bundesgesundheitsministerium.de/coronavirus/faq-covid-19-impfung.html"
+    ],
+    "last_update": "2021-12-13",
+    "data": {
+        "2022/07": {
+            "biontech": 2000000,
+            "moderna": 500000
+        },
+        "2022/08": {
+            "biontech": 2000000,
+            "moderna": 500000,
+            "novavax": 1400000
+        },
+        "2022/09": {
+            "biontech": 2000000,
+            "moderna": 500000,
+            "novavax": 900000
+        },
+        "2022/10": {
+            "biontech": 2000000,
+            "moderna": 500000,
+            "novavax": 900000
+        },
+        "2022/11": {
+            "biontech": 2000000,
+            "moderna": 500000,
+            "novavax": 600000
+        }
+    }
+}

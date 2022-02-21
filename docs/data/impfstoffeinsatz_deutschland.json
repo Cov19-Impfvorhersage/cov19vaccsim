@@ -46,6 +46,13 @@
                     "source": [
                         "https://www.rki.de/DE/Content/Kommissionen/STIKO/Empfehlungen/PM_2021-07-01.html"
                     ]
+                },
+                "2021-11-25": {
+                    "ages": ">=5",
+                    "description": "Am  25.1. empfohlen durch die EMA für Personen ab 5 Jahren",
+                    "source": [
+                        "https://www.ema.europa.eu/en/news/comirnaty-covid-19-vaccine-ema-recommends-approval-children-aged-5-11"
+                    ]
                 }
             }
         },
@@ -152,6 +159,20 @@
                     "description": "Am 11.03. empfohlen durch die EMA für Personen ab 18 Jahren",
                     "source": [
                         "https://www.ema.europa.eu/en/news/ema-recommends-covid-19-vaccine-janssen-authorisation-eu"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "novavax",
+            "displayName": "Novavax",
+            "timeline": {
+                "2021-12-20": {
+                    "ages": ">=18",
+                    "2nd_dose_weeks": "",
+                    "description": "Am 20.12. empfohlen durch die EMA für Personen ab 18 Jahren",
+                    "source": [
+                        "https://www.ema.europa.eu/en/news/ema-recommends-nuvaxovid-authorisation-eu"
                     ]
                 }
             }
